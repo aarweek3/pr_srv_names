@@ -1,75 +1,158 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using DAL.Constants;
 
-namespace DAL.Models
+namespace DAL.Models;
+
+/// <summary>
+/// Класс пользователя, расширяющий IdentityUser для поддержки кастомных полей
+/// </summary>
+public class ApplicationUser : IdentityUser
 {
-    // Класс пользователя, расширяющий IdentityUser для поддержки кастомных полей
-    public class ApplicationUser : IdentityUser
+    // ==========================================
+    // ОСНОВНАЯ ИНФОРМАЦИЯ О ПОЛЬЗОВАТЕЛЕ
+    // ==========================================
+
+    /// <summary>
+    /// Имя пользователя
+    /// </summary>
+    [Required]
+    [StringLength(StringLengths.Name)]
+    public string FirstName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Фамилия пользователя
+    /// </summary>
+    [Required]
+    [StringLength(StringLengths.Name)]
+    public string LastName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// URL аватара пользователя (рекомендуется облачное хранение)
+    /// </summary>
+    [StringLength(StringLengths.Url)]
+    public string? Avatar { get; set; }
+
+    /// <summary>
+    /// Отдел пользователя
+    /// </summary>
+    [StringLength(StringLengths.Name)]
+    public string? Department { get; set; }
+
+    /// <summary>
+    /// Флаг активности пользователя
+    /// </summary>
+    public bool IsActive { get; set; } = true;
+
+    // ==========================================
+    // ВРЕМЕННЫЕ МЕТКИ
+    // ==========================================
+
+    /// <summary>
+    /// Дата и время создания записи
+    /// </summary>
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// Дата и время последнего входа
+    /// </summary>
+    public DateTime? LastLogin { get; set; }
+
+    /// <summary>
+    /// Дата и время последнего обновления
+    /// </summary>
+    public DateTime? UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Дата и время подтверждения email
+    /// </summary>
+    public DateTime? EmailConfirmedAt { get; set; }
+
+    // ==========================================
+    // ДВУХФАКТОРНАЯ АУТЕНТИФИКАЦИЯ
+    // ==========================================
+    // ПРИМЕЧАНИЕ: Используем базовое свойство TwoFactorEnabled из IdentityUser
+    // Оно уже есть в базовом классе и правильно интегрировано с Identity
+    // Если нужна дополнительная логика, используйте NotMapped свойства ниже
+
+    /// <summary>
+    /// Проверяет, включена ли двухфакторная аутентификация
+    /// Использует базовое свойство из IdentityUser
+    /// </summary>
+    [NotMapped]
+    public bool Is2FAEnabled
     {
-        // Обязательное поле для имени пользователя, максимальная длина 100 символов
-        [Required]
-        [MaxLength(100)]
-        public string FirstName { get; set; } = string.Empty;
-
-        // Обязательное поле для фамилии пользователя, максимальная длина 100 символов
-        [Required]
-        [MaxLength(100)]
-        public string LastName { get; set; } = string.Empty;
-
-        // Поле для хранения URL аватара пользователя, опционально, максимальная длина 255 символов
-        [MaxLength(255)]
-        public string? Avatar { get; set; } // Хранит URL аватара (рекомендуется для облачного хранения)
-
-        // Поле для отдела пользователя, опционально, максимальная длина 100 символов
-        [MaxLength(100)]
-        public string? Department { get; set; }
-
-        // Флаг активности пользователя, по умолчанию true
-        public bool IsActive { get; set; } = true;
-
-        // Дата и время создания записи, устанавливается автоматически
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        // Дата и время последнего входа, опционально
-        public DateTime? LastLogin { get; set; }
-
-        // Дата и время последнего обновления, опционально
-        public DateTime? UpdatedAt { get; set; }
-
-        // Дата и время подтверждения email, опционально, для будущей поддержки подтверждения
-        public DateTime? EmailConfirmedAt { get; set; } // Добавлено для отслеживания подтверждения email
-
-        // Флаг включения двухфакторной аутентификации, по умолчанию false, скрывает наследуемое свойство
-        public new bool TwoFactorEnabled { get; set; } = false; // Добавлено для поддержки 2FA на шаге 3 ТЗ, использует new для избежания конфликта с IdentityUser
-
-        // OAuth поля
-        // Имя внешнего провайдера, опционально, максимальная длина 50 символов
-        [MaxLength(50)]
-        public string? ExternalProvider { get; set; }
-
-        // Внешний идентификатор пользователя, опционально, максимальная длина 100 символов
-        [MaxLength(100)]
-        public string? ExternalId { get; set; }
-
-        // Флаг, указывающий, является ли аккаунт внешним, по умолчанию false
-        public bool IsExternalAccount { get; set; } = false;
-
-        // Навигационные свойства
-        // Коллекция сессий пользователя
-        public virtual ICollection<UserSession> UserSessions { get; set; } = new List<UserSession>();
-
-        // Коллекция логов активности пользователя
-        public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
-
-        // Вычисляемые свойства
-        // Полное имя пользователя, формируется из FirstName и LastName
-        [NotMapped]
-        public string FullName => $"{FirstName} {LastName}".Trim();
-
-        // Проверка наличия пароля, учитывает внешние аккаунты
-        [NotMapped]
-        public bool HasPassword => !IsExternalAccount || !string.IsNullOrEmpty(PasswordHash);
+        get => TwoFactorEnabled;
+        set => TwoFactorEnabled = value;
     }
+
+    // ==========================================
+    // OAUTH И ВНЕШНЯЯ АУТЕНТИФИКАЦИЯ
+    // ==========================================
+
+    /// <summary>
+    /// Имя внешнего провайдера (Google, Facebook, и т.д.)
+    /// </summary>
+    [StringLength(StringLengths.ShortName)]
+    public string? ExternalProvider { get; set; }
+
+    /// <summary>
+    /// Внешний идентификатор пользователя от провайдера
+    /// </summary>
+    [StringLength(StringLengths.Name)]
+    public string? ExternalId { get; set; }
+
+    /// <summary>
+    /// Флаг, указывающий, является ли аккаунт внешним
+    /// </summary>
+    public bool IsExternalAccount { get; set; } = false;
+
+    // ==========================================
+    // НАВИГАЦИОННЫЕ СВОЙСТВА
+    // ==========================================
+
+    /// <summary>
+    /// Коллекция сессий пользователя
+    /// </summary>
+    public virtual ICollection<UserSession> UserSessions { get; set; } = new List<UserSession>();
+
+    /// <summary>
+    /// Коллекция логов активности пользователя
+    /// </summary>
+    public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
+
+    // ==========================================
+    // ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    // ==========================================
+
+    /// <summary>
+    /// Полное имя пользователя (Имя + Фамилия)
+    /// </summary>
+    [NotMapped]
+    public string FullName => $"{FirstName} {LastName}".Trim();
+
+    /// <summary>
+    /// Проверка наличия пароля (учитывает внешние аккаунты)
+    /// </summary>
+    [NotMapped]
+    public bool HasPassword => !IsExternalAccount || !string.IsNullOrEmpty(PasswordHash);
+
+    /// <summary>
+    /// Проверяет, подтверждён ли email пользователя
+    /// </summary>
+    [NotMapped]
+    public bool IsEmailVerified => EmailConfirmedAt.HasValue;
+
+    /// <summary>
+    /// Количество дней с момента регистрации
+    /// </summary>
+    [NotMapped]
+    public int DaysSinceRegistration => (DateTime.UtcNow - CreatedAt).Days;
+
+    /// <summary>
+    /// Количество активных сессий
+    /// </summary>
+    [NotMapped]
+    public int ActiveSessionsCount => UserSessions?.Count(s => s.IsActive) ?? 0;
 }

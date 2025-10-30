@@ -1,5 +1,6 @@
-﻿
-// DAL/Repositories/ActivityLogRepository.cs
+﻿// DAL/Repositories/ActivityLogRepository.cs
+
+using DAL.Enums;
 using DAL.Models;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,8 @@ namespace DAL.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<ActivityLog>> GetActivitiesByActionAsync(ActivityAction action, DateTime? from = null)
+        public async Task<IEnumerable<ActivityLog>> GetActivitiesByActionAsync(ActivityAction action,
+            DateTime? from = null)
         {
             var query = Entities.AsNoTracking().Where(al => al.Action == action);
 
@@ -63,9 +65,9 @@ namespace DAL.Repositories
             return await Entities
                 .AsNoTracking()
                 .Where(al => al.UserId == userId &&
-                           al.Action == ActivityAction.Login &&
-                           !al.Success &&
-                           al.Timestamp >= since)
+                             al.Action == ActivityAction.Login &&
+                             !al.Success &&
+                             al.Timestamp >= since)
                 .OrderByDescending(al => al.Timestamp)
                 .ToListAsync();
         }
@@ -75,9 +77,9 @@ namespace DAL.Repositories
             return await Entities
                 .AsNoTracking()
                 .Where(al => al.IpAddress == ipAddress &&
-                           al.Action == ActivityAction.Login &&
-                           !al.Success &&
-                           al.Timestamp >= since)
+                             al.Action == ActivityAction.Login &&
+                             !al.Success &&
+                             al.Timestamp >= since)
                 .OrderByDescending(al => al.Timestamp)
                 .ToListAsync();
         }
@@ -129,9 +131,9 @@ namespace DAL.Repositories
             return await Entities
                 .AsNoTracking()
                 .Where(al => al.Timestamp >= since &&
-                           (suspiciousActions.Contains(al.Action) && !al.Success ||
-                            al.Action == ActivityAction.BlockUser ||
-                            al.Action == ActivityAction.DeleteUser))
+                             (suspiciousActions.Contains(al.Action) && !al.Success ||
+                              al.Action == ActivityAction.BlockUser ||
+                              al.Action == ActivityAction.DeleteUser))
                 .OrderByDescending(al => al.Timestamp)
                 .ToListAsync();
         }
@@ -167,7 +169,8 @@ namespace DAL.Repositories
                 .ToDictionaryAsync(x => x.UserId, x => x.Count);
         }
 
-        public async Task<IEnumerable<(string UserId, int ActivityCount)>> GetTopActiveUsersAsync(DateTime from, DateTime to, int count = 10)
+        public async Task<IEnumerable<(string UserId, int ActivityCount)>> GetTopActiveUsersAsync(DateTime from,
+            DateTime to, int count = 10)
         {
             return await Entities
                 .AsNoTracking()

@@ -1,228 +1,163 @@
+﻿using AutoMapper;
 using DAL;
-using DAL.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Project_Server_Auth.Services;
-using Project_Server_Auth.Services.Interfaces;
-using System.Text;
+using DAL.Interfaces;
+using DAL.Repositories;
+using DAL.Repositories.Interfaces;
+using FluentValidation;
+using pr_srv_names.Deepl;
+using pr_srv_names.Extensions;
+using pr_srv_names.Middleware;
+using pr_srv_names.Pages.AdvancedImageEditor.Services;
+using pr_srv_names.Pages.Anecdote.Interfaces;
+using pr_srv_names.Pages.Anecdote.Services;
+using pr_srv_names.Pages.Language.Intarfaces;
+using pr_srv_names.Pages.Language.Services;
+using pr_srv_names.Pages.NameMain.Intarfaces;
+using pr_srv_names.Pages.NameMain.Services;
+using pr_srv_names.Pages.Sample.Intarfaces;
+using pr_srv_names.Pages.Sample.Services;
+using pr_srv_names.Services.Editor;
+using pr_srv_names.Supports.Deepl;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-#region Database Configuration
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// =================================================================
+// 1. КОНФИГУРАЦИЯ БИЛДЕРА (WebHost, Logging)
+// =================================================================
+builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
+
+builder.ConfigureLogging();
+
+// =================================================================
+// 2. РЕГИСТРАЦИЯ СЕРВИСОВ (ОБЯЗАТЕЛЬНО ДО builder.Build())
+// =================================================================
+
+// Конфигурация базы данных
+builder.Services.AddDatabaseConfiguration(builder.Configuration);
+
+// Конфигурация Identity
+builder.Services.AddIdentityConfiguration(builder.Configuration);
+builder.Services.AddIdentityPolicies();
+
+// Конфигурация JWT
+builder.Services.AddJwtAuthentication(builder.Configuration, builder.Environment);
+builder.Services.AddJwtSettings(builder.Configuration);
+builder.Services.ConfigureJwtCookies(builder.Configuration);
+
+// Конфигурация CORS
+builder.Services.AddCorsConfiguration(builder.Configuration, builder.Environment);
+
+// Регистрация общих сервисов и Swagger
+builder.Services.RegisterAllServices();
+builder.Services.AddSwaggerDocumentation();
+
+#region 8. Mapping Configuration
+
+Log.Information("Настройка маппинга...");
+var mapperConfig = new MapperConfiguration(cfg => { cfg.AddMaps(typeof(Program).Assembly); });
+var mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 #endregion
 
-#region Identity Configuration
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-    // Password settings
-    options.Password.RequiredLength = 8;
-    options.Password.RequireDigit = true;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireLowercase = true;
+#region 9. FluentValidation Configuration
 
-    // User settings
-    options.User.RequireUniqueEmail = true;
+Log.Information("Настройка FluentValidation...");
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-    // Lockout settings
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
-
-    // Sign-in settings
-    options.SignIn.RequireConfirmedEmail = false;
-    options.SignIn.RequireConfirmedPhoneNumber = false;
-})
-.AddEntityFrameworkStores<AppDbContext>()
-.AddDefaultTokenProviders();
 #endregion
 
-#region JWT Configuration
-// ���������� JwtSettings ��� ������������� � TokenService
-var jwtKey = builder.Configuration["JwtSettings:SecretKey"];
+#region 10. HttpClient Configuration
 
-if (string.IsNullOrEmpty(jwtKey) || jwtKey.Length < 32)
+Log.Information("Настройка HttpClient для DeepL...");
+builder.Services.AddHttpClient<IDeepLTranslationService, DeepLTranslationService>(client =>
 {
-    throw new InvalidOperationException("JWT ���� ����������� ��� ������� �������� (������� 32 �������)");
-}
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.SaveToken = true;
-    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = false, // �������� ��� ������
-        ValidateAudience = false, // �������� ��� ������
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ClockSkew = TimeSpan.Zero,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-    };
-
-    options.Events = new JwtBearerEvents
-    {
-        OnAuthenticationFailed = context =>
-        {
-            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-            {
-                context.Response.Headers.Add("Token-Expired", "true");
-            }
-            return Task.CompletedTask;
-        }
-    };
+    client.Timeout = TimeSpan.FromSeconds(30);
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User", "Admin"));
-    options.AddPolicy("RequireModeratorRole", policy => policy.RequireRole("Moderator", "Admin"));
-});
 #endregion
 
-#region CORS Configuration
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AngularPolicy", policy =>
-    {
-        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
-    });
-});
-#endregion
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// РЕГИСТРАЦИЯ КОНКРЕТНЫХ СЕРВИСОВ 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-#region Services Registration
-// ��� ���� �������
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<ISessionService, SessionService>();
-builder.Services.AddScoped<IActivityLogService, ActivityLogService>();
+builder.Services.AddScoped<ILanguageService, LanguageService>();
+builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new() { Title = "Auth Server API", Version = "v1" });
+builder.Services.AddScoped<ISampleService, SampleService>();
+builder.Services.AddScoped<ISampleRepository, SampleRepository>();
 
-    // JWT ����������� � Swagger
-    c.AddSecurityDefinition("Bearer", new()
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
+// Сервисы и репозитории для работы с анекдотами и именами
+builder.Services.AddScoped<IAnecdoteService, AnecdoteService>();
+builder.Services.AddScoped<IAnecdoteRepository, AnecdoteRepository>();
 
-    c.AddSecurityRequirement(new()
-    {
-        {
-            new()
-            {
-                Reference = new()
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
-});
-#endregion
+builder.Services.AddScoped<INameMainService, NameMainService>();
+builder.Services.AddScoped<INameMainRepository, NameMainRepository>();
+
+// работа с изображениями (модальное окно-простой вариант) - Мой редактор
+builder.Services.AddScoped<IEditorImageService, EditorImageService>();
+
+// ✅ ДОБАВЬТЕ ЭТО - Advanced Image Editor - Мой редактор - РАСШИРЕННАЯ ВЕРСИЯ ОБРАБОТКИ IMAGE
+builder.Services.AddScoped<IAdvancedImageProcessingService, AdvancedImageProcessingService>();
+
+
+// DeepLTranslationService уже зарегистрирован через AddHttpClient выше
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 var app = builder.Build();
 
-#region Database Initialization
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+// =================================================================
+// 3. КОНФИГУРАЦИЯ PIPELINE ПРИЛОЖЕНИЯ (ПОСЛЕ app.Build())
+// =================================================================
 
-    try
-    {
-        await SeedRolesAsync(roleManager);
-        await SeedAdminUserAsync(userManager);
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "������ ��� ������������� ������");
-    }
-}
-#endregion
+// Инициализация базы данных
+await app.InitializeDatabaseAsync();
 
-#region Pipeline Configuration
+// Конфигурация pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseDeveloperExceptionPage();
+    app.UseSwaggerDocumentation();
 }
 
-app.UseHttpsRedirection();
-app.UseCors("AngularPolicy");
+// 1. CORS (должен быть до маршрутизации)
+app.UseCorsConfiguration(app.Environment);
 
+// 2. Обработчик ошибок
+app.UseMiddleware<AuthExceptionMiddleware>();
+
+// 3. HTTPS редирект
+app.UseHttpsRedirection();
+
+// 4. Заголовки безопасности
+app.UseHsts();
+app.UseMiddleware<SecurityHeadersMiddleware>();
+
+// ✅ ДОБАВЬТЕ ЭТО: Статические файлы (ВАЖНО: до UseRouting)
+app.UseStaticFiles();
+
+// 5. Routing
+app.UseRouting();
+
+// 6. Модификация cookies
+app.AddCookieModificationMiddleware(app.Environment);
+
+// 7. Аутентификация и авторизация
 app.UseAuthentication();
 app.UseAuthorization();
+
+// 8. Rate limiting
+app.UseMiddleware<RateLimitingMiddleware>();
+
+// 9. Debug endpoints (только в development)
+if (app.Environment.IsDevelopment())
+{
+    app.ConfigureDebugEndpoints();
+}
+
+// 10. Контроллеры
 app.MapControllers();
-#endregion
 
 app.Run();
-
-#region Helper Methods
-static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
-{
-    var roles = new[] { "Admin", "User", "Moderator" };
-
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-        {
-            await roleManager.CreateAsync(new IdentityRole(role));
-        }
-    }
-}
-
-static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager)
-{
-    const string adminEmail = "admin@example.com";
-    const string adminPassword = "Admin123!";
-
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-    if (adminUser == null)
-    {
-        adminUser = new ApplicationUser
-        {
-            FirstName = "Admin",
-            LastName = "User",
-            UserName = adminEmail,
-            Email = adminEmail,
-            EmailConfirmed = true,
-            IsActive = true
-        };
-
-        var result = await userManager.CreateAsync(adminUser, adminPassword);
-
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(adminUser, "Admin");
-        }
-    }
-}
-#endregion

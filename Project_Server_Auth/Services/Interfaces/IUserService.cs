@@ -1,7 +1,8 @@
 ﻿// Services/Interfaces/IUserService.cs
-using Project_Server_Auth.Dtos;
 
-namespace Project_Server_Auth.Services.Interfaces
+using pr_srv_names.Dtos;
+
+namespace pr_srv_names.Services.Interfaces
 {
     public interface IUserService
     {

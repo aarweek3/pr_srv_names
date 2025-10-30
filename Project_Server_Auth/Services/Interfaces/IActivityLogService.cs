@@ -1,13 +1,16 @@
 ﻿// Services/Interfaces/IActivityLogService.cs
-using Project_Server_Auth.Dtos;
-using DAL.Models;
 
-namespace Project_Server_Auth.Services.Interfaces
+using DAL.Enums;
+using DAL.Models;
+using pr_srv_names.Dtos;
+
+namespace pr_srv_names.Services.Interfaces
 {
     public interface IActivityLogService
     {
         // Основное логирование
-        Task LogActivityAsync(string userId, ActivityAction action, bool success = true, string? details = null, string? entityType = null, string? entityId = null, string? ipAddress = null, string? userAgent = null);
+        Task LogActivityAsync(string userId, ActivityAction action, bool success = true, string? details = null,
+            string? entityType = null, string? entityId = null, string? ipAddress = null, string? userAgent = null);
 
         // Получение логов с фильтрацией и пагинацией
         Task<PagedResponseDto<ActivityLogDto>> GetActivityLogsAsync(ActivityLogFilterDto filter);

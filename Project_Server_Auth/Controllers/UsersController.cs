@@ -1,11 +1,13 @@
 ﻿// Controllers/UsersController.cs
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Project_Server_Auth.Dtos;
-using Project_Server_Auth.Services.Interfaces;
+using DAL.Models;
+using pr_srv_names.Dtos;
+using pr_srv_names.Services.Interfaces;
 
-namespace Project_Server_Auth.Controllers
+namespace pr_srv_names.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -14,11 +16,16 @@ namespace Project_Server_Auth.Controllers
     {
         private readonly IUserService _userService;
         private readonly ILogger<UsersController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(IUserService userService, ILogger<UsersController> logger)
+        public UsersController(
+            IUserService userService,
+            ILogger<UsersController> logger,
+            UserManager<ApplicationUser> userManager)
         {
             _userService = userService;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [HttpGet("{id}")]
@@ -57,6 +64,49 @@ namespace Project_Server_Auth.Controllers
             }
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto createUserDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(new { success = false, message = "Неверные данные" });
+
+                var existingUser = await _userManager.FindByEmailAsync(createUserDto.Email);
+                if (existingUser != null)
+                    return BadRequest(new { success = false, message = "Пользователь с таким email уже существует" });
+
+                var user = new ApplicationUser
+                {
+                    FirstName = createUserDto.FirstName,
+                    LastName = createUserDto.LastName,
+                    Email = createUserDto.Email,
+                    UserName = createUserDto.Email,
+                    Department = createUserDto.Department,
+                    IsActive = createUserDto.IsActive,
+                    EmailConfirmed = true,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                var result = await _userManager.CreateAsync(user, createUserDto.Password);
+                if (!result.Succeeded)
+                {
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    return BadRequest(new { success = false, message = errors });
+                }
+
+                await _userManager.AddToRoleAsync(user, "User");
+
+                return Ok(new { success = true, message = "Пользователь создан успешно", data = user.Id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при создании пользователя");
+                return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
+            }
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto updateUserDto)
         {
@@ -66,7 +116,9 @@ namespace Project_Server_Auth.Controllers
                     return BadRequest(ModelState);
 
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (currentUserId != id)
+                var isAdmin = User.IsInRole("Admin");
+
+                if (currentUserId != id && !isAdmin)
                     return Forbid("Можно редактировать только собственный профиль");
 
                 var result = await _userService.UpdateUserAsync(id, updateUserDto);

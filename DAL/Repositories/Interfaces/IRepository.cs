@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using System.Linq.Expressions;
-
-namespace DAL.Repositories.Interfaces
+﻿namespace DAL.Repositories.Interfaces
 {
     // =============================================================================
     // IRepository.cs - ДОПОЛНЕННЫЙ интерфейс с важными методами

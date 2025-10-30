@@ -1,5 +1,4 @@
-﻿using DAL.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore.Query;
+﻿using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
@@ -129,7 +128,8 @@ namespace DAL.Repositories
             await Entities.Where(predicate).ToListAsync();
 
         // ЧАСТИЧНОЕ ОБНОВЛЕНИЕ
-        public virtual async Task<bool> UpdatePartialAsync(int id, Expression<Func<TEntity, object>>[] propertiesToUpdate, object values)
+        public virtual async Task<bool> UpdatePartialAsync(int id,
+            Expression<Func<TEntity, object>>[] propertiesToUpdate, object values)
         {
             var entity = await GetByIdAsync(id);
             if (entity == null) return false;
@@ -176,7 +176,8 @@ namespace DAL.Repositories
         }
 
         // ДОПОЛНИТЕЛЬНЫЕ ПРОВЕРКИ
-        public virtual async Task<bool> IsUniqueAsync(Expression<Func<TEntity, object>> property, object value, int? excludeId = null)
+        public virtual async Task<bool> IsUniqueAsync(Expression<Func<TEntity, object>> property, object value,
+            int? excludeId = null)
         {
             var query = Entities.AsNoTracking().Where(BuildEqualityExpression(property, value));
 
@@ -186,7 +187,8 @@ namespace DAL.Repositories
             return !await query.AnyAsync();
         }
 
-        public virtual async Task<TResult?> GetMaxAsync<TResult>(Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, bool>>? predicate = null)
+        public virtual async Task<TResult?> GetMaxAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+            Expression<Func<TEntity, bool>>? predicate = null)
         {
             var query = Entities.AsNoTracking();
             if (predicate != null) query = query.Where(predicate);
@@ -194,7 +196,8 @@ namespace DAL.Repositories
             return await query.AnyAsync() ? await query.MaxAsync(selector) : default;
         }
 
-        public virtual async Task<TResult?> GetMinAsync<TResult>(Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, bool>>? predicate = null)
+        public virtual async Task<TResult?> GetMinAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
+            Expression<Func<TEntity, bool>>? predicate = null)
         {
             var query = Entities.AsNoTracking();
             if (predicate != null) query = query.Where(predicate);
@@ -240,7 +243,8 @@ namespace DAL.Repositories
         public virtual async Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<int> ids) =>
             await Entities.AsNoTracking().Where(e => ids.Contains(EF.Property<int>(e, "Id"))).ToListAsync();
 
-        public virtual async Task<IEnumerable<TEntity>> GetRandomAsync(int count, Expression<Func<TEntity, bool>>? predicate = null)
+        public virtual async Task<IEnumerable<TEntity>> GetRandomAsync(int count,
+            Expression<Func<TEntity, bool>>? predicate = null)
         {
             var query = Entities.AsNoTracking();
             if (predicate != null) query = query.Where(predicate);
@@ -271,7 +275,8 @@ namespace DAL.Repositories
             throw new ArgumentException("Invalid property expression");
         }
 
-        private static Expression<Func<TEntity, bool>> BuildEqualityExpression(Expression<Func<TEntity, object>> property, object value)
+        private static Expression<Func<TEntity, bool>> BuildEqualityExpression(
+            Expression<Func<TEntity, object>> property, object value)
         {
             var parameter = property.Parameters[0];
             var member = property.Body;

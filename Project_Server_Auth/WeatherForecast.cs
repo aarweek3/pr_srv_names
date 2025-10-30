@@ -1,4 +1,4 @@
-namespace Project_Server_Auth
+namespace pr_srv_names
 {
     public class WeatherForecast
     {

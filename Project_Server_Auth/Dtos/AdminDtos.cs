@@ -1,8 +1,10 @@
 ﻿// Dtos/SimpleAdminDtos.cs
+
 using DAL.Models;
 using System.ComponentModel.DataAnnotations;
+using DAL.Enums;
 
-namespace Project_Server_Auth.Dtos
+namespace pr_srv_names.Dtos
 {
     // DTO для создания пользователя администратором (простая версия)
     public class SimpleAdminCreateUserDto
@@ -19,8 +21,7 @@ namespace Project_Server_Auth.Dtos
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
 
-        [MaxLength(100)]
-        public string? Department { get; set; }
+        [MaxLength(100)] public string? Department { get; set; }
 
         [Required(ErrorMessage = "Пароль обязателен")]
         [MinLength(6)]
@@ -32,19 +33,17 @@ namespace Project_Server_Auth.Dtos
     // DTO для обновления пользователя администратором (простая версия)
     public class SimpleAdminUpdateUserDto
     {
-        [MaxLength(100)]
-        public string? FirstName { get; set; }
+        [MaxLength(100)] public string? FirstName { get; set; }
 
-        [MaxLength(100)]
-        public string? LastName { get; set; }
+        [MaxLength(100)] public string? LastName { get; set; }
 
-        [MaxLength(100)]
-        public string? Department { get; set; }
+        [MaxLength(100)] public string? Department { get; set; }
 
         public bool? IsActive { get; set; }
     }
 
     // DTO для списка пользователей в админке
+
     public class SimpleAdminUserDto
     {
         public string Id { get; set; } = string.Empty;
@@ -55,6 +54,7 @@ namespace Project_Server_Auth.Dtos
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLogin { get; set; }
         public int ActiveSessionsCount { get; set; }
+        public List<string> Roles { get; set; } = new();
     }
 
     // DTO для простой статистики
@@ -98,8 +98,6 @@ namespace Project_Server_Auth.Dtos
     // DTO для смены пароля администратором
     public class AdminChangePasswordDto
     {
-        [Required]
-        [MinLength(6)]
-        public string NewPassword { get; set; } = string.Empty;
+        [Required] [MinLength(6)] public string NewPassword { get; set; } = string.Empty;
     }
 }

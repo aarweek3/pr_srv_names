@@ -1,8 +1,10 @@
 ﻿// Services/Interfaces/ISimpleAdminService.cs
-using DAL.Models;
-using Project_Server_Auth.Dtos;
 
-namespace Project_Server_Auth.Services.Interfaces
+using DAL.DTOs;
+using DAL.Models;
+using pr_srv_names.Dtos;
+
+namespace pr_srv_names.Services.Interfaces
 {
     public interface ISimpleAdminService
     {

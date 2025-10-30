@@ -1,4 +1,5 @@
 // DAL/Interfaces/IUnitOfWork.cs
+
 using DAL.Repositories.Interfaces;
 using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,34 @@ namespace DAL.Interfaces
     /// </summary>
     public interface IUnitOfWork : IDisposable
     {
+        IAnecdoteRepository Anecdotes { get; }
+        INameMainRepository NameMains { get; }
+
+        /// <summary>
+        /// Репозиторий для работы с Samples
+        /// </summary>
+        ISampleRepository Samples { get; }
+
+        /// <summary>
+        /// Репозиторий для работы с языками
+        /// </summary>
+        ILanguageRepository Languages { get; }
+
+        /// <summary>
+        /// Репозиторий для работы с именами
+        /// </summary>
+        INameRepository Names { get; }
+
+        /// <summary>
+        /// Репозиторий для работы с описаниями имен
+        /// </summary>
+        INameDescriptionRepository NameDescriptions { get; }
+
+        /// <summary>
+        /// Репозиторий для работы с SEO
+        /// </summary>
+        ISeoDataRepository SeoDatas { get; }
+
         // ===========================
         // СВОЙСТВА КОНТЕКСТА
         // ===========================

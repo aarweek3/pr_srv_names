@@ -1,11 +1,11 @@
 // DAL/UnitOfWork.cs - ПОЛНАЯ РЕАЛИЗАЦИЯ
+
 using DAL.Interfaces;
 using DAL.Repositories;
 using DAL.Repositories.Interfaces;
 using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Data;
 
 namespace DAL
 {
@@ -19,10 +19,37 @@ namespace DAL
         private bool _disposed = false;
         private IDbContextTransaction? _currentTransaction;
 
+        // ReSharper disable once ConvertToPrimaryConstructor
         public UnitOfWork(AppDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+
+        // Добавь в UnitOfWork эти поля и свойства:
+
+        private INameMainRepository? _nameMainRepository;
+        public INameMainRepository NameMains => _nameMainRepository ??= new NameMainRepository(_context);
+
+        private IAnecdoteRepository? _anecdoteRepository;
+        public IAnecdoteRepository Anecdotes => _anecdoteRepository ??= new AnecdoteRepository(_context);
+
+        private ILanguageRepository? _languageRepository;
+        public ILanguageRepository Languages => _languageRepository ??= new LanguageRepository(_context);
+
+
+        private INameRepository? _nameRepository;
+        public INameRepository Names => _nameRepository ??= new NameRepository(_context);
+
+        private INameDescriptionRepository? _nameDescriptionRepository;
+
+        public INameDescriptionRepository NameDescriptions =>
+            _nameDescriptionRepository ??= new NameDescriptionRepository(_context);
+
+        private ISeoDataRepository? _seoDataRepository;
+        public ISeoDataRepository SeoDatas => _seoDataRepository ??= new SeoDataRepository(_context);
+
+        private ISampleRepository? _sampleRepository;
+        public ISampleRepository Samples => _sampleRepository ??= new SampleRepository(_context);
 
         // ===========================
         // СВОЙСТВА КОНТЕКСТА
@@ -103,7 +130,8 @@ namespace DAL
         public async Task BeginTransactionAsync()
         {
             if (_currentTransaction != null)
-                throw new InvalidOperationException("Транзакция уже начата. Завершите текущую транзакцию перед началом новой.");
+                throw new InvalidOperationException(
+                    "Транзакция уже начата. Завершите текущую транзакцию перед началом новой.");
 
             _currentTransaction = await _context.Database.BeginTransactionAsync();
         }
@@ -183,7 +211,8 @@ namespace DAL
             }
         }
 
-        public async Task<T> ExecuteInTransactionAsync<T>(Func<Task<T>> action, CancellationToken cancellationToken = default)
+        public async Task<T> ExecuteInTransactionAsync<T>(Func<Task<T>> action,
+            CancellationToken cancellationToken = default)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -266,7 +295,8 @@ namespace DAL
                 var schemaName = entityType.GetSchema() ?? "public";
 
                 if (string.IsNullOrEmpty(tableName))
-                    throw new InvalidOperationException($"Не удалось получить имя таблицы для типа {typeof(TEntity).Name}.");
+                    throw new InvalidOperationException(
+                        $"Не удалось получить имя таблицы для типа {typeof(TEntity).Name}.");
 
                 // PostgreSQL версия сброса последовательности
                 var sequenceName = $"{tableName}_id_seq";
@@ -276,7 +306,8 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Ошибка при сбросе последовательности для {typeof(TEntity).Name}.", ex);
+                throw new InvalidOperationException($"Ошибка при сбросе последовательности для {typeof(TEntity).Name}.",
+                    ex);
             }
         }
 

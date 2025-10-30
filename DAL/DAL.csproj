@@ -10,12 +10,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Data\**" />
-	  <Compile Remove="Services\**" />
-	  <EmbeddedResource Remove="Data\**" />
-	  <EmbeddedResource Remove="Services\**" />
-	  <None Remove="Data\**" />
-	  <None Remove="Services\**" />
+		<Compile Remove="Data\**" />
+		<Compile Remove="Services\**" />
+		<EmbeddedResource Remove="Data\**" />
+		<EmbeddedResource Remove="Services\**" />
+		<None Remove="Data\**" />
+		<None Remove="Services\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -51,11 +51,6 @@
 		<Compile Update="**\*.cs">
 			<ExcludeFromStyleCop>false</ExcludeFromStyleCop>
 		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Base\" />
-	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 </Project>

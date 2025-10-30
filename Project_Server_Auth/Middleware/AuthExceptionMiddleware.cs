@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql;
+using System.Net;
 using System.Security;
 using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace Project_Server_Auth.Middleware
+namespace pr_srv_names.Middleware
 {
     public class AuthExceptionMiddleware
     {
@@ -14,9 +15,9 @@ namespace Project_Server_Auth.Middleware
 
         public AuthExceptionMiddleware(RequestDelegate next, ILogger<AuthExceptionMiddleware> logger, IHostEnvironment env)
         {
-            _next = next;
-            _logger = logger;
-            _env = env;
+            _next = next ?? throw new ArgumentNullException(nameof(next));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _env = env ?? throw new ArgumentNullException(nameof(env));
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -24,6 +25,9 @@ namespace Project_Server_Auth.Middleware
             try
             {
                 await _next(context);
+
+                // Обрабатываем 401 и 403 статусы для API endpoints, исключая тестовые пути
+                await HandleHttpStatusCodes(context);
             }
             catch (Exception ex)
             {
@@ -31,152 +35,170 @@ namespace Project_Server_Auth.Middleware
             }
         }
 
+        private async Task HandleHttpStatusCodes(HttpContext context)
+        {
+            if ((context.Response.StatusCode == 401 || context.Response.StatusCode == 403) &&
+                !context.Response.HasStarted &&
+                context.Request.Path.StartsWithSegments("/api") &&
+                !context.Request.Path.StartsWithSegments("/api/test")) // Исключение для тестовых эндпоинтов
+            {
+                context.Response.ContentType = "application/json; charset=utf-8";
+
+                var errorResponse = new ErrorResponseModel
+                {
+                    Success = false,
+                    Message = context.Response.StatusCode == 401 ? "Unauthorized access" : "Access forbidden",
+                    StatusCode = context.Response.StatusCode,
+                    CorrelationId = context.TraceIdentifier,
+                    ErrorCode = context.Response.StatusCode == 401 ? "UNAUTHORIZED" : "FORBIDDEN"
+                };
+
+                var json = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+
+                await context.Response.WriteAsync(json);
+            }
+        }
+
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var correlationId = context.TraceIdentifier;
-            _logger.LogError(exception, "Error occurred. CorrelationId: {CorrelationId}, Path: {Path}, Method: {Method}",
-                correlationId, context.Request.Path, context.Request.Method);
 
-            var response = context.Response;
-            response.ContentType = "application/json";
-
-            var errorResponse = CreateErrorResponse(exception, correlationId);
-            response.StatusCode = errorResponse.StatusCode;
-
-            await response.WriteAsync(JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
+            // Логируем только серьезные ошибки как Error
+            if (IsServerError(exception))
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            }));
+                _logger.LogError(exception, "Server error occurred. CorrelationId: {CorrelationId}, Path: {Path}, Method: {Method}",
+                    correlationId, context.Request.Path, context.Request.Method);
+            }
+            else
+            {
+                _logger.LogWarning(exception, "Client error occurred. CorrelationId: {CorrelationId}, Path: {Path}, Method: {Method}",
+                    correlationId, context.Request.Path, context.Request.Method);
+            }
+
+            // Проверяем, что response еще не начался
+            if (context.Response.HasStarted)
+            {
+                _logger.LogWarning("Cannot write error response - response has already started");
+                return;
+            }
+
+            context.Response.ContentType = "application/json; charset=utf-8";
+            var errorResponse = CreateErrorResponse(exception, correlationId);
+            context.Response.StatusCode = errorResponse.StatusCode;
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = _env.IsDevelopment()
+            };
+
+            await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse, jsonOptions));
+        }
+
+        private static bool IsServerError(Exception exception)
+        {
+            return exception is not (ArgumentException or ArgumentNullException or
+                                   UnauthorizedAccessException or SecurityTokenException or
+                                   SecurityException or FileNotFoundException or
+                                   DirectoryNotFoundException);
         }
 
         private ErrorResponseModel CreateErrorResponse(Exception exception, string correlationId)
         {
             return exception switch
             {
-                // JWT и Security исключения
-                SecurityTokenException or SecurityException => new ErrorResponseModel
+                SecurityTokenException or SecurityTokenValidationException => new ErrorResponseModel
                 {
                     Success = false,
                     Message = "Invalid or expired token",
                     StatusCode = StatusCodes.Status401Unauthorized,
-                    CorrelationId = correlationId
+                    CorrelationId = correlationId,
+                    ErrorCode = "INVALID_TOKEN"
                 },
 
-                // Identity исключения
-                InvalidOperationException when exception.Message.Contains("role") => new ErrorResponseModel
+                SecurityException => new ErrorResponseModel
                 {
                     Success = false,
-                    Message = "Role operation failed",
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    CorrelationId = correlationId
+                    Message = "Security validation failed",
+                    StatusCode = StatusCodes.Status401Unauthorized,
+                    CorrelationId = correlationId,
+                    ErrorCode = "SECURITY_ERROR"
                 },
 
-                // Unauthorized
                 UnauthorizedAccessException => new ErrorResponseModel
                 {
                     Success = false,
                     Message = "Unauthorized access",
                     StatusCode = StatusCodes.Status401Unauthorized,
-                    CorrelationId = correlationId
+                    CorrelationId = correlationId,
+                    ErrorCode = "UNAUTHORIZED"
                 },
 
-                // Validation исключения
-                ArgumentException or ArgumentNullException => new ErrorResponseModel
+                ArgumentNullException argNull => new ErrorResponseModel
                 {
                     Success = false,
-                    Message = "Invalid request parameters",
+                    Message = _env.IsDevelopment() ? $"Required parameter is missing: {argNull.ParamName}" : "Required parameter is missing",
                     StatusCode = StatusCodes.Status400BadRequest,
-                    CorrelationId = correlationId
+                    CorrelationId = correlationId,
+                    ErrorCode = "MISSING_PARAMETER"
                 },
 
-                // Database исключения
-                DbUpdateException dbEx when dbEx.InnerException is PostgresException pgEx => CreatePostgresErrorResponse(pgEx, correlationId),
-
-                DbUpdateException => new ErrorResponseModel
+                ArgumentException arg => new ErrorResponseModel
                 {
                     Success = false,
-                    Message = "Database operation failed",
-                    StatusCode = StatusCodes.Status500InternalServerError,
-                    CorrelationId = correlationId
+                    Message = _env.IsDevelopment() ? arg.Message : "Invalid request parameters",
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    CorrelationId = correlationId,
+                    ErrorCode = "INVALID_PARAMETER"
                 },
 
-                // Операции с файлами
                 FileNotFoundException => new ErrorResponseModel
                 {
                     Success = false,
-                    Message = "File not found",
+                    Message = "Requested file not found",
                     StatusCode = StatusCodes.Status404NotFound,
-                    CorrelationId = correlationId
+                    CorrelationId = correlationId,
+                    ErrorCode = "FILE_NOT_FOUND"
                 },
 
-                DirectoryNotFoundException => new ErrorResponseModel
+                HttpRequestException httpEx => new ErrorResponseModel
                 {
                     Success = false,
-                    Message = "Directory not found",
-                    StatusCode = StatusCodes.Status404NotFound,
-                    CorrelationId = correlationId
+                    Message = _env.IsDevelopment() ? httpEx.Message : "External service error",
+                    StatusCode = StatusCodes.Status502BadGateway,
+                    CorrelationId = correlationId,
+                    ErrorCode = "EXTERNAL_SERVICE_ERROR"
                 },
 
-                // Общие исключения
+                TimeoutException => new ErrorResponseModel
+                {
+                    Success = false,
+                    Message = "Request timeout",
+                    StatusCode = StatusCodes.Status408RequestTimeout,
+                    CorrelationId = correlationId,
+                    ErrorCode = "TIMEOUT"
+                },
+
+                TaskCanceledException => new ErrorResponseModel
+                {
+                    Success = false,
+                    Message = "Request was cancelled",
+                    StatusCode = StatusCodes.Status408RequestTimeout,
+                    CorrelationId = correlationId,
+                    ErrorCode = "REQUEST_CANCELLED"
+                },
+
                 _ => new ErrorResponseModel
                 {
                     Success = false,
                     Message = _env.IsDevelopment() ? exception.Message : "An error occurred while processing your request",
                     StatusCode = StatusCodes.Status500InternalServerError,
-                    CorrelationId = correlationId
+                    CorrelationId = correlationId,
+                    ErrorCode = "INTERNAL_ERROR"
                 }
-            };
-        }
-
-        private ErrorResponseModel CreatePostgresErrorResponse(PostgresException pgEx, string correlationId)
-        {
-            return pgEx.SqlState switch
-            {
-                "23505" => new ErrorResponseModel // Unique violation
-                {
-                    Success = false,
-                    Message = GetUniqueViolationMessage(pgEx.ConstraintName),
-                    StatusCode = StatusCodes.Status409Conflict,
-                    CorrelationId = correlationId
-                },
-
-                "23503" => new ErrorResponseModel // Foreign key violation
-                {
-                    Success = false,
-                    Message = "Cannot delete record because it is referenced by other data",
-                    StatusCode = StatusCodes.Status409Conflict,
-                    CorrelationId = correlationId
-                },
-
-                "23514" => new ErrorResponseModel // Check constraint violation
-                {
-                    Success = false,
-                    Message = "Data validation failed",
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    CorrelationId = correlationId
-                },
-
-                _ => new ErrorResponseModel
-                {
-                    Success = false,
-                    Message = _env.IsDevelopment() ? pgEx.Message : "Database operation failed",
-                    StatusCode = StatusCodes.Status500InternalServerError,
-                    CorrelationId = correlationId
-                }
-            };
-        }
-
-        private static string GetUniqueViolationMessage(string? constraintName)
-        {
-            if (string.IsNullOrEmpty(constraintName))
-                return "A record with these values already exists";
-
-            return constraintName.ToLower() switch
-            {
-                var name when name.Contains("email") => "User with this email already exists",
-                var name when name.Contains("username") => "Username is already taken",
-                var name when name.Contains("refreshtoken") => "Token conflict occurred",
-                _ => "A record with these values already exists"
             };
         }
     }
@@ -187,6 +209,15 @@ namespace Project_Server_Auth.Middleware
         public string Message { get; set; } = string.Empty;
         public int StatusCode { get; set; }
         public string? CorrelationId { get; set; }
+        public string? ErrorCode { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    }
+
+    public static class AuthExceptionMiddlewareExtensions
+    {
+        public static IApplicationBuilder UseAuthExceptionHandler(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<AuthExceptionMiddleware>();
+        }
     }
 }

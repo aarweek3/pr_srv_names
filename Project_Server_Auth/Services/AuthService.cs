@@ -1,17 +1,14 @@
 ﻿// Services/AuthService.cs
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using DAL;
+using DAL.Enums;
 using DAL.Models;
-using Project_Server_Auth.Dtos;
-using Project_Server_Auth.Services.Interfaces;
+using pr_srv_names.Dtos;
+using pr_srv_names.Services.Interfaces;
 
-namespace Project_Server_Auth.Services
+namespace pr_srv_names.Services
 {
     public class AuthService : IAuthService
     {
@@ -20,30 +17,31 @@ namespace Project_Server_Auth.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
+        private readonly ITokenService _tokenService;
 
         public AuthService(
             AppDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
-            ILogger<AuthService> logger)
+            ILogger<AuthService> logger,
+            ITokenService tokenService)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _logger = logger;
+            _tokenService = tokenService;
         }
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)
         {
-            // Проверка существования пользователя
             if (await _userManager.FindByEmailAsync(registerDto.Email) != null)
             {
                 throw new InvalidOperationException("Пользователь с таким email уже существует");
             }
 
-            // Создание пользователя
             var user = new ApplicationUser
             {
                 UserName = registerDto.Email,
@@ -61,10 +59,9 @@ namespace Project_Server_Auth.Services
                 throw new InvalidOperationException($"Ошибка создания пользователя: {errors}");
             }
 
-            // Логирование
+            await _userManager.AddToRoleAsync(user, "User");
             await LogActivityAsync(user.Id, ActivityAction.Register, true);
 
-            // Генерация токенов
             var tokens = await GenerateTokensAsync(user);
 
             return new AuthResponseDto
@@ -92,10 +89,8 @@ namespace Project_Server_Auth.Services
                 throw new UnauthorizedAccessException("Неверные учетные данные");
             }
 
-            // Обновление последнего входа
             user.LastLogin = DateTime.UtcNow;
             await _userManager.UpdateAsync(user);
-
             await LogActivityAsync(user.Id, ActivityAction.Login, true);
 
             var tokens = await GenerateTokensAsync(user);
@@ -136,22 +131,20 @@ namespace Project_Server_Auth.Services
             }
         }
 
-        public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto)
+        public async Task<AuthResponseDto> RefreshTokenFromCookieAsync(string refreshToken)
         {
             var session = await _context.UserSessions
                 .Include(s => s.User)
-                .FirstOrDefaultAsync(s => s.RefreshToken == refreshTokenDto.RefreshToken && !s.IsRevoked);
+                .FirstOrDefaultAsync(s => s.RefreshToken == refreshToken && !s.IsRevoked);
 
             if (session == null || session.ExpiresAt <= DateTime.UtcNow)
             {
                 throw new UnauthorizedAccessException("Недействительный refresh токен");
             }
 
-            // Отзыв старого токена
             session.IsRevoked = true;
             session.RevokedAt = DateTime.UtcNow;
 
-            // Генерация новых токенов
             var tokens = await GenerateTokensAsync(session.User);
             await _context.SaveChangesAsync();
 
@@ -164,13 +157,19 @@ namespace Project_Server_Auth.Services
             };
         }
 
+        public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto)
+        {
+            return await RefreshTokenFromCookieAsync(refreshTokenDto.RefreshToken);
+        }
+
         public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordDto changePasswordDto)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 throw new InvalidOperationException("Пользователь не найден");
 
-            var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword,
+                changePasswordDto.NewPassword);
             if (!result.Succeeded)
             {
                 await LogActivityAsync(userId, ActivityAction.ChangePassword, false);
@@ -188,19 +187,17 @@ namespace Project_Server_Auth.Services
             return user != null ? MapToUserProfileDto(user) : null;
         }
 
-        // Приватные методы
         private async Task<TokenResult> GenerateTokensAsync(ApplicationUser user)
         {
-            var accessToken = GenerateAccessToken(user);
-            var refreshToken = GenerateRefreshToken();
-            var expiresAt = DateTime.UtcNow.AddMinutes(60); // 1 час
+            var accessToken = await _tokenService.GenerateAccessToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            var expiresAt = DateTime.UtcNow.AddMinutes(60);
 
-            // Сохранение сессии
             var session = new UserSession
             {
                 UserId = user.Id,
                 RefreshToken = refreshToken,
-                ExpiresAt = DateTime.UtcNow.AddDays(30), // 30 дней для refresh token
+                ExpiresAt = DateTime.UtcNow.AddDays(30),
                 IsRevoked = false
             };
 
@@ -213,37 +210,6 @@ namespace Project_Server_Auth.Services
                 RefreshToken = refreshToken,
                 ExpiresAt = expiresAt
             };
-        }
-
-        private string GenerateAccessToken(ApplicationUser user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:SecretKey"] ?? "your-secret-key-here");
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Email, user.Email ?? ""),
-                new Claim(ClaimTypes.Name, user.FullName)
-            };
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(60),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
-
-        private string GenerateRefreshToken()
-        {
-            var randomBytes = new byte[64];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomBytes);
-            return Convert.ToBase64String(randomBytes);
         }
 
         private UserProfileDto MapToUserProfileDto(ApplicationUser user)

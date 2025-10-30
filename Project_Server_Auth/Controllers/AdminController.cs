@@ -1,11 +1,13 @@
 ﻿// Controllers/AdminPanelController.cs
+
+using DAL.DTOs;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Project_Server_Auth.Dtos;
-using Project_Server_Auth.Services.Interfaces;
+using pr_srv_names.Dtos;
+using pr_srv_names.Services.Interfaces;
 
-namespace Project_Server_Auth.Controllers
+namespace pr_srv_names.Controllers
 {
     [ApiController]
     [Route("api/admin-panel")]
@@ -267,7 +269,10 @@ namespace Project_Server_Auth.Controllers
             try
             {
                 var result = await _adminService.RevokeAllUserSessionsAsync(id);
-                return Ok(new { success = result, message = result ? "Все сессии пользователя отозваны" : "Ошибка при отзыве сессий" });
+                return Ok(new
+                {
+                    success = result, message = result ? "Все сессии пользователя отозваны" : "Ошибка при отзыве сессий"
+                });
             }
             catch (Exception ex)
             {

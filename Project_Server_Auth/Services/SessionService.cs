@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.Models;
-using Project_Server_Auth.Dtos;
-using Project_Server_Auth.Services.Interfaces;
+using pr_srv_names.Dtos;
+using pr_srv_names.Services.Interfaces;
 
-namespace Project_Server_Auth.Services
+namespace pr_srv_names.Services
 {
     public class SessionService : ISessionService
     {

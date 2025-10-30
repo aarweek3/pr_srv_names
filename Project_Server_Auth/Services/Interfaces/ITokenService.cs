@@ -2,11 +2,11 @@
 using System.Security.Claims;
 using DAL.Models;
 
-namespace Project_Server_Auth.Services.Interfaces
+namespace pr_srv_names.Services.Interfaces
 {
     public interface ITokenService
     {
-        string GenerateAccessToken(ApplicationUser user);
+        Task<string> GenerateAccessToken(ApplicationUser user); // Изменить на Task<string>
         string GenerateRefreshToken();
         ClaimsPrincipal? GetClaimsFromToken(string token);
         bool ValidateToken(string token);

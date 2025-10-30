@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Project_Server_Auth.Dtos;
-using Project_Server_Auth.Services.Interfaces;
+using pr_srv_names.Dtos;
+using pr_srv_names.Services.Interfaces;
 
-namespace Project_Server_Auth.Controllers
+namespace pr_srv_names.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -149,6 +149,24 @@ namespace Project_Server_Auth.Controllers
                 _logger.LogError(ex, "Ошибка при валидации сессии");
                 return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
             }
+        }
+
+        [HttpGet("debug-token")]
+        [Authorize]
+        public IActionResult DebugToken()
+        {
+            var claims = User.Claims.Select(c => new
+            {
+                Type = c.Type,
+                Value = c.Value
+            }).ToList();
+
+            return Ok(new
+            {
+                success = true,
+                claims = claims,
+                roles = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList()
+            });
         }
     }
 }

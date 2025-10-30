@@ -1,11 +1,13 @@
 ﻿// Services/ActivityLogService.cs
+
 using Microsoft.EntityFrameworkCore;
 using DAL;
+using DAL.Enums;
 using DAL.Models;
-using Project_Server_Auth.Dtos;
-using Project_Server_Auth.Services.Interfaces;
+using pr_srv_names.Dtos;
+using pr_srv_names.Services.Interfaces;
 
-namespace Project_Server_Auth.Services
+namespace pr_srv_names.Services
 {
     public class ActivityLogService : IActivityLogService
     {
@@ -18,7 +20,9 @@ namespace Project_Server_Auth.Services
             _logger = logger;
         }
 
-        public async Task LogActivityAsync(string userId, ActivityAction action, bool success = true, string? details = null, string? entityType = null, string? entityId = null, string? ipAddress = null, string? userAgent = null)
+        public async Task LogActivityAsync(string userId, ActivityAction action, bool success = true,
+            string? details = null, string? entityType = null, string? entityId = null, string? ipAddress = null,
+            string? userAgent = null)
         {
             try
             {
@@ -42,7 +46,8 @@ namespace Project_Server_Auth.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при логировании активности пользователя {UserId}, действие {Action}", userId, action);
+                _logger.LogError(ex, "Ошибка при логировании активности пользователя {UserId}, действие {Action}",
+                    userId, action);
             }
         }
 
@@ -248,7 +253,8 @@ namespace Project_Server_Auth.Services
             }
         }
 
-        public async Task<Dictionary<ActivityAction, int>> GetActivityStatisticsAsync(DateTime? from = null, DateTime? to = null)
+        public async Task<Dictionary<ActivityAction, int>> GetActivityStatisticsAsync(DateTime? from = null,
+            DateTime? to = null)
         {
             try
             {

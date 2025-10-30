@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.Models;
-using Project_Server_Auth.Dtos;
-using Project_Server_Auth.Services.Interfaces;
+using pr_srv_names.Dtos;
+using pr_srv_names.Services.Interfaces;
 
-namespace Project_Server_Auth.Services
+namespace pr_srv_names.Services
 {
     public class UserService : IUserService
     {
@@ -174,26 +174,37 @@ namespace Project_Server_Auth.Services
 
                 var totalCount = await query.CountAsync();
 
+                // ОБНОВЛЕНО: Получаем пользователей с ролями
                 var users = await query
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize)
-                    .Select(u => new UserListItemDto
-                    {
-                        Id = u.Id,
-                        FullName = u.FirstName + " " + u.LastName,
-                        Email = u.Email ?? "",
-                        Department = u.Department,
-                        IsActive = u.IsActive,
-                        CreatedAt = u.CreatedAt,
-                        LastLogin = u.LastLogin,
-                        IsExternalAccount = u.IsExternalAccount,
-                        ExternalProvider = u.ExternalProvider
-                    })
                     .ToListAsync();
+
+                // Получаем роли для каждого пользователя
+                var userDtos = new List<UserListItemDto>();
+                foreach (var user in users)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    userDtos.Add(new UserListItemDto
+                    {
+                        Id = user.Id,
+                        FullName = user.FirstName + " " + user.LastName,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email ?? "",
+                        Department = user.Department,
+                        IsActive = user.IsActive,
+                        CreatedAt = user.CreatedAt,
+                        LastLogin = user.LastLogin,
+                        IsExternalAccount = user.IsExternalAccount,
+                        ExternalProvider = user.ExternalProvider,
+                        Roles = roles.ToList() // ДОБАВЛЕНО
+                    });
+                }
 
                 return new PagedResponseDto<UserListItemDto>
                 {
-                    Data = users,
+                    Data = userDtos,
                     TotalCount = totalCount,
                     PageNumber = filter.PageNumber,
                     PageSize = filter.PageSize

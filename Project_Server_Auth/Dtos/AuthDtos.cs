@@ -1,8 +1,21 @@
 ﻿using DAL.Models;
 using System.ComponentModel.DataAnnotations;
+using DAL.DTOs;
+using DAL.Enums;
 
-namespace Project_Server_Auth.Dtos
-{ // DTO для результата поиска пользователей
+namespace pr_srv_names.Dtos
+{
+    public class CreateUserDto
+    {
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string? Department { get; set; }
+        public bool IsActive { get; set; } = true;
+    }
+
+    // DTO для результата поиска пользователей
     public class UserSearchResultDto
     {
         public string Id { get; set; } = string.Empty;
@@ -12,6 +25,7 @@ namespace Project_Server_Auth.Dtos
         public string? Avatar { get; set; }
         public bool IsActive { get; set; }
     }
+
     public class LogoutDto
     {
         public string? RefreshToken { get; set; }
@@ -144,11 +158,14 @@ namespace Project_Server_Auth.Dtos
     public class UserSessionDto
     {
         public int Id { get; set; } // Добавить ID для удобства управления
+
         [MaxLength(500, ErrorMessage = "Refresh-токен не должен превышать 500 символов")]
         public string RefreshToken { get; set; } = string.Empty;
+
         public DateTime ExpiresAt { get; set; }
         public bool IsRevoked { get; set; }
         public DateTime? RevokedAt { get; set; }
+
         [MaxLength(500, ErrorMessage = "Информация об устройстве не должна превышать 500 символов")]
         public string? DeviceInfo { get; set; } // Информация о браузере или ОС
     }
@@ -158,9 +175,11 @@ namespace Project_Server_Auth.Dtos
     {
         [MaxLength(500, ErrorMessage = "Refresh-токен не должен превышать 500 символов")]
         public string? RefreshToken { get; set; }
+
         public DateTime? ExpiresAt { get; set; }
         public bool? IsRevoked { get; set; }
         public DateTime? RevokedAt { get; set; }
+
         [MaxLength(500, ErrorMessage = "Информация об устройстве не должна превышать 500 символов")]
         public string? DeviceInfo { get; set; } // Обновление данных об устройстве
     }
@@ -232,10 +251,6 @@ namespace Project_Server_Auth.Dtos
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$",
             ErrorMessage = "Пароль должен содержать минимум одну заглавную букву, одну строчную букву и одну цифру")]
         public string NewPassword { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Подтверждение пароля обязательно")]
-        [Compare(nameof(NewPassword), ErrorMessage = "Пароли не совпадают")]
-        public string ConfirmPassword { get; set; } = string.Empty;
     }
 
     // Универсальный DTO для пагинированного ответа
@@ -255,6 +270,8 @@ namespace Project_Server_Auth.Dtos
     {
         public string Id { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string? Department { get; set; }
         public bool IsActive { get; set; }
@@ -262,6 +279,7 @@ namespace Project_Server_Auth.Dtos
         public DateTime? LastLogin { get; set; }
         public bool IsExternalAccount { get; set; }
         public string? ExternalProvider { get; set; }
+        public List<string> Roles { get; set; } = new(); // ДОБАВИТЬ
     }
 
     // DTO для фильтрации пользователей

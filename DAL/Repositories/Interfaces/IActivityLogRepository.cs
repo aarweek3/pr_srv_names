@@ -1,4 +1,6 @@
 ﻿// DAL/Repositories/Interfaces/IActivityLogRepository.cs
+
+using DAL.Enums;
 using DAL.Models;
 using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
 
@@ -77,6 +79,7 @@ namespace DAL.Repositories.Interfaces
         /// <summary>
         /// Получение топ активных пользователей
         /// </summary>
-        Task<IEnumerable<(string UserId, int ActivityCount)>> GetTopActiveUsersAsync(DateTime from, DateTime to, int count = 10);
+        Task<IEnumerable<(string UserId, int ActivityCount)>> GetTopActiveUsersAsync(DateTime from, DateTime to,
+            int count = 10);
     }
 }
