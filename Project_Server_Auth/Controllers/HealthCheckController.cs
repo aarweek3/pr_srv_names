@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ * HealthCheckController — это стандартный, лёгкий и рекомендуемый подход для health checks в ASP.NET Core.
+ * Подходит для автоматических проверок оркестраторами (Kubernetes, Docker, Azure и т.д.).
+ */
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace pr_srv_names.Controllers

@@ -10,6 +10,7 @@ using pr_srv_names.Middleware;
 using pr_srv_names.Pages.AdvancedImageEditor.Services;
 using pr_srv_names.Pages.Anecdote.Interfaces;
 using pr_srv_names.Pages.Anecdote.Services;
+using pr_srv_names.Pages.Health.Services;
 using pr_srv_names.Pages.Language.Intarfaces;
 using pr_srv_names.Pages.Language.Services;
 using pr_srv_names.Pages.NameMain.Intarfaces;
@@ -102,6 +103,11 @@ builder.Services.AddScoped<IEditorImageService, EditorImageService>();
 
 // ✅ ДОБАВЬТЕ ЭТО - Advanced Image Editor - Мой редактор - РАСШИРЕННАЯ ВЕРСИЯ ОБРАБОТКИ IMAGE
 builder.Services.AddScoped<IAdvancedImageProcessingService, AdvancedImageProcessingService>();
+
+builder.Services.AddScoped<IHealthCheckEnhancedService, HealthCheckEnhancedService>();
+
+// ✅ ДОБАВЬТЕ ЭТУ СТРОКУ:
+builder.Services.AddHealthChecks();
 
 
 // DeepLTranslationService уже зарегистрирован через AddHttpClient выше
