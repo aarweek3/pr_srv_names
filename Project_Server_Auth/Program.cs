@@ -19,6 +19,8 @@ using pr_srv_names.Pages.Sample.Intarfaces;
 using pr_srv_names.Pages.Sample.Services;
 using pr_srv_names.Services.Editor;
 using pr_srv_names.Supports.Deepl;
+using pr_srv_names.Pages.UserSetting.Interfaces;
+using pr_srv_names.Pages.UserSetting.Services;
 using Serilog;
 
 
@@ -83,6 +85,25 @@ builder.Services.AddHttpClient<IDeepLTranslationService, DeepLTranslationService
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // РЕГИСТРАЦИЯ КОНКРЕТНЫХ СЕРВИСОВ 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Обычно здесь указываются схемы по умолчанию, например .AddJwtBearer(...)
+
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        // Эти ключи будут браться из appsettings.json или User Secrets
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+
+        // Это путь внутри вашего API, который перехватит ответ от Google.
+        // Менять его обычно не нужно, но он должен совпадать с тем, что в Google Console (см. пункт 3).
+        options.CallbackPath = "/signin-google"; // Путь внутри API, куда вернет Google
+    })
+    .AddFacebook(options =>
+    {
+        options.AppId = builder.Configuration["Authentication:Facebook:AppId"]!;
+        options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"]!;
+    });
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<ILanguageService, LanguageService>();
@@ -97,6 +118,10 @@ builder.Services.AddScoped<IAnecdoteRepository, AnecdoteRepository>();
 
 builder.Services.AddScoped<INameMainService, NameMainService>();
 builder.Services.AddScoped<INameMainRepository, NameMainRepository>();
+
+// Репозиторий для работы с настройками пользователей
+builder.Services.AddScoped<IUserSettingsRepository, UserSettingsRepository>();
+builder.Services.AddScoped<IUserSettingsService, UserSettingsService>();
 
 // работа с изображениями (модальное окно-простой вариант) - Мой редактор
 builder.Services.AddScoped<IEditorImageService, EditorImageService>();

@@ -1,4 +1,4 @@
-// DAL/UnitOfWork.cs - ПОЛНАЯ РЕАЛИЗАЦИЯ
+// DAL/UnitOfWork.cs - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 using DAL.Interfaces;
 using DAL.Repositories;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace DAL
 {
     /// <summary>
-    /// Полная реализация Unit of Work паттерна
+    /// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Unit of Work пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
@@ -25,7 +25,7 @@ namespace DAL
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        // Добавь в UnitOfWork эти поля и свойства:
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ UnitOfWork пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:
 
         private INameMainRepository? _nameMainRepository;
         public INameMainRepository NameMains => _nameMainRepository ??= new NameMainRepository(_context);
@@ -52,12 +52,12 @@ namespace DAL
         public ISampleRepository Samples => _sampleRepository ??= new SampleRepository(_context);
 
         // ===========================
-        // СВОЙСТВА КОНТЕКСТА
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         // ===========================
         public DbContext Context => _context;
 
         // ===========================
-        // СПЕЦИАЛИЗИРОВАННЫЕ РЕПОЗИТОРИИ с lazy loading
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ lazy loading
         // ===========================
         private IUserRepository? _userRepository;
         public IUserRepository Users => _userRepository ??= new UserRepository(_context);
@@ -66,7 +66,9 @@ namespace DAL
         public IUserSessionRepository UserSessions => _userSessionRepository ??= new UserSessionRepository(_context);
 
         private IActivityLogRepository? _activityLogRepository;
+        private IUserSettingsRepository? _userSettingsRepository;
         public IActivityLogRepository ActivityLogs => _activityLogRepository ??= new ActivityLogRepository(_context);
+        public IUserSettingsRepository UserSettings => _userSettingsRepository ??= new UserSettingsRepository(_context);
 
         // ===========================
         // GENERIC REPOSITORY
@@ -82,7 +84,7 @@ namespace DAL
         }
 
         // ===========================
-        // СОХРАНЕНИЕ ИЗМЕНЕНИЙ
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         // ===========================
         public int SaveChanges()
         {
@@ -92,15 +94,15 @@ namespace DAL
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                throw new InvalidOperationException("Конфликт одновременных обновлений при сохранении изменений.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
             catch (DbUpdateException ex)
             {
-                throw new InvalidOperationException("Ошибка при сохранении изменений в базе данных.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Неожиданная ошибка при сохранении изменений.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
@@ -112,26 +114,26 @@ namespace DAL
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                throw new InvalidOperationException("Конфликт одновременных обновлений при сохранении изменений.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
             catch (DbUpdateException ex)
             {
-                throw new InvalidOperationException("Ошибка при сохранении изменений в базе данных.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Неожиданная ошибка при сохранении изменений.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
         // ===========================
-        // ТРАНЗАКЦИИ - УПРОЩЕННЫЕ МЕТОДЫ
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         // ===========================
         public async Task BeginTransactionAsync()
         {
             if (_currentTransaction != null)
                 throw new InvalidOperationException(
-                    "Транзакция уже начата. Завершите текущую транзакцию перед началом новой.");
+                    "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.");
 
             _currentTransaction = await _context.Database.BeginTransactionAsync();
         }
@@ -139,7 +141,7 @@ namespace DAL
         public async Task CommitTransactionAsync()
         {
             if (_currentTransaction == null)
-                throw new InvalidOperationException("Нет активной транзакции для подтверждения.");
+                throw new InvalidOperationException("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
 
             try
             {
@@ -148,7 +150,7 @@ namespace DAL
             catch (Exception ex)
             {
                 await RollbackTransactionAsync();
-                throw new InvalidOperationException("Ошибка при подтверждении транзакции.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
             finally
             {
@@ -160,7 +162,7 @@ namespace DAL
         public async Task RollbackTransactionAsync()
         {
             if (_currentTransaction == null)
-                throw new InvalidOperationException("Нет активной транзакции для отката.");
+                throw new InvalidOperationException("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
 
             try
             {
@@ -168,7 +170,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Ошибка при откате транзакции.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
             finally
             {
@@ -178,7 +180,7 @@ namespace DAL
         }
 
         // ===========================
-        // ТРАНЗАКЦИИ - РАСШИРЕННЫЕ МЕТОДЫ
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         // ===========================
         public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
@@ -188,7 +190,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Ошибка при начале транзакции.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
@@ -233,12 +235,12 @@ namespace DAL
         }
 
         // ===========================
-        // SQL КОМАНДЫ
+        // SQL пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         // ===========================
         public async Task<int> ExecuteSqlRawAsync(string sql, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql))
-                throw new ArgumentException("SQL запрос не может быть пустым.", nameof(sql));
+                throw new ArgumentException("SQL пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.", nameof(sql));
 
             try
             {
@@ -246,14 +248,14 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Ошибка при выполнении SQL запроса: {sql}", ex);
+                throw new InvalidOperationException($"пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ SQL пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {sql}", ex);
             }
         }
 
         public async Task<int> ExecuteSqlRawAsync(string sql, params object[] parameters)
         {
             if (string.IsNullOrWhiteSpace(sql))
-                throw new ArgumentException("SQL запрос не может быть пустым.", nameof(sql));
+                throw new ArgumentException("SQL пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.", nameof(sql));
 
             if (parameters == null)
                 throw new ArgumentNullException(nameof(parameters));
@@ -264,12 +266,12 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Ошибка при выполнении SQL запроса с параметрами: {sql}", ex);
+                throw new InvalidOperationException($"пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ SQL пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {sql}", ex);
             }
         }
 
         // ===========================
-        // УПРАВЛЕНИЕ КОНТЕКСТОМ
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         // ===========================
         public void DetachAllEntities()
         {
@@ -279,7 +281,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Ошибка при отсоединении сущностей от контекста.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
@@ -289,16 +291,16 @@ namespace DAL
             {
                 var entityType = _context.Model.FindEntityType(typeof(TEntity));
                 if (entityType == null)
-                    throw new InvalidOperationException($"Тип сущности {typeof(TEntity).Name} не найден в модели.");
+                    throw new InvalidOperationException($"пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {typeof(TEntity).Name} пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.");
 
                 var tableName = entityType.GetTableName();
                 var schemaName = entityType.GetSchema() ?? "public";
 
                 if (string.IsNullOrEmpty(tableName))
                     throw new InvalidOperationException(
-                        $"Не удалось получить имя таблицы для типа {typeof(TEntity).Name}.");
+                        $"пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ {typeof(TEntity).Name}.");
 
-                // PostgreSQL версия сброса последовательности
+                // PostgreSQL пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 var sequenceName = $"{tableName}_id_seq";
                 var sql = $"ALTER SEQUENCE {schemaName}.{sequenceName} RESTART WITH 1";
 
@@ -306,7 +308,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Ошибка при сбросе последовательности для {typeof(TEntity).Name}.",
+                throw new InvalidOperationException($"пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ {typeof(TEntity).Name}.",
                     ex);
             }
         }
@@ -319,7 +321,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Ошибка при проверке несохраненных изменений.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
@@ -346,12 +348,12 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Ошибка при отмене изменений.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
         // ===========================
-        // ДОПОЛНИТЕЛЬНЫЕ МЕТОДЫ
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         // ===========================
         public async Task<bool> CanConnectAsync()
         {
@@ -374,7 +376,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                return $"Ошибка получения состояния: {ex.Message}";
+                return $"пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {ex.Message}";
             }
         }
 
@@ -386,7 +388,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Ошибка при выполнении миграций.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
@@ -398,7 +400,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Ошибка при получении списка ожидающих миграций.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
@@ -410,7 +412,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Ошибка при получении списка примененных миграций.", ex);
+                throw new InvalidOperationException("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex);
             }
         }
 
@@ -423,7 +425,7 @@ namespace DAL
             {
                 try
                 {
-                    // Откатываем активную транзакцию при освобождении ресурсов
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     if (_currentTransaction != null)
                     {
                         _currentTransaction.Rollback();
@@ -431,15 +433,15 @@ namespace DAL
                         _currentTransaction = null;
                     }
 
-                    // Очищаем кэш репозиториев
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     _repositories.Clear();
 
-                    // Освобождаем контекст
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     _context?.Dispose();
                 }
                 catch (Exception)
                 {
-                    // Игнорируем ошибки при освобождении ресурсов
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 }
                 finally
                 {

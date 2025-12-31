@@ -15,6 +15,7 @@ namespace pr_srv_names.Extensions
             services.AddScoped<IActivityLogService, ActivityLogService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ISimpleAdminService, SimpleAdminService>();
+            services.AddScoped<pr_srv_names.Pages.UserSetting.Interfaces.IUserSettingsService, pr_srv_names.Pages.UserSetting.Services.UserSettingsService>();
 
 
             return services;

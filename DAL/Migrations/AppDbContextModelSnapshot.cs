@@ -2228,6 +2228,76 @@ namespace DAL.Migrations
                     b.ToTable("UserSessions", (string)null);
                 });
 
+            modelBuilder.Entity("DAL.Models.UserSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccessibilityLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DefaultPageSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Density")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<int>("LoginNotificationMode")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NavigationBehavior")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NotificationChannels")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NotificationLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PrimaryColor")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<int>("SessionTerminationMode")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("ShowAdvancedFilters")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("SidebarState")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TableDensity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Theme")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TimeZone")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserSettings");
+                });
+
             modelBuilder.Entity("DAL.Models.Zodiac", b =>
                 {
                     b.Property<int>("Id")
@@ -2979,6 +3049,17 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DAL.Models.UserSettings", b =>
+                {
+                    b.HasOne("DAL.Models.ApplicationUser", "User")
+                        .WithOne("Settings")
+                        .HasForeignKey("DAL.Models.UserSettings", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DAL.Models.Zodiac", b =>
                 {
                     b.HasOne("DAL.Models.Language", "Language")
@@ -3106,6 +3187,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
                 {
                     b.Navigation("ActivityLogs");
+
+                    b.Navigation("Settings");
 
                     b.Navigation("UserSessions");
                 });

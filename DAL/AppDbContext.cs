@@ -17,6 +17,7 @@ namespace DAL
         // ==========================================
         public DbSet<UserSession> UserSessions { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
+        public DbSet<UserSettings> UserSettings { get; set; }
 
         // ==========================================
         // DbSets - Основные сущности
@@ -87,6 +88,13 @@ namespace DAL
             {
                 entity.ToTable("UserTokens");
             });
+
+            // Настройка связи One-to-One для UserSettings
+            builder.Entity<ApplicationUser>()
+                .HasOne(u => u.Settings)
+                .WithOne(s => s.User)
+                .HasForeignKey<UserSettings>(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // При удалении User удаляются и Settings
 
             // Применение конфигураций
             builder.ApplyConfiguration(new ApplicationUserConfiguration());

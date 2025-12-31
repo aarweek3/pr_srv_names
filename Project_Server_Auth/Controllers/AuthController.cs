@@ -31,12 +31,14 @@ namespace pr_srv_names.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await _authService.RegisterAsync(registerDto);
+                var result = await _authService.RegisterAsync(registerDto, 
+                    Request.HttpContext.Connection.RemoteIpAddress?.ToString(), 
+                    Request.Headers["User-Agent"].ToString());
 
-                // Устанавливаем оба токена в HttpOnly cookies
+                // ������������� ��� ������ � HttpOnly cookies
                 SetTokenCookies(result.AccessToken, result.RefreshToken);
 
-                // Не возвращаем токены в ответе
+                // �� ���������� ������ � ������
                 var response = new
                 {
                     success = true,
@@ -54,8 +56,8 @@ namespace pr_srv_names.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при регистрации");
-                return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
+                _logger.LogError(ex, "������ ��� �����������");
+                return StatusCode(500, new { success = false, message = "���������� ������ �������" });
             }
         }
 
@@ -67,14 +69,16 @@ namespace pr_srv_names.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await _authService.LoginAsync(loginDto);
+                var result = await _authService.LoginAsync(loginDto,
+                    Request.HttpContext.Connection.RemoteIpAddress?.ToString(), 
+                    Request.Headers["User-Agent"].ToString());
 
-                // Устанавливаем оба токена в HttpOnly cookies
+                // ������������� ��� ������ � HttpOnly cookies
                 SetTokenCookies(result.AccessToken, result.RefreshToken);
 
-                _logger.LogInformation("Токены установлены в cookies для пользователя {Email}", loginDto.Email);
+                _logger.LogInformation("������ ����������� � cookies ��� ������������ {Email}", loginDto.Email);
 
-                // Не возвращаем токены в ответе
+                // �� ���������� ������ � ������
                 var response = new
                 {
                     success = true,
@@ -92,8 +96,8 @@ namespace pr_srv_names.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при входе");
-                return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
+                _logger.LogError(ex, "������ ��� �����");
+                return StatusCode(500, new { success = false, message = "���������� ������ �������" });
             }
         }
 
@@ -110,15 +114,15 @@ namespace pr_srv_names.Controllers
                 var refreshToken = Request.Cookies["refreshToken"];
                 await _authService.LogoutAsync(userId, refreshToken);
 
-                // Удаляем токены из cookies
+                // ������� ������ �� cookies
                 ClearTokenCookies();
 
-                return Ok(new { success = true, message = "Выход выполнен успешно" });
+                return Ok(new { success = true, message = "����� �������� �������" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при выходе");
-                return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
+                _logger.LogError(ex, "������ ��� ������");
+                return StatusCode(500, new { success = false, message = "���������� ������ �������" });
             }
         }
 
@@ -131,13 +135,15 @@ namespace pr_srv_names.Controllers
 
                 if (string.IsNullOrEmpty(refreshToken))
                 {
-                    _logger.LogWarning("Refresh token cookie не найден");
-                    return Unauthorized(new { success = false, message = "Refresh token не найден" });
+                    _logger.LogWarning("Refresh token cookie �� ������");
+                    return Unauthorized(new { success = false, message = "Refresh token �� ������" });
                 }
 
-                var result = await _authService.RefreshTokenFromCookieAsync(refreshToken);
+                var result = await _authService.RefreshTokenFromCookieAsync(refreshToken,
+                    Request.HttpContext.Connection.RemoteIpAddress?.ToString(), 
+                    Request.Headers["User-Agent"].ToString());
 
-                // Устанавливаем новые токены в cookies
+                // ������������� ����� ������ � cookies
                 SetTokenCookies(result.AccessToken, result.RefreshToken);
 
                 var response = new
@@ -158,8 +164,8 @@ namespace pr_srv_names.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при обновлении токена");
-                return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
+                _logger.LogError(ex, "������ ��� ���������� ������");
+                return StatusCode(500, new { success = false, message = "���������� ������ �������" });
             }
         }
 
@@ -177,7 +183,7 @@ namespace pr_srv_names.Controllers
                     return Unauthorized();
 
                 var result = await _authService.ChangePasswordAsync(userId, changePasswordDto);
-                return Ok(new { success = result, message = "Пароль успешно изменен" });
+                return Ok(new { success = result, message = "������ ������� �������" });
             }
             catch (InvalidOperationException ex)
             {
@@ -185,8 +191,8 @@ namespace pr_srv_names.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при смене пароля");
-                return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
+                _logger.LogError(ex, "������ ��� ����� ������");
+                return StatusCode(500, new { success = false, message = "���������� ������ �������" });
             }
         }
 
@@ -202,14 +208,14 @@ namespace pr_srv_names.Controllers
 
                 var profile = await _authService.GetUserProfileAsync(userId);
                 if (profile == null)
-                    return NotFound(new { success = false, message = "Профиль не найден" });
+                    return NotFound(new { success = false, message = "������� �� ������" });
 
                 return Ok(new { success = true, data = profile });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при получении профиля");
-                return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
+                _logger.LogError(ex, "������ ��� ��������� �������");
+                return StatusCode(500, new { success = false, message = "���������� ������ �������" });
             }
         }
 
@@ -217,22 +223,22 @@ namespace pr_srv_names.Controllers
         {
             var isDevelopment = _configuration.GetValue<bool>("Development:AllowInsecureCookies");
 
-            // Access token cookie (короткий срок)
+            // Access token cookie (�������� ����)
             var accessTokenOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = !isDevelopment,
-                SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.Strict,
+                Secure = true,
+                SameSite = isDevelopment ? SameSiteMode.None : SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddHours(1),
                 Path = "/"
             };
 
-            // Refresh token cookie (длинный срок)
+            // Refresh token cookie (������� ����)
             var refreshTokenOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = !isDevelopment,
-                SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.Strict,
+                Secure = true,
+                SameSite = isDevelopment ? SameSiteMode.None : SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddDays(30),
                 Path = "/"
             };
@@ -240,7 +246,7 @@ namespace pr_srv_names.Controllers
             Response.Cookies.Append("accessToken", accessToken, accessTokenOptions);
             Response.Cookies.Append("refreshToken", refreshToken, refreshTokenOptions);
 
-            _logger.LogDebug("Токены установлены в cookies: Access={HasAccess}, Refresh={HasRefresh}",
+            _logger.LogDebug("������ ����������� � cookies: Access={HasAccess}, Refresh={HasRefresh}",
                 !string.IsNullOrEmpty(accessToken), !string.IsNullOrEmpty(refreshToken));
         }
 
@@ -258,7 +264,7 @@ namespace pr_srv_names.Controllers
             Response.Cookies.Append("accessToken", "", cookieOptions);
             Response.Cookies.Append("refreshToken", "", cookieOptions);
 
-            _logger.LogDebug("Токены удалены из cookies");
+            _logger.LogDebug("������ ������� �� cookies");
         }
 
         [HttpGet("debug-raw-token")]
@@ -276,7 +282,7 @@ namespace pr_srv_names.Controllers
                 var token = handler.ReadJwtToken(accessToken);
 
                 var claims = token.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                var roles = token.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+                var roles = token.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).Distinct().ToList();
 
                 return Ok(new
                 {
@@ -305,11 +311,11 @@ namespace pr_srv_names.Controllers
                     Value = c.Value ?? "null"
                 }).ToList();
 
-                var roles = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
+                var roles = User.FindAll(ClaimTypes.Role).Select(c => c.Value).Distinct().ToList();
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var email = User.FindFirst(ClaimTypes.Email)?.Value;
 
-                // Добавляем время истечения токена
+                //    
                 var exp = User.FindFirst("exp")?.Value;
                 DateTime? expiresAt = null;
 
@@ -317,6 +323,9 @@ namespace pr_srv_names.Controllers
                 {
                     expiresAt = DateTimeOffset.FromUnixTimeSeconds(expUnix).DateTime;
                 }
+
+                var isExternalAccount = User.FindFirst("IsExternalAccount")?.Value?.ToLower() == "true";
+                var externalProvider = User.FindFirst("ExternalProvider")?.Value;
 
                 return Ok(new
                 {
@@ -327,12 +336,14 @@ namespace pr_srv_names.Controllers
                     email = email ?? "unknown",
                     expiresAt = expiresAt?.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
                     claimsCount = claims.Count,
-                    isAuthenticated = User.Identity?.IsAuthenticated == true
+                    isAuthenticated = User.Identity?.IsAuthenticated == true,
+                    isExternalAccount = isExternalAccount,
+                    externalProvider = externalProvider
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка в debug-token endpoint");
+                _logger.LogError(ex, "  debug-token endpoint");
                 return StatusCode(500, new
                 {
                     success = false,
@@ -340,6 +351,18 @@ namespace pr_srv_names.Controllers
                     error = ex.Message
                 });
             }
+        }
+
+        [HttpGet("unauthorized-test")]
+        public IActionResult UnauthorizedTest()
+        {
+            return Unauthorized(new { message = "Simulated 401 Unauthorized error" });
+        }
+
+        [HttpGet("error-test")]
+        public IActionResult ErrorTest()
+        {
+            return StatusCode(500, new { message = "Simulated 500 Server Error" });
         }
 
         [HttpGet("debug-cookies")]
@@ -380,7 +403,7 @@ namespace pr_srv_names.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка в debug-cookies endpoint");
+                _logger.LogError(ex, "������ � debug-cookies endpoint");
                 return StatusCode(500, new
                 {
                     success = false,
@@ -390,8 +413,8 @@ namespace pr_srv_names.Controllers
             }
         }
 
-        // === 2. СОЗДАНИЕ ТЕСТОВЫХ ENDPOINTS НА СЕРВЕРЕ ===
-        // Добавьте в AuthController.cs:
+        // === 2. �������� �������� ENDPOINTS �� ������� ===
+        // �������� � AuthController.cs:
 
         [HttpGet("test-401")]
         public IActionResult Test401()
@@ -408,7 +431,7 @@ namespace pr_srv_names.Controllers
         [Authorize]
         public IActionResult Test403()
         {
-            // Проверяем роль, которой у пользователя точно нет
+            // ��������� ����, ������� � ������������ ����� ���
             if (!User.IsInRole("SuperAdmin"))
             {
                 return Forbid();
@@ -419,6 +442,78 @@ namespace pr_srv_names.Controllers
                 success = true,
                 message = "Access granted"
             });
+        }
+
+        [HttpPost("external/unlink/{provider}")]
+        [Authorize]
+        public async Task<IActionResult> UnlinkExternal(string provider)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (userId == null)
+                    return Unauthorized();
+
+                var result = await _authService.UnlinkExternalAsync(userId, provider);
+                if (result)
+                {
+                    _logger.LogInformation("Account {Provider} unlinked for user {UserId}", provider, userId);
+                    return Ok(new { success = true, message = $"Account {provider} unlinked successfully" });
+                }
+
+                return BadRequest(new { success = false, message = $"Failed to unlink {provider} account" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error unlinking external account");
+                return StatusCode(500, new { success = false, message = "Internal server error" });
+            }
+        }
+        [HttpGet("stress-test")]
+        public IActionResult StressTest()
+        {
+            return Ok(new { success = true, message = "Request processed successfully", timestamp = DateTime.UtcNow });
+        }
+
+        [HttpGet("sessions")]
+        [Authorize]
+        public async Task<IActionResult> GetUserSessions([FromQuery] bool includeHistory = false)
+        {
+             try
+             {
+                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 if (userId == null) return Unauthorized();
+
+                 var sessions = await _authService.GetUserSessionsAsync(userId, includeHistory);
+                 return Ok(new { success = true, data = sessions });
+             }
+             catch (Exception ex)
+             {
+                 _logger.LogError(ex, "Error getting active sessions");
+                 return StatusCode(500, new { success = false, message = "Internal server error" });
+             }
+        }
+
+        [HttpPost("sessions/{id}/revoke")]
+        [Authorize]
+        public async Task<IActionResult> RevokeSession(int id)
+        {
+             try
+             {
+                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 if (userId == null) return Unauthorized();
+
+                 var result = await _authService.RevokeSessionAsync(userId, id);
+                 if (result)
+                     return Ok(new { success = true, message = "Session revoked successfully" });
+                 
+                 return BadRequest(new { success = false, message = "Session not found or already revoked" });
+             }
+             catch (Exception ex)
+             {
+                 _logger.LogError(ex, "Error revoking session");
+                 return StatusCode(500, new { success = false, message = "Internal server error" });
+             }
         }
     }
 

@@ -121,6 +121,11 @@ public class ApplicationUser : IdentityUser
     /// Коллекция логов активности пользователя
     /// </summary>
     public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
+    
+    /// <summary>
+    /// Персональные настройки пользователя
+    /// </summary>
+    public virtual UserSettings? Settings { get; set; }
 
     // ==========================================
     // ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
@@ -155,4 +160,6 @@ public class ApplicationUser : IdentityUser
     /// </summary>
     [NotMapped]
     public int ActiveSessionsCount => UserSessions?.Count(s => s.IsActive) ?? 0;
+
+    
 }

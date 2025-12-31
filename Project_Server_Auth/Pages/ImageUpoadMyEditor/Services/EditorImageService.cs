@@ -3,8 +3,6 @@
 using Microsoft.Extensions.Configuration;
 using pr_srv_names.Models.Editor;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.Formats.Gif;

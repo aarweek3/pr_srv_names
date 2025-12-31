@@ -48,6 +48,15 @@
     <Folder Include="Pages\NameMain\Dtos\" />
     <Folder Include="Pages\NameMain\Extensions\" />
     <Folder Include="Pages\NameMain\Models\" />
+    <Folder Include="Pages\UserSetting\Constants\" />
+    <Folder Include="Pages\UserSetting\Dtos\" />
+    <Folder Include="Pages\UserSetting\Enums\" />
+    <Folder Include="Pages\UserSetting\Extensions\" />
+    <Folder Include="Pages\UserSetting\Interfaces\" />
+    <Folder Include="Pages\UserSetting\Mapping\" />
+    <Folder Include="Pages\UserSetting\Models\" />
+    <Folder Include="Pages\UserSetting\Services\" />
+    <Folder Include="Pages\UserSetting\Validators\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

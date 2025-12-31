@@ -15,7 +15,8 @@ namespace pr_srv_names.Middleware
         {
             { "/api/auth/login", new RateLimitConfig { MaxRequests = 5, TimeWindow = TimeSpan.FromMinutes(1) } },
             { "/api/auth/register", new RateLimitConfig { MaxRequests = 3, TimeWindow = TimeSpan.FromMinutes(5) } },
-            { "/api/auth/refresh", new RateLimitConfig { MaxRequests = 10, TimeWindow = TimeSpan.FromMinutes(1) } }
+            { "/api/auth/refresh", new RateLimitConfig { MaxRequests = 10, TimeWindow = TimeSpan.FromMinutes(1) } },
+            { "/api/auth/stress-test", new RateLimitConfig { MaxRequests = 10, TimeWindow = TimeSpan.FromSeconds(30) } }
         };
 
         public RateLimitingMiddleware(RequestDelegate next, IMemoryCache cache, ILogger<RateLimitingMiddleware> logger)

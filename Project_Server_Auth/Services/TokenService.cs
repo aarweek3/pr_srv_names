@@ -33,48 +33,43 @@ namespace pr_srv_names.Services
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(GetSecretKey());
 
+                // Получаем уникальный список ролей
+                var roles = (await _userManager.GetRolesAsync(user)).Distinct().ToList();
+
                 var claims = new List<Claim>
                 {
+                    // Использование стандартных ClaimTypes для совместимости с ASP.NET Core Identity
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(ClaimTypes.Email, user.Email ?? ""),
                     new Claim(ClaimTypes.Name, user.FullName),
-                    new Claim("sub", user.Id), // Стандартный JWT claim
-                    new Claim("FirstName", user.FirstName),
-                    new Claim("LastName", user.LastName),
-                    new Claim("IsActive", user.IsActive.ToString())
+
+                    // Стандартные JWT клеймы
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+
+                    // Дополнительные данные
+                    new Claim("FirstName", user.FirstName ?? ""),
+                    new Claim("LastName", user.LastName ?? ""),
+                    new Claim("IsActive", user.IsActive.ToString().ToLower())
                 };
 
                 if (!string.IsNullOrEmpty(user.Department))
                     claims.Add(new Claim("Department", user.Department));
 
-                // Получаем роли пользователя
-                var roles = await _userManager.GetRolesAsync(user);
+                // Информация о методе входа (для отображения в UI)
+                claims.Add(new Claim("IsExternalAccount", user.IsExternalAccount.ToString().ToLower()));
+                if (!string.IsNullOrEmpty(user.ExternalProvider))
+                    claims.Add(new Claim("ExternalProvider", user.ExternalProvider));
 
-                // Добавляем каждую роль как отдельный claim
+                // Добавляем роли (по одной записи на каждую роль, без дублей)
                 foreach (var role in roles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role));
-                    _logger.LogDebug("Добавлена роль {Role} для пользователя {UserId}", role, user.Id);
                 }
 
-                // Дополнительные удобные claims для работы с ролями на клиенте
-                if (roles.Any())
-                {
-                    // Массив ролей как строка через запятую
-                    claims.Add(new Claim("roles", string.Join(",", roles)));
-
-                    // Булевые флаги для основных ролей (удобно для проверок на клиенте)
-                    claims.Add(new Claim("isAdmin", roles.Contains("Admin").ToString().ToLower()));
-                    claims.Add(new Claim("isModerator", roles.Contains("Moderator").ToString().ToLower()));
-                    claims.Add(new Claim("isUser", roles.Contains("User").ToString().ToLower()));
-
-                    _logger.LogInformation("Пользователь {UserId} получил роли: {Roles}",
-                        user.Id, string.Join(", ", roles));
-                }
-                else
-                {
-                    _logger.LogWarning("Пользователь {UserId} не имеет назначенных ролей", user.Id);
-                }
+                // Вспомогательные булевы клеймы (удобно для фронтенда)
+                claims.Add(new Claim("isAdmin", roles.Contains("Admin").ToString().ToLower()));
+                claims.Add(new Claim("isModerator", roles.Contains("Moderator").ToString().ToLower()));
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -90,41 +85,32 @@ namespace pr_srv_names.Services
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var tokenString = tokenHandler.WriteToken(token);
 
-                _logger.LogDebug("JWT токен создан для пользователя {UserId} ({Email}) с ролями: [{Roles}]",
-                    user.Id, user.Email, string.Join(", ", roles));
+                _logger.LogInformation("JWT Access Token generated for user {Email}. Roles: {Roles}",
+                    user.Email, string.Join(", ", roles));
 
                 return tokenString;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при генерации access токена для пользователя {UserId}", user.Id);
-                throw new InvalidOperationException("Не удалось создать access токен", ex);
+                _logger.LogError(ex, "Error generating access token for user {UserId}", user.Id);
+                throw;
             }
         }
 
         public string GenerateRefreshToken()
         {
-            try
-            {
-                var randomBytes = new byte[64];
-                using var rng = RandomNumberGenerator.Create();
-                rng.GetBytes(randomBytes);
-                var refreshToken = Convert.ToBase64String(randomBytes);
-
-                _logger.LogDebug("Refresh токен создан");
-                return refreshToken;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Ошибка при генерации refresh токена");
-                throw new InvalidOperationException("Не удалось создать refresh токен", ex);
-            }
+            var randomBytes = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomBytes);
+            return Convert.ToBase64String(randomBytes);
         }
 
         public ClaimsPrincipal? GetClaimsFromToken(string token)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(token)) return null;
+
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(GetSecretKey());
 
@@ -137,188 +123,55 @@ namespace pr_srv_names.Services
                     ValidateAudience = true,
                     ValidAudience = GetAudience(),
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero,
-                    RequireExpirationTime = true
+                    ClockSkew = TimeSpan.Zero
                 };
 
-                var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-
-                // Дополнительная проверка типа токена
-                if (validatedToken is not JwtSecurityToken jwtToken ||
-                    !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    _logger.LogWarning("Неверный тип токена или алгоритм подписи");
-                    return null;
-                }
-
-                return principal;
-            }
-            catch (SecurityTokenExpiredException)
-            {
-                _logger.LogDebug("Токен истек");
-                return null;
-            }
-            catch (SecurityTokenException ex)
-            {
-                _logger.LogWarning(ex, "Невалидный токен: {Message}", ex.Message);
-                return null;
+                // ВАЖНО: При получении Claims из токена, ASP.NET может автоматически маппить короткие имена в длинные.
+                // Если мы хотим чистоты, мы можем отключить DefaultInboundClaimTypeMap,
+                // но здесь мы просто возвращаем Principal как есть.
+                return tokenHandler.ValidateToken(token, validationParameters, out _);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Неожиданная ошибка при извлечении claims из токена");
+                _logger.LogDebug("Token validation failed: {Message}", ex.Message);
                 return null;
             }
         }
 
-        public bool ValidateToken(string token)
-        {
-            if (string.IsNullOrWhiteSpace(token))
-            {
-                _logger.LogDebug("Пустой токен для валидации");
-                return false;
-            }
-
-            try
-            {
-                var claims = GetClaimsFromToken(token);
-                var isValid = claims != null;
-
-                if (isValid)
-                {
-                    var userId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                    _logger.LogDebug("Токен валиден для пользователя {UserId}", userId);
-                }
-
-                return isValid;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Ошибка при валидации токена");
-                return false;
-            }
-        }
+        public bool ValidateToken(string token) => GetClaimsFromToken(token) != null;
 
         public DateTime GetTokenExpiration(string token)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(token))
-                    return DateTime.MinValue;
-
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var jwtToken = tokenHandler.ReadJwtToken(token);
                 return jwtToken.ValidTo;
             }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Ошибка при получении срока действия токена");
-                return DateTime.MinValue;
-            }
+            catch { return DateTime.MinValue; }
         }
 
-        public string? GetUserIdFromToken(string token)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(token))
-                    return null;
+        public string? GetUserIdFromToken(string token) =>
+            GetClaimsFromToken(token)?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                var claims = GetClaimsFromToken(token);
-                var userId = claims?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (userId != null)
-                {
-                    _logger.LogDebug("UserId извлечен из токена: {UserId}", userId);
-                }
-
-                return userId;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Ошибка при извлечении UserId из токена");
-                return null;
-            }
-        }
-
-        // НОВЫЕ МЕТОДЫ для работы с ролями
         public List<string> GetUserRolesFromToken(string token)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(token))
-                    return new List<string>();
+            var principal = GetClaimsFromToken(token);
+            if (principal == null) return new List<string>();
 
-                var claims = GetClaimsFromToken(token);
-                if (claims == null)
-                    return new List<string>();
-
-                var roles = claims.FindAll(ClaimTypes.Role)
-                    .Select(c => c.Value)
-                    .Where(role => !string.IsNullOrEmpty(role))
-                    .ToList();
-
-                _logger.LogDebug("Роли извлечены из токена: [{Roles}]", string.Join(", ", roles));
-                return roles;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Ошибка при извлечении ролей из токена");
-                return new List<string>();
-            }
+            return principal.FindAll(ClaimTypes.Role)
+                .Select(c => c.Value)
+                .Distinct()
+                .ToList();
         }
 
-        public bool HasRole(string token, string role)
-        {
-            try
-            {
-                var roles = GetUserRolesFromToken(token);
-                return roles.Contains(role, StringComparer.OrdinalIgnoreCase);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Ошибка при проверке роли {Role} в токене", role);
-                return false;
-            }
-        }
+        public bool HasRole(string token, string role) =>
+            GetUserRolesFromToken(token).Contains(role, StringComparer.OrdinalIgnoreCase);
 
-        // Приватные методы для получения конфигурации
-        private string GetSecretKey()
-        {
-            var key = _configuration["JwtSettings:SecretKey"];
-            if (string.IsNullOrEmpty(key) || key.Length < 32)
-            {
-                throw new InvalidOperationException(
-                    "JWT SecretKey отсутствует или слишком короткий (минимум 32 символа)");
-            }
-            return key;
-        }
-
-        private double GetExpirationMinutes()
-        {
-            var configValue = _configuration["JwtSettings:ExpirationMinutes"];
-            if (double.TryParse(configValue, System.Globalization.NumberStyles.Float,
-                System.Globalization.CultureInfo.InvariantCulture, out var minutes))
-            {
-                if (minutes <= 0 || minutes > 1440) // Максимум 24 часа
-                {
-                    _logger.LogWarning("Неверное значение ExpirationMinutes: {Minutes}, используется значение по умолчанию", minutes);
-                    return 60; // Значение по умолчанию
-                }
-                return minutes;
-            }
-
-            _logger.LogWarning("Не удалось прочитать ExpirationMinutes из конфигурации, используется 60 минут");
-            return 60;
-        }
-
-        private string GetIssuer()
-        {
-            return _configuration["JwtSettings:Issuer"] ?? "Project_Server_Auth";
-        }
-
-        private string GetAudience()
-        {
-            return _configuration["JwtSettings:Audience"] ?? "Project_Client_Auth";
-        }
+        private string GetSecretKey() => _configuration["JwtSettings:SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey missing");
+        private double GetExpirationMinutes() =>
+            double.TryParse(_configuration["JwtSettings:ExpirationMinutes"], out var min) ? min : 60;
+        private string GetIssuer() => _configuration["JwtSettings:Issuer"] ?? "Project_Server_Auth";
+        private string GetAudience() => _configuration["JwtSettings:Audience"] ?? "Project_Client_Auth";
     }
 }

@@ -1,4 +1,4 @@
-ï»¿//namespace Project_Server_Auth.Extensions
+//namespace Project_Server_Auth.Extensions
 //{
 //    public static class CorsExtensions
 //    {
@@ -43,7 +43,7 @@
 
 //        public static WebApplication UseCorsConfiguration(this WebApplication app, IWebHostEnvironment environment)
 //        {
-//            // ÐŸÑ€Ð¸Ð¼ÐµÐ½ÑÐµÐ¼ CORS-Ð¿Ð¾Ð»Ð¸Ñ‚Ð¸ÐºÑƒ Ð´Ð¾ Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚Ð¸Ð·Ð°Ñ†Ð¸Ð¸
+//            // Ïðèìåíÿåì CORS-ïîëèòèêó äî ìàðøðóòèçàöèè
 //            if (environment.IsDevelopment())
 //            {
 //                app.UseCors("DevelopmentPolicy");
@@ -57,7 +57,7 @@
 //                app.UseCors("AngularPolicy");
 //            }
 
-//            // Ð¯Ð²Ð½Ð°Ñ Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° preflight-Ð·Ð°Ð¿Ñ€Ð¾ÑÐ¾Ð²
+//            // ßâíàÿ îáðàáîòêà preflight-çàïðîñîâ
 //            app.Use(async (context, next) =>
 //            {
 //                var logger = context.RequestServices.GetService<ILogger<Program>>();
@@ -111,7 +111,7 @@
 //                        {
 //                            if (cookies[i].Contains("accessToken") || cookies[i].Contains("refreshToken"))
 //                            {
-//                                cookies[i] = cookies[i].Replace("; Secure", "").Replace("; SameSite=None", "; SameSite=Lax");
+//                                cookies[i] = cookies[i];
 //                                modified = true;
 //                            }
 //                        }
@@ -199,7 +199,7 @@ namespace pr_srv_names.Extensions
 
         public static WebApplication UseCorsConfiguration(this WebApplication app, IWebHostEnvironment environment)
         {
-            // ÐŸÑ€Ð¸Ð¼ÐµÐ½ÑÐµÐ¼ CORS-Ð¿Ð¾Ð»Ð¸Ñ‚Ð¸ÐºÑƒ Ð´Ð¾ Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚Ð¸Ð·Ð°Ñ†Ð¸Ð¸
+            // Ïðèìåíÿåì CORS-ïîëèòèêó äî ìàðøðóòèçàöèè
             if (environment.IsDevelopment())
             {
                 app.UseCors("DevelopmentPolicy");
@@ -213,7 +213,7 @@ namespace pr_srv_names.Extensions
                 app.UseCors("AngularPolicy");
             }
 
-            // Ð¯Ð²Ð½Ð°Ñ Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° CORS
+            // ßâíàÿ îáðàáîòêà CORS
             app.Use(async (context, next) =>
             {
                 var logger = context.RequestServices.GetService<ILogger<Program>>();
@@ -236,7 +236,7 @@ namespace pr_srv_names.Extensions
                     return;
                 }
 
-                // Ð”Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼ CORS-Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²ÐºÐ¸ Ð´Ð»Ñ Ð²ÑÐµÑ… Ð¾Ñ‚Ð²ÐµÑ‚Ð¾Ð²
+                // Äîáàâëÿåì CORS-çàãîëîâêè äëÿ âñåõ îòâåòîâ
                 context.Response.OnStarting(() =>
                 {
                     if (context.Request.Headers.ContainsKey("Origin"))
@@ -282,7 +282,7 @@ namespace pr_srv_names.Extensions
                         {
                             if (cookies[i].Contains("accessToken") || cookies[i].Contains("refreshToken"))
                             {
-                                cookies[i] = cookies[i].Replace("; Secure", "").Replace("; SameSite=None", "; SameSite=Lax");
+                                cookies[i] = cookies[i];
                                 modified = true;
                             }
                         }

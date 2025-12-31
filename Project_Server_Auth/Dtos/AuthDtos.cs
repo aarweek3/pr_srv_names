@@ -5,6 +5,9 @@ using DAL.Enums;
 
 namespace pr_srv_names.Dtos
 {
+    /// <summary>
+    /// DTO для создания пользователя (административное создание)
+    /// </summary>
     public class CreateUserDto
     {
         public string FirstName { get; set; } = string.Empty;
@@ -15,7 +18,9 @@ namespace pr_srv_names.Dtos
         public bool IsActive { get; set; } = true;
     }
 
-    // DTO для результата поиска пользователей
+    /// <summary>
+    /// DTO для отображения результата поиска пользователей
+    /// </summary>
     public class UserSearchResultDto
     {
         public string Id { get; set; } = string.Empty;
@@ -26,12 +31,17 @@ namespace pr_srv_names.Dtos
         public bool IsActive { get; set; }
     }
 
+    /// <summary>
+    /// DTO для выхода из системы
+    /// </summary>
     public class LogoutDto
     {
         public string? RefreshToken { get; set; }
     }
 
-    // DTO для регистрации нового пользователя
+    /// <summary>
+    /// DTO для регистрации пользователя
+    /// </summary>
     public class RegisterDto
     {
         [Required(ErrorMessage = "Имя обязательно")]
@@ -47,13 +57,15 @@ namespace pr_srv_names.Dtos
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Пароль обязателен")]
-        [MinLength(8, ErrorMessage = "Пароль должен содержать минимум 8 символов")]
+        [MinLength(8, ErrorMessage = "Пароль должен быть не короче 8 символов")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$",
-            ErrorMessage = "Пароль должен содержать минимум одну заглавную букву, одну строчную букву и одну цифру")]
+            ErrorMessage = "Пароль должен содержать строчные и заглавные буквы, а также цифры")]
         public string Password { get; set; } = string.Empty;
     }
 
-    // DTO для входа пользователя
+    /// <summary>
+    /// DTO для входа пользователя
+    /// </summary>
     public class LoginDto
     {
         [Required(ErrorMessage = "Email обязателен")]
@@ -64,14 +76,18 @@ namespace pr_srv_names.Dtos
         public string Password { get; set; } = string.Empty;
     }
 
-    // DTO для возврата JWT-токена
+    /// <summary>
+    /// DTO для передачи JWT access-токена
+    /// </summary>
     public class TokenDto
     {
         public string AccessToken { get; set; } = string.Empty;
         public DateTime ExpiresAt { get; set; }
     }
 
-    // DTO для обновления refresh-токена (шаг 2)
+    /// <summary>
+    /// DTO для обновления refresh-токена
+    /// </summary>
     public class RefreshTokenDto
     {
         [Required(ErrorMessage = "Refresh-токен обязателен")]
@@ -79,7 +95,9 @@ namespace pr_srv_names.Dtos
         public string RefreshToken { get; set; } = string.Empty;
     }
 
-    // Расширенный DTO для токена с дополнительной информацией
+    /// <summary>
+    /// DTO ответа при успешной авторизации
+    /// </summary>
     public class AuthResponseDto
     {
         public string AccessToken { get; set; } = string.Empty;
@@ -89,7 +107,9 @@ namespace pr_srv_names.Dtos
         public bool RequiresTwoFactor { get; set; } = false;
     }
 
-    // DTO для профиля пользователя (шаг 3)
+    /// <summary>
+    /// DTO профиля пользователя
+    /// </summary>
     public class UserProfileDto
     {
         public string FullName { get; set; } = string.Empty;
@@ -99,9 +119,15 @@ namespace pr_srv_names.Dtos
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLogin { get; set; }
+        public List<string> Roles { get; set; } = new();
+        public bool IsExternalAccount { get; set; }
+        public string? ExternalProvider { get; set; }
+        public string? ExternalId { get; set; }
     }
 
-    // DTO для обновления данных пользователя (шаг 3)
+    /// <summary>
+    /// DTO для обновления данных пользователя
+    /// </summary>
     public class UpdateUserDto
     {
         [MaxLength(100, ErrorMessage = "Имя не должно превышать 100 символов")]
@@ -118,46 +144,54 @@ namespace pr_srv_names.Dtos
         public string? Department { get; set; }
     }
 
-    // DTO для внешней аутентификации (шаг 4, OAuth)
+    /// <summary>
+    /// DTO для внешней авторизации (OAuth)
+    /// </summary>
     public class ExternalLoginDto
     {
-        [Required(ErrorMessage = "Имя провайдера обязательно")]
-        [MaxLength(50, ErrorMessage = "Имя провайдера не должен превышать 50 символов")]
+        [Required(ErrorMessage = "Провайдер авторизации обязателен")]
+        [MaxLength(50, ErrorMessage = "Название провайдера не должно превышать 50 символов")]
         public string Provider { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Токен провайдера обязателен")]
-        [MaxLength(1000, ErrorMessage = "Токен провайдера не должен превышать 1000 символов")]
+        [MaxLength(1000, ErrorMessage = "Токен не должен превышать 1000 символов")]
         public string Token { get; set; } = string.Empty;
     }
 
-    // DTO для включения/выключения 2FA (шаг 3)
+    /// <summary>
+    /// DTO для включения или отключения двухфакторной аутентификации
+    /// </summary>
     public class TwoFactorDto
     {
-        [Required(ErrorMessage = "Метод 2FA обязателен")]
-        public bool Enable { get; set; } // true для включения, false для выключения
+        [Required(ErrorMessage = "Флаг 2FA обязателен")]
+        public bool Enable { get; set; } // true — включить, false — отключить
 
         [MaxLength(6, ErrorMessage = "Код подтверждения не должен превышать 6 символов")]
-        public string? VerificationCode { get; set; } // Код для подтверждения 2FA
+        public string? VerificationCode { get; set; }
     }
 
-    // DTO для массовых операций (шаг 5, админ-функции)
+    /// <summary>
+    /// DTO для массовых операций над пользователями
+    /// </summary>
     public class BulkOperationDto
     {
-        [Required(ErrorMessage = "Список идентификаторов обязателен")]
+        [Required(ErrorMessage = "Список пользователей обязателен")]
         public List<string> UserIds { get; set; } = new List<string>();
 
         [Required(ErrorMessage = "Тип операции обязателен")]
         public BulkOperationType OperationType { get; set; }
 
-        // Дополнительные параметры для операций
-        public string? NewRole { get; set; } // Для операции ChangeRole
-        public string? Reason { get; set; } // Причина операции
+        // Дополнительные параметры операции
+        public string? NewRole { get; set; } // Для операции смены роли
+        public string? Reason { get; set; }  // Причина операции
     }
 
-    // DTO для возврата данных о сессии пользователя
+    /// <summary>
+    /// DTO пользовательской сессии
+    /// </summary>
     public class UserSessionDto
     {
-        public int Id { get; set; } // Добавить ID для удобства управления
+        public int Id { get; set; } // Внутренний идентификатор сессии
 
         [MaxLength(500, ErrorMessage = "Refresh-токен не должен превышать 500 символов")]
         public string RefreshToken { get; set; } = string.Empty;
@@ -167,10 +201,16 @@ namespace pr_srv_names.Dtos
         public DateTime? RevokedAt { get; set; }
 
         [MaxLength(500, ErrorMessage = "Информация об устройстве не должна превышать 500 символов")]
-        public string? DeviceInfo { get; set; } // Информация о браузере или ОС
+        public string? DeviceInfo { get; set; }
+
+        public string? IpAddress { get; set; }
+        public string? UserAgent { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 
-    // DTO для обновления данных сессии
+    /// <summary>
+    /// DTO для обновления данных пользовательской сессии
+    /// </summary>
     public class UpdateSessionDto
     {
         [MaxLength(500, ErrorMessage = "Refresh-токен не должен превышать 500 символов")]
@@ -181,15 +221,17 @@ namespace pr_srv_names.Dtos
         public DateTime? RevokedAt { get; set; }
 
         [MaxLength(500, ErrorMessage = "Информация об устройстве не должна превышать 500 символов")]
-        public string? DeviceInfo { get; set; } // Обновление данных об устройстве
+        public string? DeviceInfo { get; set; }
     }
 
-    // DTO для получения логов активности
+    /// <summary>
+    /// DTO записи журнала активности
+    /// </summary>
     public class ActivityLogDto
     {
         public int Id { get; set; }
         public string UserId { get; set; } = string.Empty;
-        public string UserFullName { get; set; } = string.Empty; // Для удобства отображения
+        public string UserFullName { get; set; } = string.Empty;
         public ActivityAction Action { get; set; }
         public string? EntityType { get; set; }
         public string? EntityId { get; set; }
@@ -201,7 +243,9 @@ namespace pr_srv_names.Dtos
         public string? UserAgent { get; set; }
     }
 
-    // DTO для фильтрации логов активности
+    /// <summary>
+    /// DTO фильтрации журнала активности
+    /// </summary>
     public class ActivityLogFilterDto : BasePagedRequest
     {
         public string? UserId { get; set; }
@@ -211,16 +255,18 @@ namespace pr_srv_names.Dtos
         public string? EntityType { get; set; }
     }
 
-    // DTO для смены пароля
+    /// <summary>
+    /// DTO для смены пароля
+    /// </summary>
     public class ChangePasswordDto
     {
         [Required(ErrorMessage = "Текущий пароль обязателен")]
         public string CurrentPassword { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Новый пароль обязателен")]
-        [MinLength(8, ErrorMessage = "Пароль должен содержать минимум 8 символов")]
+        [MinLength(8, ErrorMessage = "Пароль должен быть не короче 8 символов")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$",
-            ErrorMessage = "Пароль должен содержать минимум одну заглавную букву, одну строчную букву и одну цифру")]
+            ErrorMessage = "Пароль должен содержать строчные и заглавные буквы, а также цифры")]
         public string NewPassword { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Подтверждение пароля обязательно")]
@@ -228,7 +274,9 @@ namespace pr_srv_names.Dtos
         public string ConfirmPassword { get; set; } = string.Empty;
     }
 
-    // DTO для восстановления пароля
+    /// <summary>
+    /// DTO запроса восстановления пароля
+    /// </summary>
     public class ForgotPasswordDto
     {
         [Required(ErrorMessage = "Email обязателен")]
@@ -236,24 +284,28 @@ namespace pr_srv_names.Dtos
         public string Email { get; set; } = string.Empty;
     }
 
-    // DTO для сброса пароля
+    /// <summary>
+    /// DTO сброса пароля
+    /// </summary>
     public class ResetPasswordDto
     {
         [Required(ErrorMessage = "Email обязателен")]
         [EmailAddress(ErrorMessage = "Некорректный формат email")]
         public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Токен сброса обязателен")]
+        [Required(ErrorMessage = "Токен обязателен")]
         public string Token { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Новый пароль обязателен")]
-        [MinLength(8, ErrorMessage = "Пароль должен содержать минимум 8 символов")]
+        [MinLength(8, ErrorMessage = "Пароль должен быть не короче 8 символов")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$",
-            ErrorMessage = "Пароль должен содержать минимум одну заглавную букву, одну строчную букву и одну цифру")]
+            ErrorMessage = "Пароль должен содержать строчные и заглавные буквы, а также цифры")]
         public string NewPassword { get; set; } = string.Empty;
     }
 
-    // Универсальный DTO для пагинированного ответа
+    /// <summary>
+    /// Универсальный DTO для постраничных ответов
+    /// </summary>
     public class PagedResponseDto<T>
     {
         public List<T> Data { get; set; } = new();
@@ -265,7 +317,9 @@ namespace pr_srv_names.Dtos
         public bool HasPreviousPage => PageNumber > 1;
     }
 
-    // DTO для списка пользователей в админке
+    /// <summary>
+    /// DTO элемента списка пользователей
+    /// </summary>
     public class UserListItemDto
     {
         public string Id { get; set; } = string.Empty;
@@ -277,12 +331,15 @@ namespace pr_srv_names.Dtos
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLogin { get; set; }
+        public List<string> Roles { get; set; } = new();
         public bool IsExternalAccount { get; set; }
         public string? ExternalProvider { get; set; }
-        public List<string> Roles { get; set; } = new(); // ДОБАВИТЬ
+        public string? ExternalId { get; set; }
     }
 
-    // DTO для фильтрации пользователей
+    /// <summary>
+    /// DTO фильтрации списка пользователей
+    /// </summary>
     public class UserFilterDto : BasePagedRequest
     {
         public bool? IsActive { get; set; }
@@ -291,7 +348,9 @@ namespace pr_srv_names.Dtos
         public string? ExternalProvider { get; set; }
     }
 
-    // DTO для статистики пользователей (админ панель)
+    /// <summary>
+    /// DTO статистики по пользователям
+    /// </summary>
     public class UserStatisticsDto
     {
         public int TotalUsers { get; set; }
@@ -303,7 +362,9 @@ namespace pr_srv_names.Dtos
         public List<DailyRegistrationDto> RegistrationTrend { get; set; } = new();
     }
 
-    // DTO для ежедневной статистики регистраций
+    /// <summary>
+    /// DTO статистики регистраций по дням
+    /// </summary>
     public class DailyRegistrationDto
     {
         public DateTime Date { get; set; }

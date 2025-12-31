@@ -1,5 +1,4 @@
 ﻿// Services/AuthService.cs
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DAL;
@@ -35,12 +34,10 @@ namespace pr_srv_names.Services
             _tokenService = tokenService;
         }
 
-        public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)
+        public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto, string? ipAddress = null, string? userAgent = null)
         {
             if (await _userManager.FindByEmailAsync(registerDto.Email) != null)
-            {
-                throw new InvalidOperationException("Пользователь с таким email уже существует");
-            }
+                throw new InvalidOperationException("Email already exists");
 
             var user = new ApplicationUser
             {
@@ -53,168 +50,119 @@ namespace pr_srv_names.Services
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
-            if (!result.Succeeded)
-            {
-                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new InvalidOperationException($"Ошибка создания пользователя: {errors}");
-            }
+            if (!result.Succeeded) throw new InvalidOperationException("Failed to create user");
 
             await _userManager.AddToRoleAsync(user, "User");
-            await LogActivityAsync(user.Id, ActivityAction.Register, true);
-
-            var tokens = await GenerateTokensAsync(user);
+            
+            // Создание дефолтных настроек для нового пользователя
+            var defaultSettings = new UserSettings
+            {
+                UserId = user.Id
+                // Остальные свойства получат дефолтные значения из модели
+            };
+            _context.UserSettings.Add(defaultSettings);
+            await _context.SaveChangesAsync();
+            
+            var tokens = await GenerateTokensAsync(user, ipAddress, userAgent);
+            var roles = (await _userManager.GetRolesAsync(user)).Distinct().ToList();
 
             return new AuthResponseDto
             {
                 AccessToken = tokens.AccessToken,
                 RefreshToken = tokens.RefreshToken,
                 ExpiresAt = tokens.ExpiresAt,
-                User = MapToUserProfileDto(user)
+                User = MapToUserProfileDto(user, roles)
             };
         }
 
-        public async Task<AuthResponseDto> LoginAsync(LoginDto loginDto)
+        public async Task<AuthResponseDto> LoginAsync(LoginDto loginDto, string? ipAddress = null, string? userAgent = null)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
-            if (user == null || !user.IsActive)
-            {
-                await LogActivityAsync(null, ActivityAction.Login, false, "Пользователь не найден");
-                throw new UnauthorizedAccessException("Неверные учетные данные");
-            }
+            if (user == null || !user.IsActive) throw new UnauthorizedAccessException("Unauthorized");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, true);
-            if (!result.Succeeded)
-            {
-                await LogActivityAsync(user.Id, ActivityAction.Login, false, "Неверный пароль");
-                throw new UnauthorizedAccessException("Неверные учетные данные");
-            }
+            if (!result.Succeeded) throw new UnauthorizedAccessException("Unauthorized");
 
             user.LastLogin = DateTime.UtcNow;
             await _userManager.UpdateAsync(user);
-            await LogActivityAsync(user.Id, ActivityAction.Login, true);
 
-            var tokens = await GenerateTokensAsync(user);
+            var tokens = await GenerateTokensAsync(user, ipAddress, userAgent);
+            var roles = (await _userManager.GetRolesAsync(user)).Distinct().ToList();
 
             return new AuthResponseDto
             {
                 AccessToken = tokens.AccessToken,
                 RefreshToken = tokens.RefreshToken,
                 ExpiresAt = tokens.ExpiresAt,
-                User = MapToUserProfileDto(user)
+                User = MapToUserProfileDto(user, roles)
             };
         }
 
         public async Task<bool> LogoutAsync(string userId, string? refreshToken = null)
         {
-            try
+            if (!string.IsNullOrEmpty(refreshToken))
             {
-                if (!string.IsNullOrEmpty(refreshToken))
-                {
-                    var session = await _context.UserSessions
-                        .FirstOrDefaultAsync(s => s.RefreshToken == refreshToken && !s.IsRevoked);
-
-                    if (session != null)
-                    {
-                        session.IsRevoked = true;
-                        session.RevokedAt = DateTime.UtcNow;
-                        await _context.SaveChangesAsync();
-                    }
-                }
-
-                await LogActivityAsync(userId, ActivityAction.Logout, true);
-                return true;
+                var session = await _context.UserSessions.FirstOrDefaultAsync(s => s.RefreshToken == refreshToken);
+                if (session != null) { session.IsRevoked = true; await _context.SaveChangesAsync(); }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Ошибка при выходе пользователя {UserId}", userId);
-                return false;
-            }
+            return true;
         }
 
-        public async Task<AuthResponseDto> RefreshTokenFromCookieAsync(string refreshToken)
+        public async Task<AuthResponseDto> RefreshTokenFromCookieAsync(string refreshToken, string? ipAddress = null, string? userAgent = null)
         {
-            var session = await _context.UserSessions
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(s => s.RefreshToken == refreshToken && !s.IsRevoked);
-
-            if (session == null || session.ExpiresAt <= DateTime.UtcNow)
-            {
-                throw new UnauthorizedAccessException("Недействительный refresh токен");
-            }
+            var session = await _context.UserSessions.Include(s => s.User).FirstOrDefaultAsync(s => s.RefreshToken == refreshToken && !s.IsRevoked);
+            if (session == null || session.ExpiresAt <= DateTime.UtcNow) throw new UnauthorizedAccessException("Invalid refresh token");
 
             session.IsRevoked = true;
-            session.RevokedAt = DateTime.UtcNow;
-
-            var tokens = await GenerateTokensAsync(session.User);
-            await _context.SaveChangesAsync();
-
-            return new AuthResponseDto
-            {
-                AccessToken = tokens.AccessToken,
-                RefreshToken = tokens.RefreshToken,
-                ExpiresAt = tokens.ExpiresAt,
-                User = MapToUserProfileDto(session.User)
-            };
+            var tokens = await GenerateTokensAsync(session.User, ipAddress, userAgent);
+            var roles = (await _userManager.GetRolesAsync(session.User)).Distinct().ToList();
+            return new AuthResponseDto { AccessToken = tokens.AccessToken, RefreshToken = tokens.RefreshToken, ExpiresAt = tokens.ExpiresAt, User = MapToUserProfileDto(session.User, roles) };
         }
 
-        public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto)
-        {
-            return await RefreshTokenFromCookieAsync(refreshTokenDto.RefreshToken);
-        }
+        public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenDto dto) => await RefreshTokenFromCookieAsync(dto.RefreshToken);
 
-        public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordDto changePasswordDto)
+        public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordDto dto)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-                throw new InvalidOperationException("Пользователь не найден");
-
-            var result = await _userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword,
-                changePasswordDto.NewPassword);
-            if (!result.Succeeded)
-            {
-                await LogActivityAsync(userId, ActivityAction.ChangePassword, false);
-                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new InvalidOperationException($"Ошибка смены пароля: {errors}");
-            }
-
-            await LogActivityAsync(userId, ActivityAction.ChangePassword, true);
-            return true;
+            if (user == null) return false;
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            return result.Succeeded;
         }
 
         public async Task<UserProfileDto?> GetUserProfileAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            return user != null ? MapToUserProfileDto(user) : null;
+            if (user == null) return null;
+            var roles = (await _userManager.GetRolesAsync(user)).Distinct().ToList();
+            
+            _logger.LogInformation("GetUserProfile: UserId={UserId}, Email={Email}, IsExternal={IsExternal}, Provider={Provider}", 
+                userId, user.Email, user.IsExternalAccount, user.ExternalProvider ?? "null");
+            
+            return MapToUserProfileDto(user, roles);
         }
 
-        private async Task<TokenResult> GenerateTokensAsync(ApplicationUser user)
+        private async Task<TokenResult> GenerateTokensAsync(ApplicationUser user, string? ipAddress, string? userAgent)
         {
             var accessToken = await _tokenService.GenerateAccessToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken();
-            var expiresAt = DateTime.UtcNow.AddMinutes(60);
-
             var session = new UserSession
             {
                 UserId = user.Id,
                 RefreshToken = refreshToken,
                 ExpiresAt = DateTime.UtcNow.AddDays(30),
-                IsRevoked = false
+                IsRevoked = false,
+                IpAddress = ipAddress,
+                UserAgent = userAgent,
+                DeviceInfo = userAgent // Simple fallback
             };
-
             _context.UserSessions.Add(session);
             await _context.SaveChangesAsync();
-
-            return new TokenResult
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
-                ExpiresAt = expiresAt
-            };
+            return new TokenResult { AccessToken = accessToken, RefreshToken = refreshToken, ExpiresAt = DateTime.UtcNow.AddMinutes(60) };
         }
 
-        private UserProfileDto MapToUserProfileDto(ApplicationUser user)
+        private UserProfileDto MapToUserProfileDto(ApplicationUser user, IList<string> roles)
         {
-            return new UserProfileDto
+            var dto = new UserProfileDto
             {
                 FullName = user.FullName,
                 Email = user.Email ?? "",
@@ -222,37 +170,77 @@ namespace pr_srv_names.Services
                 Avatar = user.Avatar,
                 IsActive = user.IsActive,
                 CreatedAt = user.CreatedAt,
-                LastLogin = user.LastLogin
+                LastLogin = user.LastLogin,
+                Roles = roles.Distinct().ToList(),
+                IsExternalAccount = user.IsExternalAccount,
+                ExternalProvider = user.ExternalProvider,
+                ExternalId = user.ExternalId
             };
+
+            _logger.LogInformation("MapToUserProfileDto: IsExternal={IsExternal}, Provider={Provider}", 
+                dto.IsExternalAccount, dto.ExternalProvider ?? "null");
+
+            return dto;
         }
 
-        private async Task LogActivityAsync(string? userId, ActivityAction action, bool success, string? details = null)
+        public async Task<bool> UnlinkExternalAsync(string userId, string provider)
         {
-            try
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return false;
+
+            if (user.ExternalProvider?.ToLower() == provider.ToLower())
             {
-                var log = new ActivityLog
+                user.ExternalProvider = null;
+                user.ExternalId = null;
+                user.IsExternalAccount = false;
+                
+                var result = await _userManager.UpdateAsync(user);
+                return result.Succeeded;
+            }
+
+            return false;
+        }
+
+        public async Task<List<UserSessionDto>> GetUserSessionsAsync(string userId, bool includeHistory = false)
+        {
+            var query = _context.UserSessions.Where(s => s.UserId == userId);
+
+            if (!includeHistory)
+            {
+                query = query.Where(s => !s.IsRevoked && s.ExpiresAt > DateTime.UtcNow);
+            }
+
+            var sessions = await query
+                .OrderByDescending(s => s.CreatedAt)
+                .Take(50)
+                .Select(s => new UserSessionDto
                 {
-                    UserId = userId ?? "Unknown",
-                    Action = action,
-                    Success = success,
-                    Details = details,
-                    Timestamp = DateTime.UtcNow
-                };
+                    Id = s.Id,
+                    RefreshToken = s.RefreshToken,
+                    ExpiresAt = s.ExpiresAt,
+                    IsRevoked = s.IsRevoked,
+                    RevokedAt = s.RevokedAt,
+                    DeviceInfo = s.DeviceInfo,
+                    IpAddress = s.IpAddress,
+                    UserAgent = s.UserAgent,
+                    CreatedAt = s.CreatedAt
+                })
+                .ToListAsync();
 
-                _context.ActivityLogs.Add(log);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Ошибка при логировании активности");
-            }
+            return sessions;
         }
 
-        private class TokenResult
+        public async Task<bool> RevokeSessionAsync(string userId, int sessionId)
         {
-            public string AccessToken { get; set; } = string.Empty;
-            public string RefreshToken { get; set; } = string.Empty;
-            public DateTime ExpiresAt { get; set; }
+            var session = await _context.UserSessions.FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId);
+            if (session == null) return false;
+
+            session.IsRevoked = true;
+            session.RevokedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+            return true;
         }
+
+        private class TokenResult { public string AccessToken { get; set; } = ""; public string RefreshToken { get; set; } = ""; public DateTime ExpiresAt { get; set; } }
     }
 }
