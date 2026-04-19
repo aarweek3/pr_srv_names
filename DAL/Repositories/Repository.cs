@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
+using DAL.Repositories.Interfaces;
+
 
 namespace DAL.Repositories
 {
@@ -212,7 +213,7 @@ namespace DAL.Repositories
             if (entity != null && HasProperty(entity, "IsDeleted"))
             {
                 Context.Entry(entity).Property("IsDeleted").CurrentValue = true;
-                Context.Entry(entity).Property("DeletedAt").CurrentValue = DateTime.UtcNow;
+                Context.Entry(entity).Property("DeletedAt").CurrentValue = DateTimeOffset.UtcNow;
             }
         }
 
@@ -223,7 +224,7 @@ namespace DAL.Repositories
             foreach (var entity in entities.Where(e => HasProperty(e, "IsDeleted")))
             {
                 Context.Entry(entity).Property("IsDeleted").CurrentValue = true;
-                Context.Entry(entity).Property("DeletedAt").CurrentValue = DateTime.UtcNow;
+                Context.Entry(entity).Property("DeletedAt").CurrentValue = DateTimeOffset.UtcNow;
             }
 
             return entities.Count;
@@ -231,7 +232,11 @@ namespace DAL.Repositories
 
         public virtual async Task RestoreAsync(int id)
         {
-            var entity = await GetByIdAsync(id);
+            // Используем IgnoreQueryFilters(), так как обычный поиск не найдет удаленную запись
+            var entity = await Entities
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+
             if (entity != null && HasProperty(entity, "IsDeleted"))
             {
                 Context.Entry(entity).Property("IsDeleted").CurrentValue = false;

@@ -52,6 +52,7 @@ namespace pr_srv_names.Controllers
                     Success = true,
                     ImageUrl = result.Url,
                     RelativePath = result.RelativePath,
+                    ImageId = result.ImageId,
                     FileSize = result.FileSize
                 };
 

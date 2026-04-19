@@ -1,5 +1,4 @@
-using DAL.Models;
-using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
+using DAL.Models.NameModels;
 using System.Linq.Expressions;
 
 namespace DAL.Repositories.Interfaces

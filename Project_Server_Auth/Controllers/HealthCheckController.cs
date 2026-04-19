@@ -74,7 +74,8 @@ namespace pr_srv_names.Controllers
                     Name = e.Key,
                     Status = e.Value.Status.ToString(),
                     Duration = e.Value.Duration.TotalMilliseconds,
-                    Description = e.Value.Description
+                    Description = e.Value.Description,
+                    Tags = e.Value.Tags
                 })
             };
 
@@ -99,5 +100,6 @@ namespace pr_srv_names.Controllers
         public string Status { get; set; }
         public double Duration { get; set; }
         public string Description { get; set; }
+        public IEnumerable<string> Tags { get; set; }
     }
 }

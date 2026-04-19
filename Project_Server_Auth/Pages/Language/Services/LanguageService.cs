@@ -2,7 +2,6 @@
 using pr_srv_names.Models;
 using AutoMapper;
 using DAL.Interfaces;
-using DAL.Models;
 using DAL.Repositories.Interfaces;
 using FluentValidation;
 using System.Linq.Expressions;
@@ -87,7 +86,7 @@ namespace pr_srv_names.Pages.Language.Services
         /// <summary>
         /// Получить language по ID или выбросить исключение, если не найдена
         /// </summary>
-        private async Task<DAL.Models.Language> GetLanguageOrThrow(int id)
+        private async Task<DAL.Models.LocalizationModels.Language> GetLanguageOrThrow(int id)
         {
             var correlationId = GetCorrelationId();
             var entity = await _languageRepository.GetByIdAsync(id);
@@ -220,7 +219,7 @@ namespace pr_srv_names.Pages.Language.Services
             try
             {
                 await ValidateNameAndCodeUniqueness(request.Name, request.Code);
-                var entity = _mapper.Map<DAL.Models.Language>(request);
+                var entity = _mapper.Map<DAL.Models.LocalizationModels.Language>(request);
                 await _languageRepository.AddAsync(entity);
                 await _unitOfWork.SaveChangesAsync();
                 var result = _mapper.Map<LanguageDetailDto>(entity);
@@ -439,7 +438,7 @@ namespace pr_srv_names.Pages.Language.Services
         /// <summary>
         /// Построение фильтра поиска по имени или коду языка
         /// </summary>
-        private Expression<Func<DAL.Models.Language, bool>>? BuildSearchFilter(string? searchTerm)
+        private Expression<Func<DAL.Models.LocalizationModels.Language, bool>>? BuildSearchFilter(string? searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return null;
@@ -451,7 +450,7 @@ namespace pr_srv_names.Pages.Language.Services
         /// <summary>
         /// Построение выражения сортировки на основе enum поля
         /// </summary>
-        private Expression<Func<DAL.Models.Language, object>> BuildSortExpression(LanguageSortField sortBy)
+        private Expression<Func<DAL.Models.LocalizationModels.Language, object>> BuildSortExpression(LanguageSortField sortBy)
         {
             return sortBy switch
             {

@@ -14,6 +14,7 @@ namespace pr_srv_names.Services.Interfaces
         Task<bool> ChangePasswordAsync(string userId, ChangePasswordDto changePasswordDto);
         Task<UserProfileDto?> GetUserProfileAsync(string userId);
         Task<bool> UnlinkExternalAsync(string userId, string provider);
+        Task<bool> UpdateUserProfileAsync(string userId, UpdateUserDto dto);
         Task<List<UserSessionDto>> GetUserSessionsAsync(string userId, bool includeHistory = false);
         Task<bool> RevokeSessionAsync(string userId, int sessionId);
     }

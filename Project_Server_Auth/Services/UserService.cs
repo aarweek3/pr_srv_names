@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DAL;
-using DAL.Models;
 using pr_srv_names.Dtos;
 using pr_srv_names.Services.Interfaces;
+using DAL.Models.AuthorizationModels;
 
 namespace pr_srv_names.Services
 {

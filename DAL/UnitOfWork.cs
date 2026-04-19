@@ -1,16 +1,15 @@
-// DAL/UnitOfWork.cs - ������ ����������
+// DAL/UnitOfWork.cs - Репозиторий Unit of Work
 
 using DAL.Interfaces;
 using DAL.Repositories;
 using DAL.Repositories.Interfaces;
-using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DAL
 {
     /// <summary>
-    /// ������ ���������� Unit of Work ��������
+    /// Реализация паттерна Unit of Work
     /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
@@ -19,16 +18,19 @@ namespace DAL
         private bool _disposed = false;
         private IDbContextTransaction? _currentTransaction;
 
-        // ReSharper disable once ConvertToPrimaryConstructor
         public UnitOfWork(AppDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        // ������ � UnitOfWork ��� ���� � ��������:
-
         private INameMainRepository? _nameMainRepository;
         public INameMainRepository NameMains => _nameMainRepository ??= new NameMainRepository(_context);
+
+        private IIconCategoryRepository? _iconCategoryRepository;
+        public IIconCategoryRepository IconCategories => _iconCategoryRepository ??= new IconCategoryRepository(_context);
+
+        private IIconRepository? _iconRepository;
+        public IIconRepository Icons => _iconRepository ??= new IconRepository(_context);
 
         private IAnecdoteRepository? _anecdoteRepository;
         public IAnecdoteRepository Anecdotes => _anecdoteRepository ??= new AnecdoteRepository(_context);
@@ -36,14 +38,23 @@ namespace DAL
         private ILanguageRepository? _languageRepository;
         public ILanguageRepository Languages => _languageRepository ??= new LanguageRepository(_context);
 
+        private ILanguageAppRepository? _languageAppRepository;
+        public ILanguageAppRepository LanguagesApp => _languageAppRepository ??= new LanguageAppRepository(_context);
+
+        private ILanguageOfAggregatorRepository? _languageOfAggregatorRepository;
+        public ILanguageOfAggregatorRepository LanguagesOfAggregator => _languageOfAggregatorRepository ??= new LanguageOfAggregatorRepository(_context);
+
+        private IPlatformOfAggregatorRepository? _platformOfAggregatorRepository;
+        public IPlatformOfAggregatorRepository PlatformsOfAggregator => _platformOfAggregatorRepository ??= new PlatformOfAggregatorRepository(_context);
+
+        private IPlatformRepository? _platformRepository;
+        public IPlatformRepository Platforms => _platformRepository ??= new PlatformRepository(_context);
 
         private INameRepository? _nameRepository;
         public INameRepository Names => _nameRepository ??= new NameRepository(_context);
 
         private INameDescriptionRepository? _nameDescriptionRepository;
-
-        public INameDescriptionRepository NameDescriptions =>
-            _nameDescriptionRepository ??= new NameDescriptionRepository(_context);
+        public INameDescriptionRepository NameDescriptions => _nameDescriptionRepository ??= new NameDescriptionRepository(_context);
 
         private ISeoDataRepository? _seoDataRepository;
         public ISeoDataRepository SeoDatas => _seoDataRepository ??= new SeoDataRepository(_context);
@@ -51,13 +62,22 @@ namespace DAL
         private ISampleRepository? _sampleRepository;
         public ISampleRepository Samples => _sampleRepository ??= new SampleRepository(_context);
 
+        private ISampleMainRepository? _sampleMainRepository;
+        public ISampleMainRepository SamplesMain => _sampleMainRepository ??= new SampleMainRepository(_context);
+        
+        private ISampleMainSeoRepository? _sampleMainSeoRepository;
+        public ISampleMainSeoRepository SamplesMainSeo => _sampleMainSeoRepository ??= new SampleMainSeoRepository(_context);
+
+        private ISampleMainDescriptionRepository? _sampleMainDescriptionRepository;
+        public ISampleMainDescriptionRepository SamplesMainDescriptions => _sampleMainDescriptionRepository ??= new SampleMainDescriptionRepository(_context);
+
         // ===========================
-        // �������� ���������
+        // Основные свойства
         // ===========================
         public DbContext Context => _context;
 
         // ===========================
-        // ������������������ ����������� � lazy loading
+        // Репозитории с Lazy Loading
         // ===========================
         private IUserRepository? _userRepository;
         public IUserRepository Users => _userRepository ??= new UserRepository(_context);
@@ -84,7 +104,7 @@ namespace DAL
         }
 
         // ===========================
-        // ���������� ���������
+        // Управление изменениями
         // ===========================
         public int SaveChanges()
         {
@@ -94,15 +114,15 @@ namespace DAL
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                throw new InvalidOperationException("�������� ������������� ���������� ��� ���������� ���������.", ex);
+                throw new InvalidOperationException("Ошибка конкурентного доступа при сохранении изменений.", ex);
             }
             catch (DbUpdateException ex)
             {
-                throw new InvalidOperationException("������ ��� ���������� ��������� � ���� ������.", ex);
+                throw new InvalidOperationException("Ошибка при сохранении изменений в базу данных.", ex);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("����������� ������ ��� ���������� ���������.", ex);
+                throw new InvalidOperationException("Непредвиденная ошибка при сохранении изменений.", ex);
             }
         }
 
@@ -114,26 +134,25 @@ namespace DAL
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                throw new InvalidOperationException("�������� ������������� ���������� ��� ���������� ���������.", ex);
+                throw new InvalidOperationException("Ошибка конкурентного доступа при сохранении изменений.", ex);
             }
             catch (DbUpdateException ex)
             {
-                throw new InvalidOperationException("������ ��� ���������� ��������� � ���� ������.", ex);
+                throw new InvalidOperationException("Ошибка при сохранении изменений в базу данных.", ex);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("����������� ������ ��� ���������� ���������.", ex);
+                throw new InvalidOperationException("Непредвиденная ошибка при сохранении изменений.", ex);
             }
         }
 
         // ===========================
-        // ���������� - ���������� ������
+        // Транзакции - стандартные методы
         // ===========================
         public async Task BeginTransactionAsync()
         {
             if (_currentTransaction != null)
-                throw new InvalidOperationException(
-                    "���������� ��� ������. ��������� ������� ���������� ����� ������� �����.");
+                throw new InvalidOperationException("Транзакция уже начата.");
 
             _currentTransaction = await _context.Database.BeginTransactionAsync();
         }
@@ -141,7 +160,7 @@ namespace DAL
         public async Task CommitTransactionAsync()
         {
             if (_currentTransaction == null)
-                throw new InvalidOperationException("��� �������� ���������� ��� �������������.");
+                throw new InvalidOperationException("Нет активной транзакции для фиксации.");
 
             try
             {
@@ -150,7 +169,7 @@ namespace DAL
             catch (Exception ex)
             {
                 await RollbackTransactionAsync();
-                throw new InvalidOperationException("������ ��� ������������� ����������.", ex);
+                throw new InvalidOperationException("Ошибка при фиксации транзакции.", ex);
             }
             finally
             {
@@ -162,7 +181,7 @@ namespace DAL
         public async Task RollbackTransactionAsync()
         {
             if (_currentTransaction == null)
-                throw new InvalidOperationException("��� �������� ���������� ��� ������.");
+                throw new InvalidOperationException("Нет активной транзакции для отката.");
 
             try
             {
@@ -170,7 +189,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("������ ��� ������ ����������.", ex);
+                throw new InvalidOperationException("Ошибка при откате транзакции.", ex);
             }
             finally
             {
@@ -180,7 +199,7 @@ namespace DAL
         }
 
         // ===========================
-        // ���������� - ����������� ������
+        // Транзакции - расширенные методы
         // ===========================
         public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
@@ -190,7 +209,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("������ ��� ������ ����������.", ex);
+                throw new InvalidOperationException("Ошибка при начале транзакции.", ex);
             }
         }
 
@@ -235,12 +254,12 @@ namespace DAL
         }
 
         // ===========================
-        // SQL �������
+        // SQL Команды
         // ===========================
         public async Task<int> ExecuteSqlRawAsync(string sql, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql))
-                throw new ArgumentException("SQL ������ �� ����� ���� ������.", nameof(sql));
+                throw new ArgumentException("SQL query cannot be null or whitespace.", nameof(sql));
 
             try
             {
@@ -248,14 +267,14 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"������ ��� ���������� SQL �������: {sql}", ex);
+                throw new InvalidOperationException($"Error executing SQL: {sql}", ex);
             }
         }
 
         public async Task<int> ExecuteSqlRawAsync(string sql, params object[] parameters)
         {
             if (string.IsNullOrWhiteSpace(sql))
-                throw new ArgumentException("SQL ������ �� ����� ���� ������.", nameof(sql));
+                throw new ArgumentException("SQL query cannot be null or whitespace.", nameof(sql));
 
             if (parameters == null)
                 throw new ArgumentNullException(nameof(parameters));
@@ -266,12 +285,24 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"������ ��� ���������� SQL ������� � �����������: {sql}", ex);
+                throw new InvalidOperationException($"Error executing SQL: {sql}", ex);
             }
         }
 
+        public async Task<int> TruncateTableAsync(string tableName, bool cascade = true)
+        {
+            if (string.IsNullOrWhiteSpace(tableName))
+                throw new ArgumentException("Имя таблицы не может быть пустым.", nameof(tableName));
+
+            var cascadeSql = cascade ? "CASCADE" : "";
+            // Для PostgreSQL RESTART IDENTITY сбрасывает счетчики
+            var sql = $"TRUNCATE TABLE \"{tableName}\" RESTART IDENTITY {cascadeSql};";
+
+            return await ExecuteSqlRawAsync(sql);
+        }
+
         // ===========================
-        // ���������� ����������
+        // Управление состоянием
         // ===========================
         public void DetachAllEntities()
         {
@@ -281,7 +312,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("������ ��� ������������ ��������� �� ���������.", ex);
+                throw new InvalidOperationException("Ошибка при очистке ChangeTracker.", ex);
             }
         }
 
@@ -291,16 +322,16 @@ namespace DAL
             {
                 var entityType = _context.Model.FindEntityType(typeof(TEntity));
                 if (entityType == null)
-                    throw new InvalidOperationException($"��� �������� {typeof(TEntity).Name} �� ������ � ������.");
+                    throw new InvalidOperationException($"Тип сущности {typeof(TEntity).Name} не найден в модели.");
 
                 var tableName = entityType.GetTableName();
                 var schemaName = entityType.GetSchema() ?? "public";
 
                 if (string.IsNullOrEmpty(tableName))
                     throw new InvalidOperationException(
-                        $"�� ������� �������� ��� ������� ��� ���� {typeof(TEntity).Name}.");
+                        $"Не удалось определить имя таблицы для типа {typeof(TEntity).Name}.");
 
-                // PostgreSQL ������ ������ ������������������
+                // PostgreSQL сброс последовательности
                 var sequenceName = $"{tableName}_id_seq";
                 var sql = $"ALTER SEQUENCE {schemaName}.{sequenceName} RESTART WITH 1";
 
@@ -308,8 +339,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"������ ��� ������ ������������������ ��� {typeof(TEntity).Name}.",
-                    ex);
+                throw new InvalidOperationException($"Ошибка при сбросе последовательности для {typeof(TEntity).Name}.", ex);
             }
         }
 
@@ -321,7 +351,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("������ ��� �������� ������������� ���������.", ex);
+                throw new InvalidOperationException("Ошибка при проверке наличия несохраненных изменений.", ex);
             }
         }
 
@@ -348,12 +378,12 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("������ ��� ������ ���������.", ex);
+                throw new InvalidOperationException("Ошибка при отмене изменений.", ex);
             }
         }
 
         // ===========================
-        // �������������� ������
+        // Информационные методы
         // ===========================
         public async Task<bool> CanConnectAsync()
         {
@@ -376,7 +406,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                return $"������ ��������� ���������: {ex.Message}";
+                return $"Ошибка получения состояния: {ex.Message}";
             }
         }
 
@@ -388,7 +418,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("������ ��� ���������� ��������.", ex);
+                throw new InvalidOperationException("Ошибка при выполнении миграций.", ex);
             }
         }
 
@@ -400,7 +430,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("������ ��� ��������� ������ ��������� ��������.", ex);
+                throw new InvalidOperationException("Ошибка при получении списка ожидающих миграций.", ex);
             }
         }
 
@@ -412,7 +442,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("������ ��� ��������� ������ ����������� ��������.", ex);
+                throw new InvalidOperationException("Ошибка при получении списка примененных миграций.", ex);
             }
         }
 
@@ -425,7 +455,6 @@ namespace DAL
             {
                 try
                 {
-                    // ���������� �������� ���������� ��� ������������ ��������
                     if (_currentTransaction != null)
                     {
                         _currentTransaction.Rollback();
@@ -433,15 +462,12 @@ namespace DAL
                         _currentTransaction = null;
                     }
 
-                    // ������� ��� ������������
                     _repositories.Clear();
-
-                    // ����������� ��������
                     _context?.Dispose();
                 }
                 catch (Exception)
                 {
-                    // ���������� ������ ��� ������������ ��������
+                    // Игнорируем ошибки при очистке
                 }
                 finally
                 {

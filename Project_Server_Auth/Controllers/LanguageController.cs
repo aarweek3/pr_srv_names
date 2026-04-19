@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using pr_srv_names.Pages.Language.Dtos;
 using pr_srv_names.Pages.Language.Intarfaces;
 using pr_srv_names.Models.Errors;
+using DAL.Models.LocalizationModels;
 
 namespace pr_srv_names.Controllers
 {
@@ -189,7 +190,7 @@ namespace pr_srv_names.Controllers
                 return Conflict("Язык с таким кодом уже существует.");
             }
 
-            var newLanguage = new DAL.Models.Language
+            var newLanguage = new Language
             {
                 Code = dto.Code,
                 Name = dto.Name,

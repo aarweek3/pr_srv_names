@@ -5,8 +5,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using DAL.Models;
 using pr_srv_names.Services.Interfaces;
+using DAL.Models.AuthorizationModels;
 
 namespace pr_srv_names.Services
 {

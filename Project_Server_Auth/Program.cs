@@ -1,27 +1,9 @@
 ﻿using AutoMapper;
-using DAL;
-using DAL.Interfaces;
-using DAL.Repositories;
-using DAL.Repositories.Interfaces;
 using FluentValidation;
 using pr_srv_names.Deepl;
 using pr_srv_names.Extensions;
 using pr_srv_names.Middleware;
-using pr_srv_names.Pages.AdvancedImageEditor.Services;
-using pr_srv_names.Pages.Anecdote.Interfaces;
-using pr_srv_names.Pages.Anecdote.Services;
-using pr_srv_names.Pages.Health.Services;
-using pr_srv_names.Pages.Language.Intarfaces;
-using pr_srv_names.Pages.Language.Services;
-using pr_srv_names.Pages.NameMain.Intarfaces;
-using pr_srv_names.Pages.NameMain.Services;
-using pr_srv_names.Pages.Sample.Intarfaces;
-using pr_srv_names.Pages.Sample.Services;
-using pr_srv_names.Services.Editor;
 using pr_srv_names.Supports.Deepl;
-using pr_srv_names.Pages.UserSetting.Interfaces;
-using pr_srv_names.Pages.UserSetting.Services;
-using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,87 +38,28 @@ builder.Services.AddCorsConfiguration(builder.Configuration, builder.Environment
 builder.Services.RegisterAllServices();
 builder.Services.AddSwaggerDocumentation();
 
-#region 8. Mapping Configuration
+// AutoMapper
+var mapperConfig = new MapperConfiguration(cfg => 
+    cfg.AddMaps(typeof(Program).Assembly));
+builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
-Log.Information("Настройка маппинга...");
-var mapperConfig = new MapperConfiguration(cfg => { cfg.AddMaps(typeof(Program).Assembly); });
-var mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
-
-#endregion
-
-#region 9. FluentValidation Configuration
-
-Log.Information("Настройка FluentValidation...");
+// FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-#endregion
-
-#region 10. HttpClient Configuration
-
-Log.Information("Настройка HttpClient для DeepL...");
+// HttpClient для DeepL
 builder.Services.AddHttpClient<IDeepLTranslationService, DeepLTranslationService>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
-#endregion
+// OAuth Providers (Google, Facebook)
+builder.Services.AddOAuthProviders(builder.Configuration);
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// РЕГИСТРАЦИЯ КОНКРЕТНЫХ СЕРВИСОВ 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Обычно здесь указываются схемы по умолчанию, например .AddJwtBearer(...)
+// Domain Services и Repositories
+builder.Services.AddDomainServices();
 
-builder.Services.AddAuthentication()
-    .AddGoogle(options =>
-    {
-        // Эти ключи будут браться из appsettings.json или User Secrets
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-
-        // Это путь внутри вашего API, который перехватит ответ от Google.
-        // Менять его обычно не нужно, но он должен совпадать с тем, что в Google Console (см. пункт 3).
-        options.CallbackPath = "/signin-google"; // Путь внутри API, куда вернет Google
-    })
-    .AddFacebook(options =>
-    {
-        options.AppId = builder.Configuration["Authentication:Facebook:AppId"]!;
-        options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"]!;
-    });
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddScoped<ILanguageService, LanguageService>();
-builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
-
-builder.Services.AddScoped<ISampleService, SampleService>();
-builder.Services.AddScoped<ISampleRepository, SampleRepository>();
-
-// Сервисы и репозитории для работы с анекдотами и именами
-builder.Services.AddScoped<IAnecdoteService, AnecdoteService>();
-builder.Services.AddScoped<IAnecdoteRepository, AnecdoteRepository>();
-
-builder.Services.AddScoped<INameMainService, NameMainService>();
-builder.Services.AddScoped<INameMainRepository, NameMainRepository>();
-
-// Репозиторий для работы с настройками пользователей
-builder.Services.AddScoped<IUserSettingsRepository, UserSettingsRepository>();
-builder.Services.AddScoped<IUserSettingsService, UserSettingsService>();
-
-// работа с изображениями (модальное окно-простой вариант) - Мой редактор
-builder.Services.AddScoped<IEditorImageService, EditorImageService>();
-
-// ✅ ДОБАВЬТЕ ЭТО - Advanced Image Editor - Мой редактор - РАСШИРЕННАЯ ВЕРСИЯ ОБРАБОТКИ IMAGE
-builder.Services.AddScoped<IAdvancedImageProcessingService, AdvancedImageProcessingService>();
-
-builder.Services.AddScoped<IHealthCheckEnhancedService, HealthCheckEnhancedService>();
-
-// ✅ ДОБАВЬТЕ ЭТУ СТРОКУ:
-builder.Services.AddHealthChecks();
-
-
-// DeepLTranslationService уже зарегистрирован через AddHttpClient выше
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// HealthChecks
+builder.Services.AddApplicationHealthChecks();
 
 var app = builder.Build();
 
@@ -153,11 +76,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerDocumentation();
 }
 
-// 1. CORS (должен быть до маршрутизации)
-app.UseCorsConfiguration(app.Environment);
-
-// 2. Обработчик ошибок
+// 1. Обработчик ошибок
 app.UseMiddleware<AuthExceptionMiddleware>();
+
+// 2. CORS (должен быть до маршрутизации)
+app.UseCorsConfiguration(app.Environment);
 
 // 3. HTTPS редирект
 app.UseHttpsRedirection();
@@ -166,29 +89,37 @@ app.UseHttpsRedirection();
 app.UseHsts();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
-// ✅ ДОБАВЬТЕ ЭТО: Статические файлы (ВАЖНО: до UseRouting)
-app.UseStaticFiles();
+// 5. Статические файлы
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+        ctx.Context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, OPTIONS");
+        ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type");
+    }
+});
 
-// 5. Routing
+// 6. Routing
 app.UseRouting();
 
-// 6. Модификация cookies
+// 7. Модификация cookies
 app.AddCookieModificationMiddleware(app.Environment);
 
-// 7. Аутентификация и авторизация
+// 8. Аутентификация и авторизация
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 8. Rate limiting
+// 9. Rate limiting
 app.UseMiddleware<RateLimitingMiddleware>();
 
-// 9. Debug endpoints (только в development)
+// 10. Debug endpoints (только в development)
 if (app.Environment.IsDevelopment())
 {
     app.ConfigureDebugEndpoints();
 }
 
-// 10. Контроллеры
+// 11. Контроллеры
 app.MapControllers();
 
 app.Run();

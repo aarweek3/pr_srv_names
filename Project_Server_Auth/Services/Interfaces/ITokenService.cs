@@ -1,6 +1,6 @@
 ﻿// Services/Interfaces/ITokenService.cs
 using System.Security.Claims;
-using DAL.Models;
+using DAL.Models.AuthorizationModels;
 
 namespace pr_srv_names.Services.Interfaces
 {

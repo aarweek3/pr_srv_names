@@ -1,4 +1,4 @@
-﻿using DAL.Models;
+﻿using DAL.Models.AuthorizationModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace pr_srv_names.Extensions

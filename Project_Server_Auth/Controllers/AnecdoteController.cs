@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using DAL.Interfaces;
 using DAL.Repositories.Interfaces;
 using DAL.Models;
+using DAL.Models.NameModels;
 
 namespace pr_srv_names.Controllers
 {
@@ -253,7 +254,7 @@ namespace pr_srv_names.Controllers
                 return BadRequest("Название анекдота не может быть пустым.");
             }
 
-            var newAnecdote = new DAL.Models.Anecdote
+            var newAnecdote = new Anecdote
             {
                 Name = dto.Name,
                 NameMainId = dto.NameMainId,

@@ -98,6 +98,11 @@ namespace pr_srv_names.Models.Editor
         public string RelativePath { get; set; } = string.Empty;
 
         /// <summary>
+        /// Уникальный идентификатор изображения
+        /// </summary>
+        public string ImageId { get; set; } = string.Empty;
+
+        /// <summary>
         /// Размер файла в байтах
         /// </summary>
         public long FileSize { get; set; }
@@ -308,6 +313,11 @@ namespace pr_srv_names.Models.Editor
         /// Полный URL для доступа к изображению
         /// </summary>
         public string Url { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Уникальный идентификатор изображения
+        /// </summary>
+        public string ImageId { get; set; } = string.Empty;
 
         /// <summary>
         /// Размер файла в байтах

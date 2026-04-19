@@ -1,16 +1,13 @@
-﻿using pr_srv_names.Pages.Sample.Intarfaces;
+﻿using pr_srv_names.Pages.Sample.Interfaces;
 using pr_srv_names.Pages.Sample.Dtos;
 using pr_srv_names.Models.Errors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using DAL.Interfaces;
-using DAL.Repositories.Interfaces;
-using DAL.Models;
 
 namespace pr_srv_names.Controllers
 {
     /// <summary>
-    /// Контроллер для управления языками
+    /// Контроллер для управления Sample
     /// </summary>
     [ApiController]
     [Route("api/v1/samples")]
@@ -19,26 +16,20 @@ namespace pr_srv_names.Controllers
     public class SampleController : ControllerBase
     {
         private readonly ISampleService _service;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ISampleRepository _sampleRepository;
         private readonly ILogger<SampleController> _logger;
 
         public SampleController(
             ISampleService service,
-            IUnitOfWork unitOfWork,
-            ISampleRepository sampleRepository,
             ILogger<SampleController> logger)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _sampleRepository = sampleRepository ?? throw new ArgumentNullException(nameof(sampleRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         #region Основные CRUD операции
 
         /// <summary>
-        /// Получить все языки для селектора (в алфавитном порядке)
+        /// Получить все Sample для селектора (в алфавитном порядке)
         /// </summary>
         [HttpGet("all")]
         [ProducesResponseType(typeof(IEnumerable<SampleDetailDto>), StatusCodes.Status200OK)]
@@ -46,15 +37,15 @@ namespace pr_srv_names.Controllers
         public async Task<IActionResult> GetAllForSelector()
         {
             var correlationId = HttpContext.TraceIdentifier;
-            var result = await _service.GetAllCategoriesAsync();
-            _logger.LogInformation("Все языки успешно получены для селектора. Количество: {Count}. CorrelationId: {CorrelationId}",
+            var result = await _service.GetAllSamplesAsync();
+            _logger.LogInformation("Все Sample успешно получены для селектора. Количество: {Count}. CorrelationId: {CorrelationId}",
                 result.Count(), correlationId);
 
             return Ok(result);
         }
 
         /// <summary>
-        /// Получить список языков с пагинацией и фильтрацией
+        /// Получить список Sample с пагинацией и фильтрацией
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(SamplePagedResponseDto), StatusCodes.Status200OK)]
@@ -66,15 +57,15 @@ namespace pr_srv_names.Controllers
             var correlationId = HttpContext.TraceIdentifier;
             request ??= new SamplePageRequestDto();
 
-            var result = await _service.GetAllCategoriesAsync(request);
-            _logger.LogInformation("Список языков успешно получен. Страница: {PageNumber}, Размер страницы: {PageSize}, Всего: {Total}. CorrelationId: {CorrelationId}",
+            var result = await _service.GetAllSamplesAsync(request);
+            _logger.LogInformation("Список Sample успешно получен. Страница: {PageNumber}, Размер страницы: {PageSize}, Всего: {Total}. CorrelationId: {CorrelationId}",
                 request.PageNumber, request.PageSize, result.Total, correlationId);
 
             return Ok(result);
         }
 
         /// <summary>
-        /// Получить язык по идентификатору
+        /// Получить Sample по идентификатору
         /// </summary>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(SampleDetailDto), StatusCodes.Status200OK)]
@@ -86,12 +77,12 @@ namespace pr_srv_names.Controllers
         {
             var correlationId = HttpContext.TraceIdentifier;
             var result = await _service.GetSampleByIdAsync(id);
-            _logger.LogInformation("Язык с ID {Id} успешно получен. CorrelationId: {CorrelationId}", id, correlationId);
+            _logger.LogInformation("Sample с ID {Id} успешно получен. CorrelationId: {CorrelationId}", id, correlationId);
             return Ok(result);
         }
 
         /// <summary>
-        /// Создать новый язык
+        /// Создать новый Sample
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(SampleDetailDto), StatusCodes.Status201Created)]
@@ -103,12 +94,12 @@ namespace pr_srv_names.Controllers
         {
             var correlationId = HttpContext.TraceIdentifier;
             var result = await _service.CreateSampleAsync(request);
-            _logger.LogInformation("Язык с ID {Id} успешно создан. CorrelationId: {CorrelationId}", result.Id, correlationId);
+            _logger.LogInformation("Sample с ID {Id} успешно создан. CorrelationId: {CorrelationId}", result.Id, correlationId);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         /// <summary>
-        /// Обновить существующий язык
+        /// Обновить существующий Sample
         /// </summary>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(SampleDetailDto), StatusCodes.Status200OK)]
@@ -121,12 +112,12 @@ namespace pr_srv_names.Controllers
         {
             var correlationId = HttpContext.TraceIdentifier;
             var result = await _service.UpdateSampleAsync(id, request);
-            _logger.LogInformation("Язык с ID {Id} успешно обновлен. CorrelationId: {CorrelationId}", id, correlationId);
+            _logger.LogInformation("Sample с ID {Id} успешно обновлен. CorrelationId: {CorrelationId}", id, correlationId);
             return Ok(result);
         }
 
         /// <summary>
-        /// Удалить язык
+        /// Удалить Sample
         /// </summary>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -138,7 +129,7 @@ namespace pr_srv_names.Controllers
         {
             var correlationId = HttpContext.TraceIdentifier;
             await _service.DeleteSampleAsync(id);
-            _logger.LogInformation("Язык с ID {Id} успешно удален. CorrelationId: {CorrelationId}", id, correlationId);
+            _logger.LogInformation("Sample с ID {Id} успешно удален. CorrelationId: {CorrelationId}", id, correlationId);
             return NoContent();
         }
 
@@ -147,22 +138,22 @@ namespace pr_srv_names.Controllers
         #region Дополнительные методы
 
         /// <summary>
-        /// Получить языки с описанием
+        /// Получить Sample с описанием
         /// </summary>
         [HttpGet("with-description")]
         [ProducesResponseType(typeof(IEnumerable<SampleDetailDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetCategoriesWithDescription()
+        public async Task<IActionResult> GetSamplesWithDescription()
         {
             var correlationId = HttpContext.TraceIdentifier;
-            var result = await _service.GetCategoriesWithDescriptionAsync();
-            _logger.LogInformation("Получено {Count} языков с описанием. CorrelationId: {CorrelationId}",
+            var result = await _service.GetSamplesWithDescriptionAsync();
+            _logger.LogInformation("Получено {Count} Sample с описанием. CorrelationId: {CorrelationId}",
                 result.Count(), correlationId);
             return Ok(result);
         }
 
         /// <summary>
-        /// Проверить существование языка
+        /// Проверить существование Sample
         /// </summary>
         [HttpHead("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -176,11 +167,11 @@ namespace pr_srv_names.Controllers
 
             if (!exists)
             {
-                _logger.LogInformation("Язык с ID {Id} не существует. CorrelationId: {CorrelationId}", id, correlationId);
+                _logger.LogInformation("Sample с ID {Id} не существует. CorrelationId: {CorrelationId}", id, correlationId);
                 return NotFound();
             }
 
-            _logger.LogInformation("Язык с ID {Id} существует. CorrelationId: {CorrelationId}", id, correlationId);
+            _logger.LogInformation("Sample с ID {Id} существует. CorrelationId: {CorrelationId}", id, correlationId);
             return Ok();
         }
 
@@ -189,19 +180,18 @@ namespace pr_srv_names.Controllers
         #region Control методы (упрощенные CRUD)
 
         /// <summary>
-        /// Получить все языки для контрола (упрощенная версия)
+        /// Получить все Sample для контрола (упрощенная версия)
         /// </summary>
         [HttpGet("control/all")]
         [ProducesResponseType(typeof(IEnumerable<SampleControlDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllControl()
         {
-            var samples = await _sampleRepository.GetAllAsync();
-            var dtos = samples.Select(r => new SampleControlDto { Id = r.Id, Name = r.Name }).ToList();
-            return Ok(dtos);
+            var result = await _service.GetAllControlAsync();
+            return Ok(result);
         }
 
         /// <summary>
-        /// Создать язык (упрощенная версия для контрола)
+        /// Создать Sample (упрощенная версия для контрола)
         /// </summary>
         [HttpPost("control")]
         [ProducesResponseType(typeof(SampleControlDto), StatusCodes.Status201Created)]
@@ -209,23 +199,8 @@ namespace pr_srv_names.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> CreateControl([FromBody] SampleControlCreateDto dto)
         {
-            if (string.IsNullOrWhiteSpace(dto.Name))
-            {
-                return BadRequest("Имя языка не может быть пустым.");
-            }
-
-            var isUnique = await _sampleRepository.IsSampleNameUniqueAsync(dto.Name);
-            if (!isUnique)
-            {
-                return Conflict("Язык с таким именем уже существует.");
-            }
-
-            var newSample = new Sample { Name = dto.Name };
-            await _sampleRepository.AddAsync(newSample);
-            await _unitOfWork.SaveChangesAsync();
-
-            var createdDto = new SampleControlDto { Id = newSample.Id, Name = newSample.Name };
-            return CreatedAtAction(nameof(GetAllControl), new { id = createdDto.Id }, createdDto);
+            var result = await _service.CreateControlAsync(dto);
+            return CreatedAtAction(nameof(GetAllControl), new { id = result.Id }, result);
         }
 
         #endregion

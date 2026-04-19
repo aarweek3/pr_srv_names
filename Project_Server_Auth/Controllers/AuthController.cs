@@ -515,6 +515,35 @@ namespace pr_srv_names.Controllers
                  return StatusCode(500, new { success = false, message = "Internal server error" });
              }
         }
+
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserDto updateUserDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (userId == null)
+                    return Unauthorized();
+
+                var result = await _authService.UpdateUserProfileAsync(userId, updateUserDto);
+                if (result)
+                {
+                    var updatedProfile = await _authService.GetUserProfileAsync(userId);
+                    return Ok(new { success = true, data = updatedProfile, message = "Профиль успешно обновлен" });
+                }
+
+                return BadRequest(new { success = false, message = "Не удалось обновить профиль" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при обновлении профиля");
+                return StatusCode(500, new { success = false, message = "Внутренняя ошибка сервера" });
+            }
+        }
     }
 
 

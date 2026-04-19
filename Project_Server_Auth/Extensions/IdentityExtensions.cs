@@ -1,5 +1,5 @@
 ﻿using DAL;
-using DAL.Models;
+using DAL.Models.AuthorizationModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace pr_srv_names.Extensions
@@ -187,12 +187,22 @@ namespace pr_srv_names.Extensions
         }
     }
 
-    // Кастомный валидатор паролей
     public class CustomPasswordValidator : IPasswordValidator<ApplicationUser>
     {
-        public async Task<IdentityResult> ValidateAsync(UserManager<ApplicationUser> manager, ApplicationUser user, string password)
+        public async Task<IdentityResult> ValidateAsync(UserManager<ApplicationUser> manager, ApplicationUser user, string? password)
         {
             var errors = new List<IdentityError>();
+
+            // Проверка на null или пустой пароль
+            if (string.IsNullOrEmpty(password))
+            {
+                errors.Add(new IdentityError
+                {
+                    Code = "PasswordRequired",
+                    Description = "Пароль обязателен"
+                });
+                return IdentityResult.Failed(errors.ToArray());
+            }
 
             // Проверка на содержание имени пользователя в пароле
             if (!string.IsNullOrEmpty(user.UserName) &&

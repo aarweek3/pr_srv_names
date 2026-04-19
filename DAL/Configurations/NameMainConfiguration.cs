@@ -1,4 +1,4 @@
-﻿using DAL.Models;
+﻿using DAL.Models.NameModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -34,9 +34,6 @@ namespace DAL.Configurations
                 .HasDefaultValue(true)
                 .HasComment("Активна ли запись");
 
-            // ==========================================
-            // ✅ ВИДАЛЕНО: SeoDataId - його немає в NameMain!
-            // ==========================================
 
             // Индексы
             entity.HasIndex(e => e.Name)
@@ -49,12 +46,6 @@ namespace DAL.Configurations
             entity.HasIndex(e => e.CreatedAt)
                 .HasDatabaseName("IX_Names_CreatedAt");
 
-            // ==========================================
-            // ✅ ПРАВИЛЬНО: Связь 1:1 с SeoData
-            // FK на стороне SeoData (NameMainId)
-            // Конфигурируется ТОЛЬКО в SeoDataConfiguration!
-            // ==========================================
-            // НІЧОГО НЕ ПИШЕМО ТУТ - конфігурація в SeoDataConfiguration!
 
             // Связи с основными данными
             entity.HasMany(n => n.NameDetail)

@@ -70,7 +70,7 @@ namespace pr_srv_names.Pages.Anecdote.Services
         /// <summary>
         /// Получить анекдот по ID или выбросить исключение, если не найден
         /// </summary>
-        private async Task<DAL.Models.Anecdote> GetAnecdoteOrThrow(int id)
+        private async Task<DAL.Models.NameModels.Anecdote> GetAnecdoteOrThrow(int id)
         {
             var correlationId = GetCorrelationId();
             var entity = await _anecdoteRepository.GetByIdAsync(id);
@@ -243,7 +243,7 @@ namespace pr_srv_names.Pages.Anecdote.Services
                 await ValidateNameMainExists(request.NameMainId);
                 await ValidateLanguageExists(request.LanguageId);
 
-                var entity = _mapper.Map<DAL.Models.Anecdote>(request);
+                var entity = _mapper.Map<DAL.Models.NameModels.Anecdote>(request);
                 await _anecdoteRepository.AddAsync(entity);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -469,10 +469,10 @@ namespace pr_srv_names.Pages.Anecdote.Services
         /// <summary>
         /// Построение фильтра поиска
         /// </summary>
-        private Expression<Func<DAL.Models.Anecdote, bool>>? BuildSearchFilter(string? searchTerm, int? nameMainId,
+        private Expression<Func<DAL.Models.NameModels.Anecdote, bool>>? BuildSearchFilter(string? searchTerm, int? nameMainId,
             int? languageId)
         {
-            Expression<Func<DAL.Models.Anecdote, bool>>? filter = null;
+            Expression<Func<DAL.Models.NameModels.Anecdote, bool>>? filter = null;
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -483,13 +483,13 @@ namespace pr_srv_names.Pages.Anecdote.Services
 
             if (nameMainId.HasValue)
             {
-                var nameFilter = (Expression<Func<DAL.Models.Anecdote, bool>>)(a => a.NameMainId == nameMainId.Value);
+                var nameFilter = (Expression<Func<DAL.Models.NameModels.Anecdote, bool>>)(a => a.NameMainId == nameMainId.Value);
                 filter = filter == null ? nameFilter : CombineFilters(filter, nameFilter);
             }
 
             if (languageId.HasValue)
             {
-                var langFilter = (Expression<Func<DAL.Models.Anecdote, bool>>)(a => a.LanguageId == languageId.Value);
+                var langFilter = (Expression<Func<DAL.Models.NameModels.Anecdote, bool>>)(a => a.LanguageId == languageId.Value);
                 filter = filter == null ? langFilter : CombineFilters(filter, langFilter);
             }
 
@@ -499,21 +499,21 @@ namespace pr_srv_names.Pages.Anecdote.Services
         /// <summary>
         /// Комбинирование фильтров через AND
         /// </summary>
-        private Expression<Func<DAL.Models.Anecdote, bool>> CombineFilters(
-            Expression<Func<DAL.Models.Anecdote, bool>> first,
-            Expression<Func<DAL.Models.Anecdote, bool>> second)
+        private Expression<Func<DAL.Models.NameModels.Anecdote, bool>> CombineFilters(
+            Expression<Func<DAL.Models.NameModels.Anecdote, bool>> first,
+            Expression<Func<DAL.Models.NameModels.Anecdote, bool>> second)
         {
-            var parameter = Expression.Parameter(typeof(DAL.Models.Anecdote));
+            var parameter = Expression.Parameter(typeof(DAL.Models.NameModels.Anecdote));
             var combined = Expression.AndAlso(
                 Expression.Invoke(first, parameter),
                 Expression.Invoke(second, parameter));
-            return Expression.Lambda<Func<DAL.Models.Anecdote, bool>>(combined, parameter);
+            return Expression.Lambda<Func<DAL.Models.NameModels.Anecdote, bool>>(combined, parameter);
         }
 
         /// <summary>
         /// Построение выражения сортировки
         /// </summary>
-        private Expression<Func<DAL.Models.Anecdote, object>> BuildSortExpression(AnecdoteSortField sortBy)
+        private Expression<Func<DAL.Models.NameModels.Anecdote, object>> BuildSortExpression(AnecdoteSortField sortBy)
         {
             return sortBy switch
             {

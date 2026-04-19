@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DAL;
-using DAL.Models;
 using DAL.Enums; // ⭐ ДОБАВЛЕНО - для ActivityAction, DeviceType
 using DAL.DTOs; // ⭐ ДОБАВЛЕНО - для BasePagedRequest
 using pr_srv_names.Dtos;
 using pr_srv_names.Services.Interfaces;
+using DAL.Models.AuthorizationModels;
 
 namespace pr_srv_names.Services;
 

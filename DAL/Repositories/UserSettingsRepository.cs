@@ -1,5 +1,5 @@
 using DAL.Enums.Settings;
-using DAL.Models;
+using DAL.Models.AuthorizationModels;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,5 +1,5 @@
-﻿using DAL.Models;
-using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
+﻿using DAL.Models.NameModels;
+
 
 namespace DAL.Repositories.Interfaces
 {

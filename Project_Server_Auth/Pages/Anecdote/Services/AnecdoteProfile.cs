@@ -1,6 +1,5 @@
 using AutoMapper;
 using pr_srv_names.Pages.Anecdote.Dtos;
-using DAL.Models;
 
 namespace pr_srv_names.Pages.Anecdote.Services
 {
@@ -9,7 +8,7 @@ namespace pr_srv_names.Pages.Anecdote.Services
         public AnecdoteProfile()
         {
             // Маппинг Anecdote -> AnecdoteDetailDto
-            CreateMap<DAL.Models.Anecdote, AnecdoteDetailDto>()
+            CreateMap<DAL.Models.NameModels.Anecdote, AnecdoteDetailDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
@@ -26,7 +25,7 @@ namespace pr_srv_names.Pages.Anecdote.Services
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
             // Маппинг AnecdoteCreateRequestDto -> Anecdote
-            CreateMap<AnecdoteCreateRequestDto, DAL.Models.Anecdote>()
+            CreateMap<AnecdoteCreateRequestDto, DAL.Models.NameModels.Anecdote>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.NameMainId, opt => opt.MapFrom(src => src.NameMainId))
@@ -39,7 +38,7 @@ namespace pr_srv_names.Pages.Anecdote.Services
                 .ForMember(dest => dest.Language, opt => opt.Ignore());
 
             // Маппинг AnecdoteUpdateRequestDto -> Anecdote
-            CreateMap<AnecdoteUpdateRequestDto, DAL.Models.Anecdote>()
+            CreateMap<AnecdoteUpdateRequestDto, DAL.Models.NameModels.Anecdote>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.NameMainId, opt => opt.MapFrom(src => src.NameMainId))

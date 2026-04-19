@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using DAL.Interfaces;
 using DAL.Repositories.Interfaces;
 using DAL.Models;
+using DAL.Models.NameModels;
 
 namespace pr_srv_names.Controllers
 {

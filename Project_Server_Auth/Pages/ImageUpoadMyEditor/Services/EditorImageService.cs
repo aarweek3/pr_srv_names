@@ -100,6 +100,7 @@ namespace pr_srv_names.Services.Editor
                     RelativePath = $"uploads/{fileName}",
                     Url = $"{_baseUrl}/uploads/{fileName}",
                     FileSize = imageBytes.Length,
+                    ImageId = Path.GetFileNameWithoutExtension(fileName),
                     Metadata = validation
                 };
             }

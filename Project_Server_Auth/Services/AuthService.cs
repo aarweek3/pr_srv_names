@@ -6,6 +6,7 @@ using DAL.Enums;
 using DAL.Models;
 using pr_srv_names.Dtos;
 using pr_srv_names.Services.Interfaces;
+using DAL.Models.AuthorizationModels;
 
 namespace pr_srv_names.Services
 {
@@ -199,6 +200,29 @@ namespace pr_srv_names.Services
             }
 
             return false;
+        }
+
+        public async Task<bool> UpdateUserProfileAsync(string userId, UpdateUserDto dto)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return false;
+
+            if (!string.IsNullOrEmpty(dto.FirstName))
+                user.FirstName = dto.FirstName;
+
+            if (!string.IsNullOrEmpty(dto.LastName))
+                user.LastName = dto.LastName;
+
+            if (dto.Avatar != null)
+                user.Avatar = dto.Avatar;
+
+            if (dto.Department != null)
+                user.Department = dto.Department;
+
+            user.UpdatedAt = DateTime.UtcNow;
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
         }
 
         public async Task<List<UserSessionDto>> GetUserSessionsAsync(string userId, bool includeHistory = false)

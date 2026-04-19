@@ -1,4 +1,4 @@
-﻿using DAL.Models;
+﻿using DAL.Models.SampleModels;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

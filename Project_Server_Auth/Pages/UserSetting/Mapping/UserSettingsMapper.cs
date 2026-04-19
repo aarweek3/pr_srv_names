@@ -1,4 +1,4 @@
-using DAL.Models;
+using DAL.Models.AuthorizationModels;
 using pr_srv_names.Pages.UserSetting.Dtos;
 
 namespace pr_srv_names.Pages.UserSetting.Mapping;

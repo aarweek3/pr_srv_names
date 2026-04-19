@@ -1,0 +1,416 @@
+[
+  {
+    "Name": "Windows",
+    "SystemCode": "windows",
+    "IconPath": "assets/icons/platforms/svg/windows-color-icon.svg",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Windows",
+        "Description": "The world's most popular desktop operating system from Microsoft.",
+        "HtmlContent": "<p>Windows is a series of operating systems developed by Microsoft. It powers billions of personal computers and laptops worldwide.</p>",
+        "SeoData": {
+          "MetaTitle": "Best Software for Windows | Free Download",
+          "MetaDescription": "Discover essential applications for Windows PC. Expert reviews and direct download links.",
+          "UrlSlug": "windows",
+          "OgTitle": "Windows Software Catalog"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Windows",
+        "Description": "Самая популярная в мире настольная операционная система от Microsoft.",
+        "HtmlContent": "<p>Windows — это серия операционных систем от Microsoft, на которой работает большинство персональных компьютеров в мире.</p>",
+        "SeoData": {
+          "MetaTitle": "Лучшие программы для Windows | Скачать бесплатно",
+          "MetaDescription": "Откройте для себя самые необходимые приложения для вашего ПК на Windows. Экспертные обзоры и проверенные ссылки.",
+          "UrlSlug": "windows",
+          "OgTitle": "Каталог ПО для Windows"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 3,
+        "Name": "Windows",
+        "Description": "El sistema operativo de escritorio más popular del mundo de Microsoft.",
+        "HtmlContent": "<p>Windows es una serie de sistemas operativos desarrollados por Microsoft. Es el estándar para computadoras personales y laptops.</p>",
+        "SeoData": {
+          "MetaTitle": "Mejor Software para Windows | Descarga Directa",
+          "MetaDescription": "Descubre las mejores aplicaciones para tu PC con Windows. Reseñas expertas y enlaces seguros.",
+          "UrlSlug": "windows-es",
+          "OgTitle": "Catálogo de Software Windows"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 5,
+        "Name": "Windows",
+        "Description": "Das weltweit beliebteste Desktop-Betriebssystem von Microsoft.",
+        "HtmlContent": "<p>Windows ist eine Serie von Betriebssystemen von Microsoft. Es ist das am weitesten verbreitete System für PCs weltweit.</p>",
+        "SeoData": {
+          "MetaTitle": "Beste Software für Windows | Kostenloser Download",
+          "MetaDescription": "Entdecken Sie die wichtigsten Anwendungen für Ihren Windows-PC. Expertenbewertungen und direkte Links.",
+          "UrlSlug": "windows-de",
+          "OgTitle": "Windows Software-Katalog"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 11,
+        "Name": "Windows",
+        "Description": "Najpopularniejszy na świecie system operacyjny dla komputerów stacjonarnych firmy Microsoft.",
+        "HtmlContent": "<p>Windows to seria systemów operacyjnych opracowanych przez Microsoft. Zasila miliardy komputerów osobistych na całym świecie.</p>",
+        "SeoData": {
+          "MetaTitle": "Najlepsze programy dla Windows | Pobierz za darmo",
+          "MetaDescription": "Odkryj najpotrzebniejsze aplikacje na swój komputer z systemem Windows. Eksperckie recenzje i bezpieczne linki.",
+          "UrlSlug": "windows-pl",
+          "OgTitle": "Katalog oprogramowania Windows"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "Android",
+    "SystemCode": "android",
+    "IconPath": "assets/icons/platforms/svg/android-robot-bot-icon.svg",
+    "SortOrder": 2,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Android",
+        "Description": "The world's most popular mobile operating system.",
+        "HtmlContent": "<p>Android is an open-source mobile operating system developed by Google, designed for smartphones and tablets.</p>",
+        "SeoData": {
+          "MetaTitle": "Top Android Apps & APKs | Safe Download",
+          "MetaDescription": "Find and download the best Android applications and games safely for your mobile devices.",
+          "UrlSlug": "android",
+          "OgTitle": "Android Mobile Apps"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Android",
+        "Description": "Самая популярная мобильная операционная система в мире.",
+        "HtmlContent": "<p>Android — это мобильная операционная система на базе ядра Linux, разработанная Google для смартфонов и планшетов.</p>",
+        "SeoData": {
+          "MetaTitle": "Лучшие приложения и APK для Android | Скачать",
+          "MetaDescription": "Найдите и скачайте лучшие мобильные приложения и игры для Android. Безопасные APK файлы.",
+          "UrlSlug": "android",
+          "OgTitle": "Мобильные приложения для Android"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 3,
+        "Name": "Android",
+        "Description": "El sistema operativo móvil más popular del mundo.",
+        "HtmlContent": "<p>Android es un sistema operativo móvil de código abierto desarrollado por Google para dispositivos táctiles.</p>",
+        "SeoData": {
+          "MetaTitle": "Mejores Apps y APKs para Android | Descarga Segura",
+          "MetaDescription": "Encuentra y descarga las mejores aplicaciones y juegos para Android perfectamente seguros.",
+          "UrlSlug": "android-es",
+          "OgTitle": "Aplicaciones Móviles Android"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 5,
+        "Name": "Android",
+        "Description": "Das weltweit beliebteste mobile Betriebssystem.",
+        "HtmlContent": "<p>Android ist ein von Google entwickeltes mobiles Quelloffenes Betriebssystem für Smartphones und Tablets.</p>",
+        "SeoData": {
+          "MetaTitle": "Top Android Apps & APKs | Sicherer Download",
+          "MetaDescription": "Finden Sie die besten Android-Apps und Spiele für Ihre mobilen Geräte zum sicheren Download.",
+          "UrlSlug": "android-de",
+          "OgTitle": "Android Mobile Apps"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 11,
+        "Name": "Android",
+        "Description": "Najpopularniejszy na świecie mobilny system operacyjny.",
+        "HtmlContent": "<p>Android to mobilny system operacyjny o otwartym kodzie źródłowym opracowany przez Google dla smartfonów i tabletów.</p>",
+        "SeoData": {
+          "MetaTitle": "Najlepsze aplikacje Android i APK | Pobierz bezpiecznie",
+          "MetaDescription": "Znajdź i pobierz najlepsze aplikacje mobilne oraz gry na Androida w bezpieczny sposób.",
+          "UrlSlug": "android-pl",
+          "OgTitle": "Aplikacje mobilne Android"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "macOS",
+    "SystemCode": "macos",
+    "IconPath": "assets/icons/platforms/svg/apple-icon.svg",
+    "SortOrder": 3,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "macOS",
+        "Description": "The operating system for Apple Mac computers.",
+        "HtmlContent": "<p>macOS is a Unix-based operating system developed and marketed by Apple for its Mac computers.</p>",
+        "SeoData": {
+          "MetaTitle": "Premium Software for macOS | Mac App Catalog",
+          "MetaDescription": "Explore a curated selection of high-quality software for your Apple Mac computer.",
+          "UrlSlug": "macos",
+          "OgTitle": "macOS Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "macOS",
+        "Description": "Операционная система для компьютеров Apple Mac.",
+        "HtmlContent": "<p>macOS — это проприетарная графическая операционная система от Apple, разработанная для линейки компьютеров Mac.</p>",
+        "SeoData": {
+          "MetaTitle": "Профессиональное ПО для macOS | Скачать для Mac",
+          "MetaDescription": "Кураторская подборка качественного программного обеспечения для вашего Mac.",
+          "UrlSlug": "macos",
+          "OgTitle": "Программы для macOS"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 3,
+        "Name": "macOS",
+        "Description": "El sistema operativo para computadoras Apple Mac.",
+        "HtmlContent": "<p>macOS es un sistema operativo desarrollado por Apple Inc. exclusivamente para su línea de computadoras personales Macintosh.</p>",
+        "SeoData": {
+          "MetaTitle": "Software Premium para macOS | Catálogo Mac",
+          "MetaDescription": "Selección curada de software de alta calidad para tu computadora Apple Mac.",
+          "UrlSlug": "macos-es",
+          "OgTitle": "Software para macOS"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 5,
+        "Name": "macOS",
+        "Description": "Das Betriebssystem für Apple Mac-Computer.",
+        "HtmlContent": "<p>macOS ist das Betriebssystem, auf dem jeder Mac basiert. Es wurde speziell für die Hardware von Apple entwickelt.</p>",
+        "SeoData": {
+          "MetaTitle": "Premium-Software für macOS | Mac App Katalog",
+          "MetaDescription": "Entdecken Sie eine sorgfältig getroffene Auswahl an Software für Ihren Mac.",
+          "UrlSlug": "macos-de",
+          "OgTitle": "macOS Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 11,
+        "Name": "macOS",
+        "Description": "System operacyjny dla komputerów Apple Mac.",
+        "HtmlContent": "<p>macOS to system operacyjny oparty na systemie Unix, opracowany i sprzedawany przez Apple dla komputerów Mac.</p>",
+        "SeoData": {
+          "MetaTitle": "Najlepsze oprogramowanie na macOS | Pobierz na Mac",
+          "MetaDescription": "Poznaj wyselekcjonowane oprogramowanie wysokiej jakości na komputer firmy Apple.",
+          "UrlSlug": "macos-pl",
+          "OgTitle": "Oprogramowanie macOS"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "iOS",
+    "SystemCode": "ios",
+    "IconPath": "assets/icons/platforms/svg/apple-icon.svg",
+    "SortOrder": 4,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "iOS",
+        "Description": "Mobile operating system for iPhone and iPad.",
+        "HtmlContent": "<p>iOS is the world's most personal and secure mobile operating system, packed with powerful features.</p>",
+        "SeoData": {
+          "MetaTitle": "Best iPhone & iPad Apps | iOS App Store",
+          "MetaDescription": "Find the best applications for your iPhone and iPad from our huge catalog.",
+          "UrlSlug": "ios",
+          "OgTitle": "iOS Apps"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "iOS",
+        "Description": "Мобильная операционная система для iPhone и iPad.",
+        "HtmlContent": "<p>iOS — мобильная операционная система для смартфонов, электронных планшетов и других устройств от Apple.</p>",
+        "SeoData": {
+          "MetaTitle": "Лучшие приложения для iPhone и iPad | iOS каталог",
+          "MetaDescription": "Исследуйте лучшие приложения для устройств на базе iOS из нашего огромного каталога.",
+          "UrlSlug": "ios",
+          "OgTitle": "Приложения для iOS"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 3,
+        "Name": "iOS",
+        "Description": "Sistema operativo móvil para iPhone y iPad.",
+        "HtmlContent": "<p>iOS es un sistema operativo móvil de la multinacional Apple Inc. muy seguro y lleno de funcionalidades.</p>",
+        "SeoData": {
+          "MetaTitle": "Mejores Apps para iPhone y iPad | Catálogo iOS",
+          "MetaDescription": "Encuentra las mejores aplicaciones para tus dispositivos Apple móviles.",
+          "UrlSlug": "ios-es",
+          "OgTitle": "Apps iOS"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 5,
+        "Name": "iOS",
+        "Description": "Mobiles Betriebssystem für iPhone und iPad.",
+        "HtmlContent": "<p>iOS ist das weltweit sicherste mobile Betriebssystem von Apple, speziell für das iPhone entwickelt.</p>",
+        "SeoData": {
+          "MetaTitle": "Beste iPhone & iPad Apps | iOS App Verzeichnis",
+          "MetaDescription": "Finden Sie die besten Anwendungen für Ihr Apple iOS-Gerät.",
+          "UrlSlug": "ios-de",
+          "OgTitle": "iOS Apps"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 11,
+        "Name": "iOS",
+        "Description": "Mobilny system operacyjny dla iPhone'a i iPada.",
+        "HtmlContent": "<p>iOS to mobilny system operacyjny stworzony przez Apple Inc. wyłącznie dla swoich urządzeń.</p>",
+        "SeoData": {
+          "MetaTitle": "Najlepsze aplikacje na iPhone i iPad | Katalog iOS",
+          "MetaDescription": "Poznaj najlepsze aplikacje na urządzenia Apple z naszego wielkiego katalogu.",
+          "UrlSlug": "ios-pl",
+          "OgTitle": "Aplikacje iOS"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "Linux",
+    "SystemCode": "linux",
+    "IconPath": "assets/icons/platforms/svg/linux-icon.svg",
+    "SortOrder": 5,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Linux",
+        "Description": "Open-source Unix-like operating system family.",
+        "HtmlContent": "<p>Linux is a family of open-source Unix-like operating systems based on the Linux kernel.</p>",
+        "SeoData": {
+          "MetaTitle": "Linux Software & Distros | Free Catalog",
+          "MetaDescription": "Find essential tools, software and distributions for your Linux environment.",
+          "UrlSlug": "linux",
+          "OgTitle": "Linux Apps"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Linux",
+        "Description": "Семейство Unix-подобных ОС с открытым исходным кодом.",
+        "HtmlContent": "<p>Linux — семейство операционных систем с открытым исходным кодом, основанных на одноименном ядре.</p>",
+        "SeoData": {
+          "MetaTitle": "ПО для Linux | Каталог дистрибутивов и программ",
+          "MetaDescription": "Найдите необходимые инструменты и программы для любого дистрибутива Linux.",
+          "UrlSlug": "linux",
+          "OgTitle": "Программы для Linux"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 3,
+        "Name": "Linux",
+        "Description": "Familia de sistemas operativos tipo Unix de código abierto.",
+        "HtmlContent": "<p>Linux es una familia de sistemas operativos de código abierto muy utilizados en servidores y estaciones de trabajo.</p>",
+        "SeoData": {
+          "MetaTitle": "Software y Distros para Linux | Catálogo Abierto",
+          "MetaDescription": "Encuentra herramientas y software esenciales para tu sistema Linux.",
+          "UrlSlug": "linux-es",
+          "OgTitle": "Apps Linux"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 5,
+        "Name": "Linux",
+        "Description": "Quelloffene Unix-ähnliche Betriebssystem-Familie.",
+        "HtmlContent": "<p>Linux ist ein Open-Source-Betriebssystem, das auf dem Linux-Kernel basiert und weltweit als Server-Plattform dient.</p>",
+        "SeoData": {
+          "MetaTitle": "Linux Software & Distributionen | Katalog",
+          "MetaDescription": "Finden Sie Tools und Programme für Ihre Linux-Umgebung.",
+          "UrlSlug": "linux-de",
+          "OgTitle": "Linux Apps"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 11,
+        "Name": "Linux",
+        "Description": "Rodzina systemów operacyjnych typu Unix o otwartym kodzie.",
+        "HtmlContent": "<p>Linux to rodzina systemów operacyjnych bazujących na jądrze systemu Linux o otwartym kodzie źródłowym.</p>",
+        "SeoData": {
+          "MetaTitle": "Oprogramowanie i dystrybucje Linux | Darmowy katalog",
+          "MetaDescription": "Znajdź niezbędne narzędzia i oprogramowanie dla swojego środowiska Linux.",
+          "UrlSlug": "linux-pl",
+          "OgTitle": "Aplikacje Linux"
+        }
+      }
+    ]
+  },
+  {
+    "Name": "Web",
+    "SystemCode": "web",
+    "IconPath": "assets/icons/platforms/svg/web-earth-icon.svg",
+    "SortOrder": 6,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Web (Browser)",
+        "Description": "Applications that run directly in your web browser.",
+        "HtmlContent": "<p>Web applications are cross-platform software that work through the Internet browser.</p>",
+        "SeoData": {
+          "MetaTitle": "Best Web Tools & Online Apps | No Install",
+          "MetaDescription": "Discover the most powerful web-based applications that work directly in your browser.",
+          "UrlSlug": "web-apps",
+          "OgTitle": "Web Applications"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Web (Браузерные)",
+        "Description": "Приложения, работающие прямо в вашем браузере.",
+        "HtmlContent": "<p>Веб-приложения — это кроссплатформенное ПО, которое работает через интернет-браузер без установки.</p>",
+        "SeoData": {
+          "MetaTitle": "Лучшие веб-сервисы и онлайн приложения | Без установки",
+          "MetaDescription": "Откройте для себя мощные браузерные инструменты, доступные онлайн в любое время.",
+          "UrlSlug": "web-apps",
+          "OgTitle": "Веб-приложения"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 3,
+        "Name": "Web (Navegador)",
+        "Description": "Aplicaciones que se ejecutan en su navegador web.",
+        "HtmlContent": "<p>Las aplicaciones web son programas que funcionan a través de Internet sin necesidad de instalación local.</p>",
+        "SeoData": {
+          "MetaTitle": "Mejores Herramientas Web y Apps Online",
+          "MetaDescription": "Descubre potentes aplicaciones basadas en navegador listas para usar.",
+          "UrlSlug": "apps-web",
+          "OgTitle": "Aplicaciones Web"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 5,
+        "Name": "Web (Browser)",
+        "Description": "Anwendungen, die direkt in Ihrem Webbrowser laufen.",
+        "HtmlContent": "<p>Web-Apps sind plattformübergreifende Softwarelösungen, die über das Internet im Browser genutzt werden.</p>",
+        "SeoData": {
+          "MetaTitle": "Beste Web-Tools & Online-Apps | Keine Installation",
+          "MetaDescription": "Entdecken Sie die leistungsstärksten browserbasierten Anwendungen.",
+          "UrlSlug": "web-anwendungen",
+          "OgTitle": "Web-Apps"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 11,
+        "Name": "Web (Przeglądarkowe)",
+        "Description": "Aplikacje działające w Twojej przeglądarce internetowej.",
+        "HtmlContent": "<p>Aplikacje internetowe to oprogramowanie wieloplatformowe działające przez przeglądarkę bez instalacji.</p>",
+        "SeoData": {
+          "MetaTitle": "Najlepsze narzędzia i aplikacje online | Bez instalacji",
+          "MetaDescription": "Poznaj najpotężniejsze aplikacje przeglądarkowe działające bezpośrednio online.",
+          "UrlSlug": "aplikacje-web",
+          "OgTitle": "Aplikacje Web"
+        }
+      }
+    ]
+  }
+]

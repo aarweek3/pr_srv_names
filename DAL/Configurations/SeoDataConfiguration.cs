@@ -1,4 +1,4 @@
-﻿using DAL.Models;
+﻿using DAL.Models.GeneralModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,12 +14,6 @@ namespace DAL.Configurations
             // Свойства
             entity.Property(e => e.Id)
                 .HasComment("Уникальный идентификатор SEO-данных");
-            entity.Property(e => e.NameMainId)
-                .IsRequired()
-                .HasComment("Внешний ключ на таблицу Names");
-            entity.Property(e => e.LanguageId)
-                .IsRequired()
-                .HasComment("Внешний ключ на таблицу Languages");
             entity.Property(e => e.MetaTitle)
                 .HasMaxLength(70)
                 .HasComment("SEO заголовок (рекомендуется до 70 символов)");
@@ -90,8 +84,6 @@ namespace DAL.Configurations
                 .HasComment("Имя издателя");
             entity.Property(e => e.PublishedDate)
                 .HasComment("Дата публикации");
-            entity.Property(e => e.ModifiedDate)
-                .HasComment("Дата последнего изменения");
             entity.Property(e => e.ArticleSection)
                 .HasMaxLength(100)
                 .HasDefaultValue(string.Empty)
@@ -108,39 +100,14 @@ namespace DAL.Configurations
             entity.Property(e => e.Region)
                 .HasMaxLength(100)
                 .HasComment("Географический регион");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasComment("Дата создания записи");
-            entity.Property(e => e.UpdatedAt)
-                .HasComment("Дата последнего обновления");
-            entity.Property(e => e.CreatedBy)
-                .HasMaxLength(450)
-                .HasComment("Пользователь, создавший запись");
-            entity.Property(e => e.UpdatedBy)
-                .HasMaxLength(450)
-                .HasComment("Пользователь, обновивший запись");
 
             // Индексы
-            entity.HasIndex(e => new { e.NameMainId, e.LanguageId })
-                .IsUnique()
-                .HasDatabaseName("IX_SeoData_NameMainId_LanguageId");
             entity.HasIndex(e => e.UrlSlug)
                 .HasDatabaseName("IX_SeoData_UrlSlug");
             entity.HasIndex(e => e.NoIndex)
                 .HasDatabaseName("IX_SeoData_NoIndex");
             entity.HasIndex(e => e.Priority)
                 .HasDatabaseName("IX_SeoData_Priority");
-
-            // Связи // Связь 1:1 - главная конфигурация здесь
-            entity.HasOne(s => s.NameMain)
-                .WithOne(n => n.SeoData) // Исправлено: 1:1 связь с NameMain
-                .HasForeignKey<SeoData>(s => s.NameMainId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(s => s.Language)
-                .WithMany() // Без навигационного свойства на стороне Language
-                .HasForeignKey(s => s.LanguageId)
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

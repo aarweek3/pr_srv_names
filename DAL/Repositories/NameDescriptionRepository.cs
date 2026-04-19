@@ -1,4 +1,4 @@
-﻿using DAL.Models;
+﻿using DAL.Models.NameModels;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

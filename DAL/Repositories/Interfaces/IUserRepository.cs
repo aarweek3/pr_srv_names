@@ -1,5 +1,5 @@
 ﻿// DAL/Repositories/Interfaces/IUserRepository.cs
-using DAL.Models;
+using DAL.Models.AuthorizationModels;
 
 namespace DAL.Repositories.Interfaces
 {

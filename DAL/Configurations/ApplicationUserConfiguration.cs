@@ -1,4 +1,4 @@
-﻿using DAL.Models;
+﻿using DAL.Models.AuthorizationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

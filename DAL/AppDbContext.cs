@@ -1,66 +1,15 @@
-﻿using DAL.Models;
-using DAL.Models.Base;
-using DAL.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using DAL.Configurations;
+using DAL.Models.AuthorizationModels;
 
 namespace DAL
 {
-    public class AppDbContext : IdentityDbContext<ApplicationUser>
+    public partial class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-
-        // ==========================================
-        // DbSets - Пользователи и безопасность
-        // ==========================================
-        public DbSet<UserSession> UserSessions { get; set; }
-        public DbSet<ActivityLog> ActivityLogs { get; set; }
-        public DbSet<UserSettings> UserSettings { get; set; }
-
-        // ==========================================
-        // DbSets - Основные сущности
-        // ==========================================
-        public DbSet<NameMain> Names { get; set; }
-        public DbSet<Language> Languages { get; set; }
-        public DbSet<NameDetail> NameDetails { get; set; }
-
-        // ==========================================
-        // DbSets - Локализованные справочники
-        // ==========================================
-        public DbSet<Anecdote> Anecdotes { get; set; }
-        public DbSet<Color> Colors { get; set; }
-        public DbSet<Fact> Facts { get; set; }
-        public DbSet<Metal> Metals { get; set; }
-        public DbSet<Number> Numbers { get; set; }
-        public DbSet<Patron> Patrons { get; set; }
-        public DbSet<Plant> Plants { get; set; }
-        public DbSet<Profession> Professions { get; set; }
-        public DbSet<Stone> Stones { get; set; }
-        public DbSet<Synonym> Synonyms { get; set; }
-        public DbSet<Talent> Talents { get; set; }
-        public DbSet<Animal> Animals { get; set; }
-        public DbSet<Tree> Trees { get; set; }
-
-        // ==========================================
-        // DbSets - Расширенные локализованные сущности
-        // ==========================================
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Declension> Declensions { get; set; }
-        public DbSet<ForeignVariant> ForeignVariants { get; set; }
-        public DbSet<HoroscopeOfName> HoroscopesOfNames { get; set; }
-        public DbSet<NameUrlForParsing> NameUrlsForParsing { get; set; }
-        public DbSet<Planet> Planets { get; set; }
-        public DbSet<Zodiac> Zodiacs { get; set; }
-        public DbSet<ZodiacHoroscope> ZodiacHoroscopes { get; set; }
-        public DbSet<ZodiacTalisman> ZodiacTalismans { get; set; }
-
-        // ==========================================
-        // DbSets - Прочие
-        // ==========================================
-        public DbSet<SeoData> SeoData { get; set; }
-        public DbSet<Sample> Samples { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -94,9 +43,10 @@ namespace DAL
                 .HasOne(u => u.Settings)
                 .WithOne(s => s.User)
                 .HasForeignKey<UserSettings>(s => s.UserId)
-                .OnDelete(DeleteBehavior.Cascade); // При удалении User удаляются и Settings
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Применение конфигураций
+            // Применение конфигураций сущностей
+            builder.ApplyConfiguration(new LanguageAppConfiguration());
             builder.ApplyConfiguration(new ApplicationUserConfiguration());
             builder.ApplyConfiguration(new UserSessionConfiguration());
             builder.ApplyConfiguration(new ActivityLogConfiguration());
@@ -126,71 +76,15 @@ namespace DAL
             builder.ApplyConfiguration(new CommentConfiguration());
             builder.ApplyConfiguration(new NameUrlForParsingConfiguration());
             builder.ApplyConfiguration(new SeoDataConfiguration());
-        }
+            builder.ApplyConfiguration(new IconConfiguration());
+            builder.ApplyConfiguration(new MediaFileConfiguration());
+            builder.ApplyConfiguration(new SampleMainConfiguration());
+            builder.ApplyConfiguration(new SampleMainDescriptionConfiguration());
+            builder.ApplyConfiguration(new SampleMainSeoConfiguration());
+            builder.ApplyConfiguration(new SampleMainDescriptionSeoConfiguration());
 
-        public override int SaveChanges()
-        {
-            UpdateAuditFields();
-            return base.SaveChanges();
-        }
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            UpdateAuditFields();
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-
-        private void UpdateAuditFields()
-        {
-            var now = DateTime.UtcNow;
-
-            // Обновление ApplicationUser
-            var userEntries = ChangeTracker.Entries<ApplicationUser>().Where(e => e.State == EntityState.Modified);
-            foreach (var entry in userEntries)
-            {
-                entry.Entity.UpdatedAt = now;
-            }
-
-            // Обновление UserSession
-            var sessionEntries = ChangeTracker.Entries<UserSession>().Where(e => e.State == EntityState.Modified);
-            foreach (var entry in sessionEntries)
-            {
-                var session = entry.Entity;
-                if (session.IsRevoked && session.RevokedAt == null)
-                {
-                    session.RevokedAt = now;
-                }
-            }
-
-            // Обновление BaseEntity
-            var baseEntityEntries = ChangeTracker.Entries<BaseEntity>()
-                .Where(e => e.State is EntityState.Added or EntityState.Modified);
-            foreach (var entry in baseEntityEntries)
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedAt = now;
-                    entry.Entity.IsActive = true;
-                }
-
-                entry.Entity.UpdatedAt = now;
-            }
-
-            // Обновление SeoData
-            var seoEntries = ChangeTracker.Entries<SeoData>()
-                .Where(e => e.State is EntityState.Added or EntityState.Modified);
-            foreach (var entry in seoEntries)
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedAt = now;
-                    entry.Entity.CreatedBy ??= "system";
-                }
-
-                entry.Entity.UpdatedAt = now;
-                entry.Entity.UpdatedBy ??= "system";
-                entry.Entity.ModifiedDate = now;
-            }
+            // Инициализация моделей Агрегатора (v3.5)
+            builder.ConfigureAggregatorModels();
         }
     }
 }

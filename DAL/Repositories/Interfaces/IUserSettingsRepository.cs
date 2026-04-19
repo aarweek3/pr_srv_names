@@ -1,6 +1,6 @@
 using DAL.Enums.Settings;
-using DAL.Models;
-using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
+using DAL.Models.AuthorizationModels;
+
 
 namespace DAL.Repositories.Interfaces
 {

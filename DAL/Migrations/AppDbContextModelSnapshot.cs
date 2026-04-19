@@ -22,7 +22,1350 @@ namespace DAL.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DAL.Models.ActivityLog", b =>
+            modelBuilder.Entity("DAL.Models.Aggregator.AggregatorSource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BaseUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("aggregator_sources");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.CategoryOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CanonicalName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("categories_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.DeveloperOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CanonicalName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IconPath")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("developer_of_aggregators");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.DownloadLinkOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Architecture")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FileHash")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<long?>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<int>("VersionOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("VersionOfAggregatorId");
+
+                    b.ToTable("download_links_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.DownloadLogOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("DownloadLinkOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int?>("VersionOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("DownloadLinkOfAggregatorId");
+
+                    b.HasIndex("VersionOfAggregatorId");
+
+                    b.ToTable("download_logs_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.LanguageOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("IconKey")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRtl")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("NativeTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("ShortCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDefault")
+                        .IsUnique()
+                        .HasFilter("\"IsDefault\" = true");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("languages_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.LicenseTypeOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CanonicalName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("license_types_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.CategoryOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CategoryOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("CategoryOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("category_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.DeveloperOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("DeveloperOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("DeveloperOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("developer_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.DownloadLinkOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int?>("DownloadLinkOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("DownloadLinkOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("download_link_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.LicenseTypeOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LicenseTypeOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("LicenseTypeOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("license_type_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.PlatformOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("HtmlContent")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int?>("PlatformOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SeoDataId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UrlPicture")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("SeoDataId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("PlatformOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("platform_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.ProgramOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Cons")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("FullDescription")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LicenseTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LocalizedName")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Pros")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ShortDescription")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("LicenseTypeId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("ProgramOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("programs_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.ScreenshotOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AltText")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ScreenshotOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("ScreenshotOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("screenshot_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.TagOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int?>("TagOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("TagOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("tag_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.VersionOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("VersionOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("WhatsNew")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("VersionOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("version_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.VideoOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("VideoOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("VideoOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("video_of_aggregator_localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.PlatformOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IconPath")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SystemCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("SystemCode")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("platforms_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramMarketDataOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AggregatorSourceId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DownloadCountDisplay")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long?>("DownloadCountExact")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Price")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<double?>("RatingMax")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("RatingNormalized")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("double precision")
+                        .HasComputedColumnSql("CASE WHEN \"RatingMax\" > 0 THEN \"RatingValue\" / \"RatingMax\" ELSE NULL END", true);
+
+                    b.Property<double?>("RatingValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AggregatorSourceId");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("ProgramOfAggregatorId", "LanguageOfAggregatorId", "AggregatorSourceId")
+                        .IsUnique();
+
+                    b.ToTable("program_market_data_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("AverageRating")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("CanonicalName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int>("CategoryOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("DeveloperOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("IconPath")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("RatingCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int?>("SubCategoryOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<long?>("TotalDownloads")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryOfAggregatorId");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("DeveloperOfAggregatorId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("SubCategoryOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("programs_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramPlatformOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("MinOsVersion")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int?>("PlatformOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("PlatformOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("ProgramOfAggregatorId", "PlatformOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("program_platforms_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramTagOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TagOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("TagOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("ProgramOfAggregatorId", "TagOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("program_tags_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ScreenshotOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ProgramOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("screenshots_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.TagOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("tags_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.VersionOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ExternalChangelogUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsLatest")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("ReleasedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("VersionNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("ProgramOfAggregatorId", "IsLatest")
+                        .IsUnique()
+                        .HasFilter("\"IsLatest\" = true");
+
+                    b.HasIndex("ProgramOfAggregatorId", "VersionNumber")
+                        .IsUnique();
+
+                    b.ToTable("versions_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.VideoOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ThumbnailPath")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("VideoUrl")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ProgramOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("videos_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.AuthorizationModels.ActivityLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,101 +1468,7 @@ namespace DAL.Migrations
                     b.ToTable("ActivityLogs", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Models.Anecdote", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("IsActive");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("NameMainId");
-
-                    b.HasIndex("NameMainId", "LanguageId")
-                        .HasDatabaseName("IX_Anecdotes_NameMainId_LanguageId");
-
-                    b.ToTable("Anecdotes");
-                });
-
-            modelBuilder.Entity("DAL.Models.Animal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("IsActive");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("NameMainId");
-
-                    b.HasIndex("NameMainId", "LanguageId")
-                        .HasDatabaseName("IX_Animals_NameMainId_LanguageId");
-
-                    b.ToTable("Animals");
-                });
-
-            modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
+            modelBuilder.Entity("DAL.Models.AuthorizationModels.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -381,7 +1630,1387 @@ namespace DAL.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Models.Color", b =>
+            modelBuilder.Entity("DAL.Models.AuthorizationModels.UserSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Уникальный идентификатор сессии");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                        .HasComment("Дата создания сессии");
+
+                    b.Property<string>("DeviceInfo")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasComment("Информация об устройстве (браузер, ОС)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasComment("Дата окончания действия токена");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)")
+                        .HasComment("IP адрес создания сессии");
+
+                    b.Property<bool>("IsRevoked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasComment("Отозван ли токен");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasComment("Refresh токен");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasComment("Время аннулирования сессии");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasComment("User Agent браузера");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt")
+                        .HasDatabaseName("IX_UserSessions_ExpiresAt");
+
+                    b.HasIndex("IsRevoked")
+                        .HasDatabaseName("IX_UserSessions_IsRevoked");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("IX_UserSessions_UserId");
+
+                    b.HasIndex("RefreshToken", "IsRevoked")
+                        .IsUnique()
+                        .HasDatabaseName("IX_UserSessions_RefreshToken_IsRevoked");
+
+                    b.HasIndex("UserId", "IsRevoked", "ExpiresAt")
+                        .HasDatabaseName("IX_UserSessions_UserId_IsRevoked_ExpiresAt");
+
+                    b.ToTable("UserSessions", (string)null);
+                });
+
+            modelBuilder.Entity("DAL.Models.AuthorizationModels.UserSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccessibilityLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DefaultPageSize")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Density")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<int>("LoginNotificationMode")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NavigationBehavior")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NotificationChannels")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NotificationLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PrimaryColor")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<int>("SessionTerminationMode")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("ShowAdvancedFilters")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("SidebarState")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TableDensity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Theme")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TimeZone")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserSettings");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Article", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ArticleType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid?>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("PublishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ViewsCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("article");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("ContainsSpam")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsEdited")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<short>("Rating")
+                        .HasColumnType("smallint");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("article_comment");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleSoftware", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<short>("SortOrder")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("article_software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<short>("SortOrder")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("article_tag");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(50000)
+                        .HasColumnType("character varying(50000)");
+
+                    b.Property<string>("CoverImageUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("language_id");
+
+                    b.Property<string>("ShortSummary")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("article_translation");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsLeaf")
+                        .HasColumnType("boolean");
+
+                    b.Property<short>("Level")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("category");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.CategoryTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("ShortDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("category_translation");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Developer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LogoUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Website")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("developer");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.LicenseType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsCommercial")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsOpenSource")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("license_type");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Platform", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Family")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UrlPictureMain")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("platform");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.PlatformTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("DescriptionFull")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Guid>("PlatformId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("SeoDataId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UrlPicture")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("PlatformId");
+
+                    b.HasIndex("SeoDataId");
+
+                    b.ToTable("platform_translation");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("HelpfulCount")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsEdited")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRatingOnly")
+                        .HasColumnType("boolean");
+
+                    b.Property<short>("Score")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("UnhelpfulCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("review");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SeoEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ArticleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<bool>("Follow")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Index")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("seo_entity");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SeoTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CanonicalUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Keywords")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MetaDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("MetaTitle")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid>("SeoEntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("SeoEntityId");
+
+                    b.ToTable("seo_translation");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Software", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("DeveloperId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("developer_id");
+
+                    b.Property<string>("ImportId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("ImportSource")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("LicenseTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeveloperId");
+
+                    b.HasIndex("LicenseTypeId");
+
+                    b.ToTable("software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareAlias", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AliasName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsPrimarySearch")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("software_alias");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareAsset", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AssetType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int?>("Height")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("PlatformId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<short>("SortOrder")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<int?>("Width")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlatformId");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("software_asset");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<short>("SortOrder")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("software_category");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareLink", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LinkType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<short>("SortOrder")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("software_link");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareNews", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(8000)
+                        .HasColumnType("character varying(8000)");
+
+                    b.Property<string>("ExternalUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<bool>("IsImportant")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("PublishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ShortDescription")
+                        .HasMaxLength(800)
+                        .HasColumnType("character varying(800)");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("software_news");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareStatistics", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("AverageRating")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("BookmarkCount")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("DownloadCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("LastCalculatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("RatingOnlyCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ReviewCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ShareCount")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("ViewsCount")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoftwareId")
+                        .IsUnique();
+
+                    b.ToTable("software_statistics");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<short>("SortOrder")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("software_tag");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(10000)
+                        .HasColumnType("character varying(10000)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("language_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("ShortDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("software_id");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("software_translation");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareVersion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsLatest")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPreRelease")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsStable")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("ReleaseDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("SoftwareId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("VersionNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoftwareId");
+
+                    b.ToTable("software_version");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareVersionPlatform", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Architecture")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("PlatformId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("ReleaseDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("SoftwareVersionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SupportStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlatformId");
+
+                    b.HasIndex("SoftwareVersionId");
+
+                    b.ToTable("software_version_platform");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareVersionPlatformFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FileFormat")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("MirrorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Sha256")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<long?>("SizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("SoftwareVersionPlatformId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SoftwareVersionPlatformId");
+
+                    b.ToTable("software_version_platform_file");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.TagBusiness", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("UsageCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tagBusiness");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.TagTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("tag_translation");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.UpdateFeed", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Changes")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<bool>("IsMajor")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("PublishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("SoftwareVersionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("SoftwareVersionId");
+
+                    b.ToTable("update_feed");
+                });
+
+            modelBuilder.Entity("DAL.Models.GeneralModels.Icon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsActive");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("SvgContent")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Tags")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Icons");
+                });
+
+            modelBuilder.Entity("DAL.Models.GeneralModels.IconCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -393,24 +3022,27 @@ namespace DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("CreatedAt");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
+                    b.Property<string>("FolderName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
                         .HasColumnName("IsActive");
 
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("MenuIcon")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -418,352 +3050,256 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("NameMainId");
-
-                    b.HasIndex("NameMainId", "LanguageId")
-                        .HasDatabaseName("IX_Colors_NameMainId_LanguageId");
-
-                    b.ToTable("Colors");
+                    b.ToTable("IconCategories");
                 });
 
-            modelBuilder.Entity("DAL.Models.Comment", b =>
+            modelBuilder.Entity("DAL.Models.GeneralModels.MediaFile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasComment("Уникальный идентификатор комментария");
+                        .HasComment("Уникальный идентификатор медиафайла");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AuthorEmail")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasComment("Email автора комментария");
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("CreatedAt")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP")
                         .HasComment("Дата создания записи");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)")
-                        .HasComment("Текст комментария (основной контент)");
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uuid")
+                        .HasComment("Уникальный идентификатор изображения");
 
                     b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasDefaultValue(true)
-                        .HasColumnName("IsActive")
-                        .HasComment("Активна ли запись");
+                        .HasColumnName("IsActive");
 
-                    b.Property<bool>("IsApproved")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasComment("Одобрен ли комментарий модератором");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer")
-                        .HasComment("Внешний ключ на таблицу Languages");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("OriginalName")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasComment("Название комментария (может быть заголовком или кратким описанием)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasComment("Исходное имя файла");
 
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer")
-                        .HasComment("Внешний ключ на таблицу Names");
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                    b.Property<int?>("ParentCommentId")
-                        .HasColumnType("integer")
-                        .HasComment("Внешний ключ на родительский комментарий (для ответов)");
-
-                    b.Property<int>("Rating")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0)
-                        .HasComment("Рейтинг комментария (количество лайков)");
+                    b.Property<string>("RelativePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt")
-                        .HasComment("Дата последнего обновления");
+                        .HasColumnName("UpdatedAt");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt")
-                        .HasDatabaseName("IX_Comments_CreatedAt");
+                        .HasDatabaseName("IX_MediaFiles_CreatedAt");
 
-                    b.HasIndex("IsApproved")
-                        .HasDatabaseName("IX_Comments_IsApproved");
-
-                    b.HasIndex("LanguageId")
-                        .HasDatabaseName("IX_Comments_LanguageId");
-
-                    b.HasIndex("NameMainId")
-                        .HasDatabaseName("IX_Comments_NameMainId");
-
-                    b.HasIndex("ParentCommentId")
-                        .HasDatabaseName("IX_Comments_ParentCommentId");
-
-                    b.HasIndex("Rating")
-                        .HasDatabaseName("IX_Comments_Rating");
-
-                    b.HasIndex("IsApproved", "CreatedAt")
-                        .HasDatabaseName("IX_Comments_IsApproved_CreatedAt");
-
-                    b.HasIndex("NameMainId", "LanguageId")
+                    b.HasIndex("ImageId")
                         .IsUnique()
-                        .HasDatabaseName("IX_Comments_NameMainId_LanguageId");
+                        .HasDatabaseName("IX_MediaFiles_ImageId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.HasIndex("OriginalName")
+                        .HasDatabaseName("IX_MediaFiles_OriginalName");
+
+                    b.ToTable("MediaFiles", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Models.Declension", b =>
+            modelBuilder.Entity("DAL.Models.GeneralModels.SeoData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasComment("Уникальный идентификатор SEO-данных");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Accusative")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasComment("Винительный падеж");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<string>("Dative")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasComment("Дательный падеж");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
-
-                    b.Property<string>("Genitive")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasComment("Родительный падеж");
-
-                    b.Property<string>("Instrumental")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasComment("Творительный падеж");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("IsActive");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Nominative")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasComment("Именительный падеж");
-
-                    b.Property<string>("Prepositional")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasComment("Предложный падеж");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("NameMainId");
-
-                    b.HasIndex("NameMainId", "LanguageId")
-                        .HasDatabaseName("IX_Declensions_NameMainId_LanguageId");
-
-                    b.ToTable("Declensions");
-                });
-
-            modelBuilder.Entity("DAL.Models.Fact", b =>
-                {
-                    b.Property<int>("Id")
+                    b.Property<string>("ArticleSection")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("")
+                        .HasComment("Раздел статьи");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("IsActive");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("NameMainId");
-
-                    b.HasIndex("NameMainId", "LanguageId")
-                        .HasDatabaseName("IX_Facts_NameMainId_LanguageId");
-
-                    b.ToTable("Facts");
-                });
-
-            modelBuilder.Entity("DAL.Models.ForeignVariant", b =>
-                {
-                    b.Property<int>("Id")
+                    b.Property<string>("AuthorName")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("")
+                        .HasComment("Имя автора");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("CanonicalUrl")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasComment("Каноническая ссылка");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreatedAt");
+                    b.Property<string>("ImageAltText")
+                        .HasMaxLength(125)
+                        .HasColumnType("character varying(125)")
+                        .HasComment("Alt текст изображения");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
+                    b.Property<string>("ImageCaption")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasComment("Подпись изображения");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("IsActive");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt");
-
-                    b.Property<string>("Url")
+                    b.Property<string>("ImageUrl")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)")
-                        .HasComment("URL ссылка на внешний ресурс");
+                        .HasDefaultValue("")
+                        .HasComment("URL изображения");
 
-                    b.HasKey("Id");
+                    b.Property<string>("MetaDescription")
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)")
+                        .HasComment("META описание (рекомендуется до 160 символов)");
 
-                    b.HasIndex("LanguageId");
+                    b.Property<string>("MetaKeywords")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasComment("META ключевые слова");
 
-                    b.HasIndex("NameMainId");
+                    b.Property<string>("MetaTitle")
+                        .HasMaxLength(70)
+                        .HasColumnType("character varying(70)")
+                        .HasComment("SEO заголовок (рекомендуется до 70 символов)");
 
-                    b.HasIndex("NameMainId", "LanguageId")
-                        .HasDatabaseName("IX_ForeignVariants_NameMainId_LanguageId");
-
-                    b.ToTable("ForeignVariants");
-                });
-
-            modelBuilder.Entity("DAL.Models.HoroscopeOfName", b =>
-                {
-                    b.Property<int>("Id")
+                    b.Property<bool>("NoFollow")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
-
-                    b.Property<DateTime?>("HoroscopeDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasComment("Дата гороскопа");
-
-                    b.Property<string>("HoroscopeType")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasComment("Тип гороскопа (ежедневный, еженедельный, годовой)");
-
-                    b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
-                        .HasColumnName("IsActive");
+                        .HasDefaultValue(false)
+                        .HasComment("Запрет следования по ссылкам (robots nofollow)");
 
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer");
+                    b.Property<bool>("NoIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasComment("Запрет индексации (robots noindex)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                    b.Property<string>("OgDescription")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasComment("Open Graph описание");
 
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer");
+                    b.Property<string>("OgImage")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasComment("Open Graph изображение");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<string>("OgTitle")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("Open Graph заголовок");
+
+                    b.Property<string>("OgType")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasDefaultValue("article")
+                        .HasComment("Open Graph тип контента");
+
+                    b.Property<string>("OgUrl")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasComment("Open Graph URL");
+
+                    b.Property<int?>("Priority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(5)
+                        .HasComment("Приоритет страницы для sitemap.xml (0-10)");
+
+                    b.Property<DateTime?>("PublishedDate")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt");
+                        .HasComment("Дата публикации");
 
-                    b.Property<int>("ZodiacId")
-                        .HasColumnType("integer");
+                    b.Property<string>("PublisherName")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("")
+                        .HasComment("Имя издателя");
+
+                    b.Property<string>("Region")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("Географический регион");
+
+                    b.Property<string>("SchemaJsonLd")
+                        .HasColumnType("jsonb")
+                        .HasComment("JSON-LD разметка");
+
+                    b.Property<string>("SchemaType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("Тип схемы Schema.org");
+
+                    b.Property<string>("TwitterCard")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasDefaultValue("summary_large_image")
+                        .HasComment("Twitter Card тип");
+
+                    b.Property<string>("TwitterDescription")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasComment("Twitter описание");
+
+                    b.Property<string>("TwitterImage")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasComment("Twitter изображение");
+
+                    b.Property<string>("TwitterTitle")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("Twitter заголовок");
+
+                    b.Property<string>("UrlSlug")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasComment("ЧПУ URL");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId");
+                    b.HasIndex("NoIndex")
+                        .HasDatabaseName("IX_SeoData_NoIndex");
 
-                    b.HasIndex("NameMainId");
+                    b.HasIndex("Priority")
+                        .HasDatabaseName("IX_SeoData_Priority");
 
-                    b.HasIndex("ZodiacId");
+                    b.HasIndex("UrlSlug")
+                        .HasDatabaseName("IX_SeoData_UrlSlug");
 
-                    b.HasIndex("ZodiacId", "NameMainId", "LanguageId")
-                        .HasDatabaseName("IX_HoroscopesOfNames_ZodiacId_NameMainId_LanguageId");
-
-                    b.ToTable("HoroscopesOfNames");
+                    b.ToTable("SeoData", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Models.Language", b =>
+            modelBuilder.Entity("DAL.Models.LocalizationModels.Language", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -934,7 +3470,584 @@ namespace DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DAL.Models.Metal", b =>
+            modelBuilder.Entity("DAL.Models.LocalizationModels.LanguageApp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasComment("Код языка по стандарту BCP-47 (например, ru-RU, en-US)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата создания записи");
+
+                    b.Property<string>("Direction")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)")
+                        .HasDefaultValue("ltr")
+                        .HasComment("Направление письма (ltr/rtl)");
+
+                    b.Property<bool>("Enabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasComment("Доступность языка для выбора");
+
+                    b.Property<string>("IconKey")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasComment("Ключ иконки/флага");
+
+                    b.Property<bool>("IsDefault")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasComment("Язык по умолчанию (может быть только один)");
+
+                    b.Property<bool>("IsSystem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasComment("Системный язык (нельзя удалить)");
+
+                    b.Property<string>("NativeTitle")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("Название на родном языке для UI");
+
+                    b.Property<string>("ShortCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)")
+                        .HasComment("Краткий код языка для UI (например, RU, EN)");
+
+                    b.Property<int>("SortOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(999)
+                        .HasComment("Порядок сортировки в UI");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasComment("Название на английском для админки");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата последнего обновления");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("IX_LanguagesApp_Code");
+
+                    b.HasIndex("IsDefault")
+                        .IsUnique()
+                        .HasDatabaseName("IX_LanguagesApp_Default_Unique")
+                        .HasFilter("\"IsDefault\" = true");
+
+                    b.HasIndex("ShortCode")
+                        .HasDatabaseName("IX_LanguagesApp_ShortCode");
+
+                    b.HasIndex("IsDefault", "Enabled")
+                        .HasDatabaseName("IX_LanguagesApp_Default_Enabled");
+
+                    b.ToTable("LanguagesApp", (string)null);
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.Anecdote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsActive");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("NameMainId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("NameMainId");
+
+                    b.HasIndex("NameMainId", "LanguageId")
+                        .HasDatabaseName("IX_Anecdotes_NameMainId_LanguageId");
+
+                    b.ToTable("Anecdotes");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.Animal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsActive");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("NameMainId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("NameMainId");
+
+                    b.HasIndex("NameMainId", "LanguageId")
+                        .HasDatabaseName("IX_Animals_NameMainId_LanguageId");
+
+                    b.ToTable("Animals");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.Color", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsActive");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("NameMainId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("NameMainId");
+
+                    b.HasIndex("NameMainId", "LanguageId")
+                        .HasDatabaseName("IX_Colors_NameMainId_LanguageId");
+
+                    b.ToTable("Colors");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Уникальный идентификатор комментария");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorEmail")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasComment("Email автора комментария");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                        .HasComment("Дата создания записи");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasComment("Текст комментария (основной контент)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("IsActive")
+                        .HasComment("Активна ли запись");
+
+                    b.Property<bool>("IsApproved")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasComment("Одобрен ли комментарий модератором");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer")
+                        .HasComment("Внешний ключ на таблицу Languages");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasComment("Название комментария (может быть заголовком или кратким описанием)");
+
+                    b.Property<int>("NameMainId")
+                        .HasColumnType("integer")
+                        .HasComment("Внешний ключ на таблицу Names");
+
+                    b.Property<int?>("ParentCommentId")
+                        .HasColumnType("integer")
+                        .HasComment("Внешний ключ на родительский комментарий (для ответов)");
+
+                    b.Property<int>("Rating")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasComment("Рейтинг комментария (количество лайков)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt")
+                        .HasComment("Дата последнего обновления");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_Comments_CreatedAt");
+
+                    b.HasIndex("IsApproved")
+                        .HasDatabaseName("IX_Comments_IsApproved");
+
+                    b.HasIndex("LanguageId")
+                        .HasDatabaseName("IX_Comments_LanguageId");
+
+                    b.HasIndex("NameMainId")
+                        .HasDatabaseName("IX_Comments_NameMainId");
+
+                    b.HasIndex("ParentCommentId")
+                        .HasDatabaseName("IX_Comments_ParentCommentId");
+
+                    b.HasIndex("Rating")
+                        .HasDatabaseName("IX_Comments_Rating");
+
+                    b.HasIndex("IsApproved", "CreatedAt")
+                        .HasDatabaseName("IX_Comments_IsApproved_CreatedAt");
+
+                    b.HasIndex("NameMainId", "LanguageId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Comments_NameMainId_LanguageId");
+
+                    b.ToTable("Comments", (string)null);
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.Declension", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Accusative")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasComment("Винительный падеж");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("Dative")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasComment("Дательный падеж");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<string>("Genitive")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasComment("Родительный падеж");
+
+                    b.Property<string>("Instrumental")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasComment("Творительный падеж");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsActive");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("NameMainId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Nominative")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasComment("Именительный падеж");
+
+                    b.Property<string>("Prepositional")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasComment("Предложный падеж");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("NameMainId");
+
+                    b.HasIndex("NameMainId", "LanguageId")
+                        .HasDatabaseName("IX_Declensions_NameMainId_LanguageId");
+
+                    b.ToTable("Declensions");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.Fact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsActive");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("NameMainId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("NameMainId");
+
+                    b.HasIndex("NameMainId", "LanguageId")
+                        .HasDatabaseName("IX_Facts_NameMainId_LanguageId");
+
+                    b.ToTable("Facts");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.ForeignVariant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsActive");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("NameMainId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.Property<string>("Url")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasComment("URL ссылка на внешний ресурс");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("NameMainId");
+
+                    b.HasIndex("NameMainId", "LanguageId")
+                        .HasDatabaseName("IX_ForeignVariants_NameMainId_LanguageId");
+
+                    b.ToTable("ForeignVariants");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.HoroscopeOfName", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("HoroscopeDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasComment("Дата гороскопа");
+
+                    b.Property<string>("HoroscopeType")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasComment("Тип гороскопа (ежедневный, еженедельный, годовой)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsActive");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("NameMainId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedAt");
+
+                    b.Property<int>("ZodiacId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("NameMainId");
+
+                    b.HasIndex("ZodiacId");
+
+                    b.HasIndex("ZodiacId", "NameMainId", "LanguageId")
+                        .HasDatabaseName("IX_HoroscopesOfNames_ZodiacId_NameMainId_LanguageId");
+
+                    b.ToTable("HoroscopesOfNames");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.Metal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -981,7 +4094,7 @@ namespace DAL.Migrations
                     b.ToTable("Metals");
                 });
 
-            modelBuilder.Entity("DAL.Models.NameDetail", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.NameDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1354,7 +4467,7 @@ namespace DAL.Migrations
                     b.ToTable("NameDetails", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Models.NameMain", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.NameMain", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1410,7 +4523,7 @@ namespace DAL.Migrations
                     b.ToTable("Names", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Models.NameUrlForParsing", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.NameUrlForParsing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1492,7 +4605,7 @@ namespace DAL.Migrations
                     b.ToTable("NameUrlForParsings");
                 });
 
-            modelBuilder.Entity("DAL.Models.Number", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Number", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1539,7 +4652,7 @@ namespace DAL.Migrations
                     b.ToTable("Numbers");
                 });
 
-            modelBuilder.Entity("DAL.Models.Patron", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Patron", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1586,7 +4699,7 @@ namespace DAL.Migrations
                     b.ToTable("Patrons");
                 });
 
-            modelBuilder.Entity("DAL.Models.Planet", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Planet", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1638,7 +4751,7 @@ namespace DAL.Migrations
                     b.ToTable("Planets");
                 });
 
-            modelBuilder.Entity("DAL.Models.Plant", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Plant", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1686,7 +4799,7 @@ namespace DAL.Migrations
                     b.ToTable("Plants");
                 });
 
-            modelBuilder.Entity("DAL.Models.Profession", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Profession", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1733,239 +4846,7 @@ namespace DAL.Migrations
                     b.ToTable("Professions");
                 });
 
-            modelBuilder.Entity("DAL.Models.Sample", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Samples");
-                });
-
-            modelBuilder.Entity("DAL.Models.SeoData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasComment("Уникальный идентификатор SEO-данных");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ArticleSection")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasDefaultValue("")
-                        .HasComment("Раздел статьи");
-
-                    b.Property<string>("AuthorName")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasDefaultValue("")
-                        .HasComment("Имя автора");
-
-                    b.Property<string>("CanonicalUrl")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)")
-                        .HasComment("Каноническая ссылка");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                        .HasComment("Дата создания записи");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasComment("Пользователь, создавший запись");
-
-                    b.Property<string>("ImageAltText")
-                        .HasMaxLength(125)
-                        .HasColumnType("character varying(125)")
-                        .HasComment("Alt текст изображения");
-
-                    b.Property<string>("ImageCaption")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasComment("Подпись изображения");
-
-                    b.Property<string>("ImageUrl")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasDefaultValue("")
-                        .HasComment("URL изображения");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("integer")
-                        .HasComment("Внешний ключ на таблицу Languages");
-
-                    b.Property<string>("MetaDescription")
-                        .HasMaxLength(160)
-                        .HasColumnType("character varying(160)")
-                        .HasComment("META описание (рекомендуется до 160 символов)");
-
-                    b.Property<string>("MetaKeywords")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasComment("META ключевые слова");
-
-                    b.Property<string>("MetaTitle")
-                        .HasMaxLength(70)
-                        .HasColumnType("character varying(70)")
-                        .HasComment("SEO заголовок (рекомендуется до 70 символов)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasComment("Дата последнего изменения");
-
-                    b.Property<int>("NameMainId")
-                        .HasColumnType("integer")
-                        .HasComment("Внешний ключ на таблицу Names");
-
-                    b.Property<bool>("NoFollow")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasComment("Запрет следования по ссылкам (robots nofollow)");
-
-                    b.Property<bool>("NoIndex")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasComment("Запрет индексации (robots noindex)");
-
-                    b.Property<string>("OgDescription")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasComment("Open Graph описание");
-
-                    b.Property<string>("OgImage")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasComment("Open Graph изображение");
-
-                    b.Property<string>("OgTitle")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasComment("Open Graph заголовок");
-
-                    b.Property<string>("OgType")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasDefaultValue("article")
-                        .HasComment("Open Graph тип контента");
-
-                    b.Property<string>("OgUrl")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)")
-                        .HasComment("Open Graph URL");
-
-                    b.Property<int?>("Priority")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(5)
-                        .HasComment("Приоритет страницы для sitemap.xml (0-10)");
-
-                    b.Property<DateTime?>("PublishedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasComment("Дата публикации");
-
-                    b.Property<string>("PublisherName")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasDefaultValue("")
-                        .HasComment("Имя издателя");
-
-                    b.Property<string>("Region")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasComment("Географический регион");
-
-                    b.Property<string>("SchemaJsonLd")
-                        .HasColumnType("jsonb")
-                        .HasComment("JSON-LD разметка");
-
-                    b.Property<string>("SchemaType")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasComment("Тип схемы Schema.org");
-
-                    b.Property<string>("TwitterCard")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasDefaultValue("summary_large_image")
-                        .HasComment("Twitter Card тип");
-
-                    b.Property<string>("TwitterDescription")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasComment("Twitter описание");
-
-                    b.Property<string>("TwitterImage")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasComment("Twitter изображение");
-
-                    b.Property<string>("TwitterTitle")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasComment("Twitter заголовок");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasComment("Дата последнего обновления");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasComment("Пользователь, обновивший запись");
-
-                    b.Property<string>("UrlSlug")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasComment("ЧПУ URL");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("NameMainId")
-                        .IsUnique();
-
-                    b.HasIndex("NoIndex")
-                        .HasDatabaseName("IX_SeoData_NoIndex");
-
-                    b.HasIndex("Priority")
-                        .HasDatabaseName("IX_SeoData_Priority");
-
-                    b.HasIndex("UrlSlug")
-                        .HasDatabaseName("IX_SeoData_UrlSlug");
-
-                    b.HasIndex("NameMainId", "LanguageId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_SeoData_NameMainId_LanguageId");
-
-                    b.ToTable("SeoData", (string)null);
-                });
-
-            modelBuilder.Entity("DAL.Models.Stone", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Stone", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2012,7 +4893,7 @@ namespace DAL.Migrations
                     b.ToTable("Stones");
                 });
 
-            modelBuilder.Entity("DAL.Models.Synonym", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Synonym", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2059,7 +4940,7 @@ namespace DAL.Migrations
                     b.ToTable("Synonyms");
                 });
 
-            modelBuilder.Entity("DAL.Models.Talent", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Talent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2106,7 +4987,7 @@ namespace DAL.Migrations
                     b.ToTable("Talents");
                 });
 
-            modelBuilder.Entity("DAL.Models.Tree", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Tree", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2153,152 +5034,7 @@ namespace DAL.Migrations
                     b.ToTable("Trees");
                 });
 
-            modelBuilder.Entity("DAL.Models.UserSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasComment("Уникальный идентификатор сессии");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                        .HasComment("Дата создания сессии");
-
-                    b.Property<string>("DeviceInfo")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasComment("Информация об устройстве (браузер, ОС)");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasComment("Дата окончания действия токена");
-
-                    b.Property<string>("IpAddress")
-                        .HasMaxLength(45)
-                        .HasColumnType("character varying(45)")
-                        .HasComment("IP адрес создания сессии");
-
-                    b.Property<bool>("IsRevoked")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasComment("Отозван ли токен");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasComment("Refresh токен");
-
-                    b.Property<DateTime?>("RevokedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasComment("Время аннулирования сессии");
-
-                    b.Property<string>("UserAgent")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasComment("User Agent браузера");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExpiresAt")
-                        .HasDatabaseName("IX_UserSessions_ExpiresAt");
-
-                    b.HasIndex("IsRevoked")
-                        .HasDatabaseName("IX_UserSessions_IsRevoked");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("IX_UserSessions_UserId");
-
-                    b.HasIndex("RefreshToken", "IsRevoked")
-                        .IsUnique()
-                        .HasDatabaseName("IX_UserSessions_RefreshToken_IsRevoked");
-
-                    b.HasIndex("UserId", "IsRevoked", "ExpiresAt")
-                        .HasDatabaseName("IX_UserSessions_UserId_IsRevoked_ExpiresAt");
-
-                    b.ToTable("UserSessions", (string)null);
-                });
-
-            modelBuilder.Entity("DAL.Models.UserSettings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessibilityLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DefaultPageSize")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Density")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<int>("LoginNotificationMode")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NavigationBehavior")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NotificationChannels")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NotificationLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("PrimaryColor")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<int>("SessionTerminationMode")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("ShowAdvancedFilters")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("SidebarState")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TableDensity")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Theme")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("TimeZone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserSettings");
-                });
-
-            modelBuilder.Entity("DAL.Models.Zodiac", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Zodiac", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2372,7 +5108,7 @@ namespace DAL.Migrations
                     b.ToTable("Zodiacs");
                 });
 
-            modelBuilder.Entity("DAL.Models.ZodiacHoroscope", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.ZodiacHoroscope", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2424,7 +5160,7 @@ namespace DAL.Migrations
                     b.ToTable("ZodiacHoroscopes");
                 });
 
-            modelBuilder.Entity("DAL.Models.ZodiacTalisman", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.ZodiacTalisman", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2479,6 +5215,232 @@ namespace DAL.Migrations
                         .HasDatabaseName("IX_ZodiacTalismans_ZodiacId_NameMainId_LanguageId");
 
                     b.ToTable("ZodiacTalismans");
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.Sample", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Samples");
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.SampleMain", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Уникальный идентификатор записи");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата создания записи");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasComment("Флаг активности записи");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasComment("Техническое название для идентификации в админке");
+
+                    b.Property<string>("SystemCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("Системный код для использования в логике приложения");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата последнего обновления");
+
+                    b.Property<string>("UrlPictureMain")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SamplesMain", (string)null);
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.SampleMainDescription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Уникальный идентификатор перевода");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата создания записи");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasComment("Локализованное описание");
+
+                    b.Property<int>("LanguageAppId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasComment("Локализованное название");
+
+                    b.Property<int>("SampleMainId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата последнего обновления");
+
+                    b.Property<string>("UrlPicture")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageAppId");
+
+                    b.HasIndex("SampleMainId", "LanguageAppId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_SamplesMainDescriptions_Main_Language");
+
+                    b.ToTable("SamplesMainDescriptions", (string)null);
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.SampleMainDescriptionSeo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Уникальный идентификатор перевода");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата создания записи");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasComment("Локализованное описание");
+
+                    b.Property<string>("HtmlContent")
+                        .HasColumnType("text")
+                        .HasComment("HTML контент (статья/полное описание)");
+
+                    b.Property<int>("LanguageAppId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasComment("Локализованное название");
+
+                    b.Property<int>("SampleMainSeoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SeoDataId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата последнего обновления");
+
+                    b.Property<string>("UrlPicture")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasComment("Локализованное изображение (если пусто, берется Main)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageAppId");
+
+                    b.HasIndex("SeoDataId")
+                        .IsUnique();
+
+                    b.HasIndex("SampleMainSeoId", "LanguageAppId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_SamplesMainDescriptionsSeo_Main_Language");
+
+                    b.ToTable("SamplesMainDescriptionsSeo", (string)null);
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.SampleMainSeo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasComment("Уникальный идентификатор записи");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата создания записи");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasComment("Флаг активности записи");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasComment("Техническое название для идентификации");
+
+                    b.Property<string>("SystemCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasComment("Системный код");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()")
+                        .HasComment("Дата последнего обновления");
+
+                    b.Property<string>("UrlPictureMain")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasComment("Главное изображение (по умолчанию для всех языков)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SamplesMainSeo", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -2613,9 +5575,343 @@ namespace DAL.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.Models.ActivityLog", b =>
+            modelBuilder.Entity("DAL.Models.Aggregator.CategoryOfAggregator", b =>
                 {
-                    b.HasOne("DAL.Models.ApplicationUser", "User")
+                    b.HasOne("DAL.Models.Aggregator.CategoryOfAggregator", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.DownloadLinkOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.VersionOfAggregator", "VersionOfAggregator")
+                        .WithMany("DownloadLinks")
+                        .HasForeignKey("VersionOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VersionOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.DownloadLogOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.DownloadLinkOfAggregator", "DownloadLinkOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("DownloadLinkOfAggregatorId");
+
+                    b.HasOne("DAL.Models.Aggregator.VersionOfAggregator", "VersionOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("VersionOfAggregatorId");
+
+                    b.Navigation("DownloadLinkOfAggregator");
+
+                    b.Navigation("VersionOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.CategoryOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.CategoryOfAggregator", "CategoryOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("CategoryOfAggregatorId");
+
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoryOfAggregator");
+
+                    b.Navigation("LanguageOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.DeveloperOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.DeveloperOfAggregator", "DeveloperOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("DeveloperOfAggregatorId");
+
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DeveloperOfAggregator");
+
+                    b.Navigation("LanguageOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.DownloadLinkOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.DownloadLinkOfAggregator", "DownloadLinkOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("DownloadLinkOfAggregatorId");
+
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DownloadLinkOfAggregator");
+
+                    b.Navigation("LanguageOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.LicenseTypeOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.LicenseTypeOfAggregator", "LicenseTypeOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("LicenseTypeOfAggregatorId");
+
+                    b.Navigation("LanguageOfAggregator");
+
+                    b.Navigation("LicenseTypeOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.PlatformOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.PlatformOfAggregator", "PlatformOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("PlatformOfAggregatorId");
+
+                    b.HasOne("DAL.Models.GeneralModels.SeoData", "SeoData")
+                        .WithMany()
+                        .HasForeignKey("SeoDataId");
+
+                    b.Navigation("LanguageOfAggregator");
+
+                    b.Navigation("PlatformOfAggregator");
+
+                    b.Navigation("SeoData");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.ProgramOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.LicenseTypeOfAggregator", "LicenseType")
+                        .WithMany()
+                        .HasForeignKey("LicenseTypeId");
+
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("ProgramOfAggregatorId");
+
+                    b.Navigation("LanguageOfAggregator");
+
+                    b.Navigation("LicenseType");
+
+                    b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.ScreenshotOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.ScreenshotOfAggregator", "ScreenshotOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("ScreenshotOfAggregatorId");
+
+                    b.Navigation("LanguageOfAggregator");
+
+                    b.Navigation("ScreenshotOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.TagOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.TagOfAggregator", "TagOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("TagOfAggregatorId");
+
+                    b.Navigation("LanguageOfAggregator");
+
+                    b.Navigation("TagOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.VersionOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.VersionOfAggregator", "VersionOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("VersionOfAggregatorId");
+
+                    b.Navigation("LanguageOfAggregator");
+
+                    b.Navigation("VersionOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.VideoOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.VideoOfAggregator", "VideoOfAggregator")
+                        .WithMany("Localizations")
+                        .HasForeignKey("VideoOfAggregatorId");
+
+                    b.Navigation("LanguageOfAggregator");
+
+                    b.Navigation("VideoOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramMarketDataOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.AggregatorSource", "AggregatorSource")
+                        .WithMany()
+                        .HasForeignKey("AggregatorSourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("MarketData")
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AggregatorSource");
+
+                    b.Navigation("LanguageOfAggregator");
+
+                    b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.CategoryOfAggregator", "CategoryOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("CategoryOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.DeveloperOfAggregator", "DeveloperOfAggregator")
+                        .WithMany("Programs")
+                        .HasForeignKey("DeveloperOfAggregatorId");
+
+                    b.HasOne("DAL.Models.Aggregator.CategoryOfAggregator", "SubCategoryOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryOfAggregatorId");
+
+                    b.Navigation("CategoryOfAggregator");
+
+                    b.Navigation("DeveloperOfAggregator");
+
+                    b.Navigation("SubCategoryOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramPlatformOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.PlatformOfAggregator", "PlatformOfAggregator")
+                        .WithMany("ProgramPlatforms")
+                        .HasForeignKey("PlatformOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("ProgramPlatforms")
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("PlatformOfAggregator");
+
+                    b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramTagOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("ProgramTags")
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DAL.Models.Aggregator.TagOfAggregator", "TagOfAggregator")
+                        .WithMany("ProgramTags")
+                        .HasForeignKey("TagOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("ProgramOfAggregator");
+
+                    b.Navigation("TagOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ScreenshotOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("Screenshots")
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.VersionOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("Versions")
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.VideoOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("Videos")
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.AuthorizationModels.ActivityLog", b =>
+                {
+                    b.HasOne("DAL.Models.AuthorizationModels.ApplicationUser", "User")
                         .WithMany("ActivityLogs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2624,15 +5920,449 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DAL.Models.Anecdote", b =>
+            modelBuilder.Entity("DAL.Models.AuthorizationModels.UserSession", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.AuthorizationModels.ApplicationUser", "User")
+                        .WithMany("UserSessions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DAL.Models.AuthorizationModels.UserSettings", b =>
+                {
+                    b.HasOne("DAL.Models.AuthorizationModels.ApplicationUser", "User")
+                        .WithOne("Settings")
+                        .HasForeignKey("DAL.Models.AuthorizationModels.UserSettings", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Article", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Category", "Category")
+                        .WithMany("Articles")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleComment", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Article", "Article")
+                        .WithMany("Comments")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.ArticleComment", "Parent")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleSoftware", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Article", "Article")
+                        .WithMany("ArticleSoftwares")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("ArticleSoftwares")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleTag", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Article", "Article")
+                        .WithMany("ArticleTags")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.TagBusiness", "TagBusiness")
+                        .WithMany("ArticleTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+
+                    b.Navigation("TagBusiness");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleTranslation", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Article", "Article")
+                        .WithMany("Translations")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.Navigation("Article");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Category", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.CategoryTranslation", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Category", "Category")
+                        .WithMany("Translations")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.PlatformTranslation", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.Platform", "Platform")
+                        .WithMany("Translations")
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.GeneralModels.SeoData", "SeoData")
+                        .WithMany()
+                        .HasForeignKey("SeoDataId");
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Platform");
+
+                    b.Navigation("SeoData");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Review", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("Reviews")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SeoEntity", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Article", null)
+                        .WithMany("SeoEntities")
+                        .HasForeignKey("ArticleId");
+
+                    b.HasOne("DAL.Models.Business.Category", null)
+                        .WithMany("SeoEntities")
+                        .HasForeignKey("CategoryId");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SeoTranslation", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.SeoEntity", "SeoEntity")
+                        .WithMany("Translations")
+                        .HasForeignKey("SeoEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("SeoEntity");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Software", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Developer", "Developer")
+                        .WithMany("Softwares")
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.LicenseType", "LicenseType")
+                        .WithMany("Softwares")
+                        .HasForeignKey("LicenseTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Developer");
+
+                    b.Navigation("LicenseType");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareAlias", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("Aliases")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareAsset", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Platform", "Platform")
+                        .WithMany()
+                        .HasForeignKey("PlatformId");
+
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("Assets")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Platform");
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareCategory", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Category", "Category")
+                        .WithMany("SoftwareCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("SoftwareCategories")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareLink", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("Links")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareNews", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("News")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareStatistics", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithOne("Statistics")
+                        .HasForeignKey("DAL.Models.Business.SoftwareStatistics", "SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareTag", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("SoftwareTags")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.TagBusiness", "TagBusiness")
+                        .WithMany("SoftwareTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Software");
+
+                    b.Navigation("TagBusiness");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareTranslation", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("Translations")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareVersion", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Software", "Software")
+                        .WithMany("Versions")
+                        .HasForeignKey("SoftwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Software");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareVersionPlatform", b =>
+                {
+                    b.HasOne("DAL.Models.Business.Platform", "Platform")
+                        .WithMany("VersionPlatforms")
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.SoftwareVersion", "Version")
+                        .WithMany("VersionPlatforms")
+                        .HasForeignKey("SoftwareVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Platform");
+
+                    b.Navigation("Version");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareVersionPlatformFile", b =>
+                {
+                    b.HasOne("DAL.Models.Business.SoftwareVersionPlatform", "VersionPlatform")
+                        .WithMany("Files")
+                        .HasForeignKey("SoftwareVersionPlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VersionPlatform");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.TagTranslation", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.TagBusiness", "TagBusiness")
+                        .WithMany("Translations")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("TagBusiness");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.UpdateFeed", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Business.SoftwareVersion", "SoftwareVersion")
+                        .WithMany("UpdateFeeds")
+                        .HasForeignKey("SoftwareVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("SoftwareVersion");
+                });
+
+            modelBuilder.Entity("DAL.Models.GeneralModels.Icon", b =>
+                {
+                    b.HasOne("DAL.Models.GeneralModels.IconCategory", "Category")
+                        .WithMany("Icons")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.Anecdote", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Anecdotes")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2643,15 +6373,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Animal", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Animal", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Animals")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2662,15 +6392,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Color", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Color", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Colors")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2681,21 +6411,21 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Comment", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Comment", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Comments")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Comment", "ParentComment")
+                    b.HasOne("DAL.Models.NameModels.Comment", "ParentComment")
                         .WithMany("Replies")
                         .HasForeignKey("ParentCommentId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -2707,15 +6437,15 @@ namespace DAL.Migrations
                     b.Navigation("ParentComment");
                 });
 
-            modelBuilder.Entity("DAL.Models.Declension", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Declension", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Declensions")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2726,15 +6456,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Fact", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Fact", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Facts")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2745,15 +6475,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.ForeignVariant", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.ForeignVariant", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("ForeignVariants")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2764,21 +6494,21 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.HoroscopeOfName", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.HoroscopeOfName", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("HoroscopesOfName")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Zodiac", "Zodiac")
+                    b.HasOne("DAL.Models.NameModels.Zodiac", "Zodiac")
                         .WithMany("Horoscopes")
                         .HasForeignKey("ZodiacId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -2791,15 +6521,15 @@ namespace DAL.Migrations
                     b.Navigation("Zodiac");
                 });
 
-            modelBuilder.Entity("DAL.Models.Metal", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Metal", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Metals")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2810,15 +6540,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.NameDetail", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.NameDetail", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany("NameDetails")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("NameDetail")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2829,15 +6559,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.NameUrlForParsing", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.NameUrlForParsing", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("UrlsForParsing")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2848,15 +6578,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Number", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Number", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Numbers")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2867,15 +6597,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Patron", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Patron", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Patrons")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2886,15 +6616,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Planet", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Planet", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Planets")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2905,15 +6635,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Plant", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Plant", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Plants")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2924,15 +6654,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Profession", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Profession", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Professions")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2943,34 +6673,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.SeoData", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Stone", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
-                        .WithOne("SeoData")
-                        .HasForeignKey("DAL.Models.SeoData", "NameMainId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("NameMain");
-                });
-
-            modelBuilder.Entity("DAL.Models.Stone", b =>
-                {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Stones")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2981,15 +6692,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Synonym", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Synonym", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Synonyms")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3000,15 +6711,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Talent", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Talent", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Talents")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3019,15 +6730,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.Tree", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Tree", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Trees")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3038,37 +6749,15 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.UserSession", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Zodiac", b =>
                 {
-                    b.HasOne("DAL.Models.ApplicationUser", "User")
-                        .WithMany("UserSessions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DAL.Models.UserSettings", b =>
-                {
-                    b.HasOne("DAL.Models.ApplicationUser", "User")
-                        .WithOne("Settings")
-                        .HasForeignKey("DAL.Models.UserSettings", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DAL.Models.Zodiac", b =>
-                {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("Zodiacs")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3079,21 +6768,21 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
                 });
 
-            modelBuilder.Entity("DAL.Models.ZodiacHoroscope", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.ZodiacHoroscope", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("ZodiacHoroscopes")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Zodiac", "Zodiac")
+                    b.HasOne("DAL.Models.NameModels.Zodiac", "Zodiac")
                         .WithMany()
                         .HasForeignKey("ZodiacId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3106,21 +6795,21 @@ namespace DAL.Migrations
                     b.Navigation("Zodiac");
                 });
 
-            modelBuilder.Entity("DAL.Models.ZodiacTalisman", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.ZodiacTalisman", b =>
                 {
-                    b.HasOne("DAL.Models.Language", "Language")
+                    b.HasOne("DAL.Models.LocalizationModels.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.NameMain", "NameMain")
+                    b.HasOne("DAL.Models.NameModels.NameMain", "NameMain")
                         .WithMany("ZodiacTalismans")
                         .HasForeignKey("NameMainId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Zodiac", "Zodiac")
+                    b.HasOne("DAL.Models.NameModels.Zodiac", "Zodiac")
                         .WithMany("Talismans")
                         .HasForeignKey("ZodiacId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3131,6 +6820,56 @@ namespace DAL.Migrations
                     b.Navigation("NameMain");
 
                     b.Navigation("Zodiac");
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.SampleMainDescription", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "LanguageApp")
+                        .WithMany()
+                        .HasForeignKey("LanguageAppId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_SamplesMainDescriptions_LanguagesApp");
+
+                    b.HasOne("DAL.Models.SampleModels.SampleMain", "SampleMain")
+                        .WithMany("Descriptions")
+                        .HasForeignKey("SampleMainId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_SamplesMainDescriptions_SamplesMain");
+
+                    b.Navigation("LanguageApp");
+
+                    b.Navigation("SampleMain");
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.SampleMainDescriptionSeo", b =>
+                {
+                    b.HasOne("DAL.Models.LocalizationModels.LanguageApp", "LanguageApp")
+                        .WithMany()
+                        .HasForeignKey("LanguageAppId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_SamplesMainDescriptionsSeo_LanguagesApp");
+
+                    b.HasOne("DAL.Models.SampleModels.SampleMainSeo", "SampleMainSeo")
+                        .WithMany("Descriptions")
+                        .HasForeignKey("SampleMainSeoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_SamplesMainDescriptionsSeo_SamplesMainSeo");
+
+                    b.HasOne("DAL.Models.GeneralModels.SeoData", "SeoData")
+                        .WithOne()
+                        .HasForeignKey("DAL.Models.SampleModels.SampleMainDescriptionSeo", "SeoDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK_SamplesMainDescriptionsSeo_SeoData");
+
+                    b.Navigation("LanguageApp");
+
+                    b.Navigation("SampleMainSeo");
+
+                    b.Navigation("SeoData");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -3144,7 +6883,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("DAL.Models.ApplicationUser", null)
+                    b.HasOne("DAL.Models.AuthorizationModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3153,7 +6892,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("DAL.Models.ApplicationUser", null)
+                    b.HasOne("DAL.Models.AuthorizationModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3168,7 +6907,7 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.ApplicationUser", null)
+                    b.HasOne("DAL.Models.AuthorizationModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3177,14 +6916,86 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("DAL.Models.ApplicationUser", null)
+                    b.HasOne("DAL.Models.AuthorizationModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
+            modelBuilder.Entity("DAL.Models.Aggregator.CategoryOfAggregator", b =>
+                {
+                    b.Navigation("Children");
+
+                    b.Navigation("Localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.DeveloperOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+
+                    b.Navigation("Programs");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.DownloadLinkOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.LicenseTypeOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.PlatformOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+
+                    b.Navigation("ProgramPlatforms");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+
+                    b.Navigation("MarketData");
+
+                    b.Navigation("ProgramPlatforms");
+
+                    b.Navigation("ProgramTags");
+
+                    b.Navigation("Screenshots");
+
+                    b.Navigation("Versions");
+
+                    b.Navigation("Videos");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ScreenshotOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.TagOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+
+                    b.Navigation("ProgramTags");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.VersionOfAggregator", b =>
+                {
+                    b.Navigation("DownloadLinks");
+
+                    b.Navigation("Localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.VideoOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+                });
+
+            modelBuilder.Entity("DAL.Models.AuthorizationModels.ApplicationUser", b =>
                 {
                     b.Navigation("ActivityLogs");
 
@@ -3193,17 +7004,121 @@ namespace DAL.Migrations
                     b.Navigation("UserSessions");
                 });
 
-            modelBuilder.Entity("DAL.Models.Comment", b =>
+            modelBuilder.Entity("DAL.Models.Business.Article", b =>
+                {
+                    b.Navigation("ArticleSoftwares");
+
+                    b.Navigation("ArticleTags");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("SeoEntities");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.ArticleComment", b =>
                 {
                     b.Navigation("Replies");
                 });
 
-            modelBuilder.Entity("DAL.Models.Language", b =>
+            modelBuilder.Entity("DAL.Models.Business.Category", b =>
+                {
+                    b.Navigation("Articles");
+
+                    b.Navigation("Children");
+
+                    b.Navigation("SeoEntities");
+
+                    b.Navigation("SoftwareCategories");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Developer", b =>
+                {
+                    b.Navigation("Softwares");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.LicenseType", b =>
+                {
+                    b.Navigation("Softwares");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Platform", b =>
+                {
+                    b.Navigation("Translations");
+
+                    b.Navigation("VersionPlatforms");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SeoEntity", b =>
+                {
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.Software", b =>
+                {
+                    b.Navigation("Aliases");
+
+                    b.Navigation("ArticleSoftwares");
+
+                    b.Navigation("Assets");
+
+                    b.Navigation("Links");
+
+                    b.Navigation("News");
+
+                    b.Navigation("Reviews");
+
+                    b.Navigation("SoftwareCategories");
+
+                    b.Navigation("SoftwareTags");
+
+                    b.Navigation("Statistics");
+
+                    b.Navigation("Translations");
+
+                    b.Navigation("Versions");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareVersion", b =>
+                {
+                    b.Navigation("UpdateFeeds");
+
+                    b.Navigation("VersionPlatforms");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.SoftwareVersionPlatform", b =>
+                {
+                    b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("DAL.Models.Business.TagBusiness", b =>
+                {
+                    b.Navigation("ArticleTags");
+
+                    b.Navigation("SoftwareTags");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("DAL.Models.GeneralModels.IconCategory", b =>
+                {
+                    b.Navigation("Icons");
+                });
+
+            modelBuilder.Entity("DAL.Models.LocalizationModels.Language", b =>
                 {
                     b.Navigation("NameDetails");
                 });
 
-            modelBuilder.Entity("DAL.Models.NameMain", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Comment", b =>
+                {
+                    b.Navigation("Replies");
+                });
+
+            modelBuilder.Entity("DAL.Models.NameModels.NameMain", b =>
                 {
                     b.Navigation("Anecdotes");
 
@@ -3235,8 +7150,6 @@ namespace DAL.Migrations
 
                     b.Navigation("Professions");
 
-                    b.Navigation("SeoData");
-
                     b.Navigation("Stones");
 
                     b.Navigation("Synonyms");
@@ -3254,11 +7167,21 @@ namespace DAL.Migrations
                     b.Navigation("Zodiacs");
                 });
 
-            modelBuilder.Entity("DAL.Models.Zodiac", b =>
+            modelBuilder.Entity("DAL.Models.NameModels.Zodiac", b =>
                 {
                     b.Navigation("Horoscopes");
 
                     b.Navigation("Talismans");
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.SampleMain", b =>
+                {
+                    b.Navigation("Descriptions");
+                });
+
+            modelBuilder.Entity("DAL.Models.SampleModels.SampleMainSeo", b =>
+                {
+                    b.Navigation("Descriptions");
                 });
 #pragma warning restore 612, 618
         }

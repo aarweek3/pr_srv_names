@@ -1,6 +1,6 @@
 ﻿
 // DAL/Repositories/UserSessionRepository.cs
-using DAL.Models;
+using DAL.Models.AuthorizationModels;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

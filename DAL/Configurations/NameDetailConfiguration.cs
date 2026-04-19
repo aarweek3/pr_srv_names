@@ -1,4 +1,4 @@
-﻿using DAL.Models;
+﻿using DAL.Models.NameModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

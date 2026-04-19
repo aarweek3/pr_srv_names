@@ -2,7 +2,6 @@
 using pr_srv_names.Models;
 using AutoMapper;
 using DAL.Interfaces;
-using DAL.Models;
 using DAL.Repositories.Interfaces;
 using FluentValidation;
 using System.Linq.Expressions;
@@ -80,7 +79,7 @@ namespace pr_srv_names.Pages.NameMain.Services
         /// </summary>
         /// <param name="id">Идентификатор namemain</param>
         /// <returns>NameMainа</returns>
-        private async Task<DAL.Models.NameMain> GetNameMainOrThrow(int id)
+        private async Task<DAL.Models.NameModels.NameMain> GetNameMainOrThrow(int id)
         {
             var correlationId = GetCorrelationId();
             var entity = await _namemainrepository.GetByIdAsync(id);
@@ -218,7 +217,7 @@ namespace pr_srv_names.Pages.NameMain.Services
                 // Используем общий метод валидации уникальности
                 await ValidateNameUniqueness(request.Name);
 
-                var entity = _mapper.Map<DAL.Models.NameMain>(request);
+                var entity = _mapper.Map<DAL.Models.NameModels.NameMain>(request);
                 await _namemainrepository.AddAsync(entity);
                 await _unitOfWork.SaveChangesAsync();
 
@@ -432,7 +431,7 @@ namespace pr_srv_names.Pages.NameMain.Services
         /// </summary>
         /// <param name="searchTerm">Поисковый термин</param>
         /// <returns>Expression для фильтрации или null</returns>
-        private Expression<Func<DAL.Models.NameMain, bool>>? BuildSearchFilter(string? searchTerm)
+        private Expression<Func<DAL.Models.NameModels.NameMain, bool>>? BuildSearchFilter(string? searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return null;
@@ -446,7 +445,7 @@ namespace pr_srv_names.Pages.NameMain.Services
         /// </summary>
         /// <param name="sortBy">Поле сортировки</param>
         /// <returns>Expression для сортировки</returns>
-        private Expression<Func<DAL.Models.NameMain, object>> BuildSortExpression(NameMainSortField sortBy)
+        private Expression<Func<DAL.Models.NameModels.NameMain, object>> BuildSortExpression(NameMainSortField sortBy)
         {
             return sortBy switch
             {

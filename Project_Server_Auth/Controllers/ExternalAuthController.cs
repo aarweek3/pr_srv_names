@@ -1,6 +1,7 @@
 ﻿// контроллер для внешней аутентификации
 using DAL;
 using DAL.Models;
+using DAL.Models.AuthorizationModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using pr_srv_names.Services.Interfaces;

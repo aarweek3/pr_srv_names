@@ -1,24 +1,33 @@
 // DAL/Interfaces/IUnitOfWork.cs
 
 using DAL.Repositories.Interfaces;
-using DAL.Repositories.Interfaces.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DAL.Interfaces
 {
     /// <summary>
-    /// Unit of Work ������� ��� ���������� ������������ � �������������
+    /// Unit of Work      
     /// </summary>
     public interface IUnitOfWork : IDisposable
     {
         IAnecdoteRepository Anecdotes { get; }
         INameMainRepository NameMains { get; }
+        IIconCategoryRepository IconCategories { get; }
+        IIconRepository Icons { get; }
+        ILanguageAppRepository LanguagesApp { get; }
+        ILanguageOfAggregatorRepository LanguagesOfAggregator { get; }
+        IPlatformOfAggregatorRepository PlatformsOfAggregator { get; }
+        IPlatformRepository Platforms { get; }
 
         /// <summary>
-        /// ����������� ��� ������ � Samples
+        ///     Samples
         /// </summary>
         ISampleRepository Samples { get; }
+
+        ISampleMainRepository SamplesMain { get; }
+        ISampleMainDescriptionRepository SamplesMainDescriptions { get; }
+        ISampleMainSeoRepository SamplesMainSeo { get; }
 
         /// <summary>
         /// ����������� ��� ������ � �������
@@ -155,6 +164,15 @@ namespace DAL.Interfaces
         /// <param name="parameters">��������� �������</param>
         /// <returns>���������� ���������� �������</returns>
         Task<int> ExecuteSqlRawAsync(string sql, params object[] parameters);
+
+        /// <summary>
+        /// Выполняет полную очистку таблицы (PostgreSQL TRUNCATE).
+        /// В отличие от удаления через DELETE, этот метод работает быстрее и позволяет сбросить счетчики ID.
+        /// </summary>
+        /// <param name="tableName">Имя таблицы в БД</param>
+        /// <param name="cascade">Если true, будут также удалены связанные данные в других таблицах (CASCADE)</param>
+        /// <returns>Количество затронутых строк</returns>
+        Task<int> TruncateTableAsync(string tableName, bool cascade = true);
 
         // ===========================
         // ���������� ����������

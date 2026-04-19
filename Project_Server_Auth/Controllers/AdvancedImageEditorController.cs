@@ -10,14 +10,17 @@ namespace pr_srv_names.Pages.AdvancedImageEditor.Controllers
     {
         private readonly IAdvancedImageProcessingService _imageProcessingService;
         private readonly ILogger<AdvancedImageEditorController> _logger;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public AdvancedImageEditorController(
             IAdvancedImageProcessingService imageProcessingService,
-            ILogger<AdvancedImageEditorController> logger)
+            ILogger<AdvancedImageEditorController> logger,
+            IHttpClientFactory httpClientFactory)
         {
             _imageProcessingService =
                 imageProcessingService ?? throw new ArgumentNullException(nameof(imageProcessingService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         /// <summary>
@@ -300,6 +303,48 @@ namespace pr_srv_names.Pages.AdvancedImageEditor.Controllers
                 _logger.LogError(ex, "Ошибка при получении списка изображений");
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new { error = "Внутренняя ошибка сервера", details = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Прокси для загрузки внешних изображений (обход CORS)
+        /// GET /api/advanced-image/proxy-image?url=...
+        /// </summary>
+        [HttpGet("proxy-image")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ProxyImage([FromQuery] string url)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return BadRequest(new { message = "URL обязателен" });
+            }
+
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                client.Timeout = TimeSpan.FromSeconds(15);
+                var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning("Не удалось загрузить внешнее изображение: {Url}, Status: {Status}", url, response.StatusCode);
+                    return StatusCode((int)response.StatusCode, new { message = "Не удалось загрузить изображение из внешнего источника" });
+                }
+
+                var contentType = response.Content.Headers.ContentType?.MediaType ?? "image/jpeg";
+                var stream = await response.Content.ReadAsStreamAsync();
+
+                _logger.LogInformation("Проксирование изображения: {Url} (Type: {Type})", url, contentType);
+
+                return File(stream, contentType);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при проксировании изображения: {Url}", url);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { error = "Ошибка при проксировании изображения", details = ex.Message });
             }
         }
     }

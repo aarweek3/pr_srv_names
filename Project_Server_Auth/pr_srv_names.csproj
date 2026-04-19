@@ -25,6 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -43,11 +44,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Examples\ExampleApp\Constants\" />
+    <Folder Include="Examples\ExampleApp\Dtos\" />
+    <Folder Include="Examples\ExampleApp\Extensions\" />
+    <Folder Include="Examples\ExampleApp\Interfaces\" />
+    <Folder Include="Examples\ExampleApp\Models\" />
+    <Folder Include="Examples\ExampleApp\Services\" />
     <Folder Include="logs\" />
+    <Folder Include="Pages\AGGREGATOR\PlatformOfAggregator\Documentations\" />
+    <Folder Include="Pages\AGGREGATOR\PlatformOfAggregator\Extensions\" />
+    <Folder Include="Pages\AGGREGATOR\PlatformOfAggregator\Interfaces\" />
+    <Folder Include="Pages\AGGREGATOR\PlatformOfAggregator\Mappings\" />
+    <Folder Include="Pages\AGGREGATOR\PlatformOfAggregator\Models\" />
+    <Folder Include="Pages\AGGREGATOR\PlatformOfAggregator\Services\" />
+    <Folder Include="Pages\CategoryRepository\" />
+    <Folder Include="Pages\LanguageApp\Services\" />
     <Folder Include="Pages\NameMain\Constants\" />
     <Folder Include="Pages\NameMain\Dtos\" />
     <Folder Include="Pages\NameMain\Extensions\" />
     <Folder Include="Pages\NameMain\Models\" />
+    <Folder Include="Pages\SampleMain\" />
     <Folder Include="Pages\UserSetting\Constants\" />
     <Folder Include="Pages\UserSetting\Dtos\" />
     <Folder Include="Pages\UserSetting\Enums\" />
@@ -57,6 +73,7 @@
     <Folder Include="Pages\UserSetting\Models\" />
     <Folder Include="Pages\UserSetting\Services\" />
     <Folder Include="Pages\UserSetting\Validators\" />
+    <Folder Include="wwwroot\icons\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

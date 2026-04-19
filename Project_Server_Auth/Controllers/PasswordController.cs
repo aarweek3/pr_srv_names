@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using DAL.Models;
 using pr_srv_names.Dtos;
+using DAL.Models.AuthorizationModels;
 
 namespace pr_srv_names.Controllers
 {

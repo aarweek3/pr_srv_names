@@ -1,4 +1,5 @@
 using DAL.Interfaces;
+using DAL.Models.AuthorizationModels;
 using DAL.Repositories.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -64,7 +65,7 @@ namespace pr_srv_names.Pages.UserSetting.Services
         /// <summary>
         /// Получение настроек или создание дефолтных, если их нет
         /// </summary>
-        private async Task<DAL.Models.UserSettings> GetOrCreateSettingsAsync(string userId)
+        private async Task<UserSettings> GetOrCreateSettingsAsync(string userId)
         {
             var correlationId = GetCorrelationId();
             var settings = await _settingsRepository.GetByUserIdAsync(userId);

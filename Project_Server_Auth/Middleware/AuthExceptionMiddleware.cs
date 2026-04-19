@@ -103,7 +103,7 @@ namespace pr_srv_names.Middleware
             return exception is not (ArgumentException or ArgumentNullException or
                                    UnauthorizedAccessException or SecurityTokenException or
                                    SecurityException or FileNotFoundException or
-                                   DirectoryNotFoundException);
+                                   DirectoryNotFoundException or pr_srv_names.Exceptions.ConflictException);
         }
 
         private ErrorResponseModel CreateErrorResponse(Exception exception, string correlationId)
@@ -191,6 +191,16 @@ namespace pr_srv_names.Middleware
                     ErrorCode = "REQUEST_CANCELLED"
                 },
 
+                pr_srv_names.Exceptions.ConflictException conflict => new ErrorResponseModel
+                {
+                    Success = false,
+                    Message = conflict.Message,
+                    StatusCode = StatusCodes.Status409Conflict,
+                    CorrelationId = correlationId,
+                    ErrorCode = "CONFLICT",
+                    ConflictField = conflict.ConflictField
+                },
+
                 _ => new ErrorResponseModel
                 {
                     Success = false,
@@ -210,6 +220,7 @@ namespace pr_srv_names.Middleware
         public int StatusCode { get; set; }
         public string? CorrelationId { get; set; }
         public string? ErrorCode { get; set; }
+        public string? ConflictField { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 
