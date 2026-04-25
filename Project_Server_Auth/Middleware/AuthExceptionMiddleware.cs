@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Security;
@@ -204,7 +204,7 @@ namespace pr_srv_names.Middleware
                 _ => new ErrorResponseModel
                 {
                     Success = false,
-                    Message = _env.IsDevelopment() ? exception.Message : "An error occurred while processing your request",
+                    Message = exception.Message, // ВСЕГДА выводим сообщение для отладки
                     StatusCode = StatusCodes.Status500InternalServerError,
                     CorrelationId = correlationId,
                     ErrorCode = "INTERNAL_ERROR"

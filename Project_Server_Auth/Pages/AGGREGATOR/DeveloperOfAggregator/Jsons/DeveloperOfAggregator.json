@@ -1,0 +1,117 @@
+[
+  {
+    "name": "Microsoft Corporation",
+    "systemCode": "microsoft",
+    "website": "https://www.microsoft.com",
+    "isActive": true,
+    "sortOrder": 1,
+    "localizations": [
+      {
+        "languageOfAggregatorId": 1,
+        "name": "Microsoft",
+        "description": "Американская публичная транснациональная корпорация, один из крупнейших в мире производителей программного обеспечения для различного рода вычислительной техники.",
+        "metaTitle": "Microsoft - Официальный разработчик ПО",
+        "metaDescription": "Информация о компании Microsoft: продукты, история и инновации."
+      },
+      {
+        "languageOfAggregatorId": 2,
+        "name": "Microsoft",
+        "description": "Microsoft Corporation is an American multinational technology company which produces computer software, consumer electronics, personal computers, and related services.",
+        "metaTitle": "Microsoft - Official Software Developer",
+        "metaDescription": "Microsoft company information: products, history, and innovations."
+      }
+    ]
+  },
+  {
+    "name": "Google LLC",
+    "systemCode": "google",
+    "website": "https://www.google.com",
+    "isActive": true,
+    "sortOrder": 2,
+    "localizations": [
+      {
+        "languageOfAggregatorId": 1,
+        "name": "Google",
+        "description": "Американская транснациональная корпорация в составе холдинга Alphabet, специализирующаяся на интернет-поиске, облачных вычислениях и рекламных технологиях.",
+        "metaTitle": "Google - Технологический гигант",
+        "metaDescription": "Сведения о компании Google и её вкладе в развитие интернет-технологий."
+      },
+      {
+        "languageOfAggregatorId": 2,
+        "name": "Google",
+        "description": "Google LLC is an American multinational technology company that specializes in Internet-related services and products, which include online advertising technologies, a search engine, cloud computing, software, and hardware.",
+        "metaTitle": "Google - Technology Giant",
+        "metaDescription": "Information about Google LLC and its impact on internet technologies."
+      }
+    ]
+  },
+  {
+    "name": "Adobe Inc.",
+    "systemCode": "adobe",
+    "website": "https://www.adobe.com",
+    "isActive": true,
+    "sortOrder": 3,
+    "localizations": [
+      {
+        "languageOfAggregatorId": 1,
+        "name": "Adobe",
+        "description": "Американская компания — крупнейший разработчик программного обеспечения для графического дизайна, видеомонтажа и веб-разработки (Photoshop, Illustrator, Premiere Pro).",
+        "metaTitle": "Adobe - Лидер в сфере креативного ПО",
+        "metaDescription": "Узнайте больше о решениях Adobe для дизайнеров и творческих профессионалов."
+      },
+      {
+        "languageOfAggregatorId": 2,
+        "name": "Adobe",
+        "description": "Adobe Inc. is an American multinational computer software company. It has historically focused upon the creation of multimedia and creativity software products, with a more recent foray towards digital marketing software.",
+        "metaTitle": "Adobe - Leader in Creative Software",
+        "metaDescription": "Learn more about Adobe solutions for designers and creative professionals."
+      }
+    ]
+  },
+  {
+    "name": "JetBrains s.r.o.",
+    "systemCode": "jetbrains",
+    "website": "https://www.jetbrains.com",
+    "isActive": true,
+    "sortOrder": 4,
+    "localizations": [
+      {
+        "languageOfAggregatorId": 1,
+        "name": "JetBrains",
+        "description": "Чешская компания, разрабатывающая мощные инструменты для разработки программного обеспечения, такие как IntelliJ IDEA, ReSharper и язык программирования Kotlin.",
+        "metaTitle": "JetBrains - Инструменты для профессиональных разработчиков",
+        "metaDescription": "Все о продуктах JetBrains: IDE, инструменты анализа кода и командной работы."
+      },
+      {
+        "languageOfAggregatorId": 2,
+        "name": "JetBrains",
+        "description": "JetBrains is a Czech software development company whose tools are targeted towards software developers and project managers.",
+        "metaTitle": "JetBrains - Essential tools for software developers",
+        "metaDescription": "Learn all about JetBrains products: IDEs, team tools, and code analysis."
+      }
+    ]
+  },
+  {
+    "name": "Apple Inc.",
+    "systemCode": "apple",
+    "website": "https://www.apple.com",
+    "isActive": true,
+    "sortOrder": 5,
+    "localizations": [
+      {
+        "languageOfAggregatorId": 1,
+        "name": "Apple",
+        "description": "Американская корпорация, производитель персональных и планшетных компьютеров, аудиоплееров, смартфонов, программного обеспечения.",
+        "metaTitle": "Apple - Инновационные технологии и ПО",
+        "metaDescription": "Информация об Apple: экосистема macOS, iOS и профессиональное ПО."
+      },
+      {
+        "languageOfAggregatorId": 2,
+        "name": "Apple",
+        "description": "Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software, and online services.",
+        "metaTitle": "Apple - Innovative Technology and Software",
+        "metaDescription": "Apple information: macOS ecosystem, iOS, and professional software."
+      }
+    ]
+  }
+]

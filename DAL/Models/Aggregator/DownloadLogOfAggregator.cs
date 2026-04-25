@@ -1,11 +1,15 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using DAL.Models.Aggregator.Base;
 
 namespace DAL.Models.Aggregator
 {
     [Table("download_logs_of_aggregator")]
+    [Index(nameof(VersionOfAggregatorId))]
+    [Index(nameof(DownloadLinkOfAggregatorId))]
+    [Index(nameof(CreatedAt))]
     public class DownloadLogOfAggregator : BaseEntityOfAggregator
     {
         public int? VersionOfAggregatorId { get; set; }

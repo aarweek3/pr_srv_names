@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using DAL.Models.Aggregator.Base;
 using DAL.Models.Aggregator.Enums;
 using DAL.Models.Aggregator.Localizations;
@@ -9,11 +10,12 @@ using DAL.Models.Aggregator.Localizations;
 namespace DAL.Models.Aggregator
 {
     [Table("versions_of_aggregator")]
+    [Index(nameof(ProgramOfAggregatorId), nameof(VersionNumber), IsUnique = true)]
     public class VersionOfAggregator : FullAuditableEntityOfAggregator
     {
         public int ProgramOfAggregatorId { get; set; }
         [ForeignKey(nameof(ProgramOfAggregatorId))]
-        public virtual ProgramOfAggregator? ProgramOfAggregator { get; set; }
+        public virtual ProgramOfAggregator ProgramOfAggregator { get; set; } = null!;
 
         [Required, MaxLength(50)]
         public string VersionNumber { get; set; } = string.Empty;

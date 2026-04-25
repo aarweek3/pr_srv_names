@@ -11,7 +11,7 @@ namespace DAL.Models.Aggregator
     {
         public int ProgramOfAggregatorId { get; set; }
         [ForeignKey(nameof(ProgramOfAggregatorId))]
-        public virtual ProgramOfAggregator? ProgramOfAggregator { get; set; }
+        public virtual ProgramOfAggregator ProgramOfAggregator { get; set; } = null!;
 
         [Required, MaxLength(2048)]
         public string FilePath { get; set; } = string.Empty;

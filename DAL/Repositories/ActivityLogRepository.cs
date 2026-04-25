@@ -1,4 +1,4 @@
-﻿// DAL/Repositories/ActivityLogRepository.cs
+// DAL/Repositories/ActivityLogRepository.cs
 
 using DAL.Enums;
 using DAL.Models.AuthorizationModels;
@@ -12,7 +12,7 @@ namespace DAL.Repositories
     /// </summary>
     public class ActivityLogRepository : Repository<ActivityLog>, IActivityLogRepository
     {
-        public ActivityLogRepository(DbContext context) : base(context)
+        public ActivityLogRepository(AppDbContext context) : base(context)
         {
         }
 

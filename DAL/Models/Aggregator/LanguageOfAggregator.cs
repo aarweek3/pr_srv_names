@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using DAL.Models.Aggregator.Base;
 
 namespace DAL.Models.Aggregator
@@ -9,6 +10,8 @@ namespace DAL.Models.Aggregator
     /// Содержит информацию о локализации, кодах языка и региональных настройках.
     /// </summary>
     [Table("languages_of_aggregator")]
+    [Index(nameof(Code), IsUnique = true)]
+    [Index(nameof(ShortCode), IsUnique = true)]
     public class LanguageOfAggregator : AuditableEntityOfAggregator
     {
         /// <summary>

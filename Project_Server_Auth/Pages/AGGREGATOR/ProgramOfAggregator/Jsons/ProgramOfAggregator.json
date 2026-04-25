@@ -1,0 +1,253 @@
+[
+  {
+    "CanonicalName": "Google Chrome",
+    "Slug": "google-chrome",
+    "CategoryOfAggregatorId": 202,
+    "DeveloperOfAggregatorId": 2,
+    "IconPath": "argregator_icons/programs/chrome.png",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Google Chrome",
+        "ShortDescription": "Быстрый и безопасный браузер от Google.",
+        "FullDescription": "Google Chrome — это быстрый, удобный и безопасный веб-браузер, созданный для современного интернета."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Google Chrome",
+        "ShortDescription": "Fast and secure browser by Google.",
+        "FullDescription": "Google Chrome is a fast, easy-to-use, and secure web browser that was built for the modern web."
+      }
+    ],
+    "PlatformIds": [1, 2, 3],
+    "TagIds": [1, 5]
+  },
+  {
+    "CanonicalName": "Microsoft Edge",
+    "Slug": "microsoft-edge",
+    "CategoryOfAggregatorId": 202,
+    "DeveloperOfAggregatorId": 1,
+    "IconPath": "argregator_icons/programs/edge.png",
+    "SortOrder": 2,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Microsoft Edge",
+        "ShortDescription": "Современный браузер от Microsoft на базе Chromium.",
+        "FullDescription": "Microsoft Edge предлагает встроенные функции для повышения производительности, конфиденциальности и безопасности."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Microsoft Edge",
+        "ShortDescription": "Modern browser from Microsoft based on Chromium.",
+        "FullDescription": "Microsoft Edge offers built-in features to improve your productivity, privacy, and security."
+      }
+    ],
+    "PlatformIds": [1, 2, 3]
+  },
+  {
+    "CanonicalName": "Adobe Photoshop",
+    "Slug": "adobe-photoshop",
+    "CategoryOfAggregatorId": 17,
+    "DeveloperOfAggregatorId": 3,
+    "IconPath": "argregator_icons/programs/photoshop.png",
+    "SortOrder": 10,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Adobe Photoshop",
+        "ShortDescription": "Лучшее в мире приложение для дизайна и обработки изображений.",
+        "FullDescription": "Photoshop — это мощный инструмент для работы с растровой графикой, используемый профессионалами по всему миру."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Adobe Photoshop",
+        "ShortDescription": "The world's best imaging and design app.",
+        "FullDescription": "Photoshop is a powerful raster graphics editor used by professionals worldwide."
+      }
+    ],
+    "PlatformIds": [1, 3]
+  },
+  {
+    "CanonicalName": "Visual Studio Code",
+    "Slug": "vscode",
+    "CategoryOfAggregatorId": 202,
+    "DeveloperOfAggregatorId": 1,
+    "IconPath": "argregator_icons/programs/vscode.png",
+    "SortOrder": 20,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Visual Studio Code",
+        "ShortDescription": "Легкий и мощный редактор кода.",
+        "FullDescription": "VS Code — это бесплатный редактор с открытым исходным кодом, поддерживающий сотни языков программирования."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Visual Studio Code",
+        "ShortDescription": "Lightweight and powerful code editor.",
+        "FullDescription": "VS Code is a free, open-source editor with support for hundreds of programming languages."
+      }
+    ],
+    "PlatformIds": [1, 2, 3]
+  },
+  {
+    "CanonicalName": "Telegram Desktop",
+    "Slug": "telegram",
+    "CategoryOfAggregatorId": 206,
+    "DeveloperOfAggregatorId": 2,
+    "IconPath": "argregator_icons/programs/telegram.png",
+    "SortOrder": 30,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Telegram",
+        "ShortDescription": "Быстрый и безопасный мессенджер.",
+        "FullDescription": "Telegram — это приложение для обмена сообщениями, ориентированное на скорость и безопасность."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Telegram",
+        "ShortDescription": "Fast and secure messaging app.",
+        "FullDescription": "Telegram is a messaging app with a focus on speed and security."
+      }
+    ],
+    "PlatformIds": [1, 2, 3]
+  },
+  {
+    "CanonicalName": "Discord",
+    "Slug": "discord",
+    "CategoryOfAggregatorId": 206,
+    "DeveloperOfAggregatorId": 2,
+    "IconPath": "argregator_icons/programs/discord.png",
+    "SortOrder": 40,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Discord",
+        "ShortDescription": "Голосовой и текстовый чат для геймеров.",
+        "FullDescription": "Discord — это самый простой способ общаться голосом, видео и текстом."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Discord",
+        "ShortDescription": "Voice and text chat for gamers.",
+        "FullDescription": "Discord is the easiest way to talk over voice, video, and text."
+      }
+    ],
+    "PlatformIds": [1, 2, 3]
+  },
+  {
+    "CanonicalName": "Spotify",
+    "Slug": "spotify",
+    "CategoryOfAggregatorId": 3,
+    "DeveloperOfAggregatorId": 2,
+    "IconPath": "argregator_icons/programs/spotify.png",
+    "SortOrder": 50,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Spotify",
+        "ShortDescription": "Цифровой музыкальный сервис.",
+        "FullDescription": "Spotify предоставляет доступ к миллионам песен и другому контенту от авторов со всего мира."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Spotify",
+        "ShortDescription": "Digital music service.",
+        "FullDescription": "Spotify gives you access to millions of songs and other content from creators all over the world."
+      }
+    ],
+    "PlatformIds": [1, 2, 3]
+  },
+  {
+    "CanonicalName": "VLC Media Player",
+    "Slug": "vlc",
+    "CategoryOfAggregatorId": 10,
+    "DeveloperOfAggregatorId": 1,
+    "IconPath": "argregator_icons/programs/vlc.png",
+    "SortOrder": 60,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "VLC Media Player",
+        "ShortDescription": "Универсальный медиаплеер.",
+        "FullDescription": "VLC — это бесплатный кроссплатформенный мультимедийный проигрыватель с открытым исходным кодом."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "VLC Media Player",
+        "ShortDescription": "Universal media player.",
+        "FullDescription": "VLC is a free and open source cross-platform multimedia player."
+      }
+    ],
+    "PlatformIds": [1, 2, 3]
+  },
+  {
+    "CanonicalName": "WinRAR",
+    "Slug": "winrar",
+    "CategoryOfAggregatorId": 209,
+    "DeveloperOfAggregatorId": 1,
+    "IconPath": "argregator_icons/programs/winrar.png",
+    "SortOrder": 70,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "WinRAR",
+        "ShortDescription": "Мощный архиватор и менеджер архивов.",
+        "FullDescription": "WinRAR — это один из самых популярных архиваторов, поддерживающий форматы RAR, ZIP и многие другие."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "WinRAR",
+        "ShortDescription": "Powerful archiver and archive manager.",
+        "FullDescription": "WinRAR is one of the most popular archivers, supporting RAR, ZIP and many other formats."
+      }
+    ],
+    "PlatformIds": [1]
+  },
+  {
+    "CanonicalName": "Stable Diffusion WebUI",
+    "Slug": "stable-diffusion-webui",
+    "CategoryOfAggregatorId": 102,
+    "DeveloperOfAggregatorId": 2,
+    "IconPath": "argregator_icons/programs/sd.png",
+    "SortOrder": 100,
+    "IsActive": true,
+    "Status": 2,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Stable Diffusion WebUI",
+        "ShortDescription": "Интерфейс для генерации изображений нейросетью.",
+        "FullDescription": "Автономный браузерный интерфейс для Stable Diffusion, позволяющий генерировать изображения локально."
+      },
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Stable Diffusion WebUI",
+        "ShortDescription": "Interface for AI image generation.",
+        "FullDescription": "A browser interface based on Gradio library for Stable Diffusion."
+      }
+    ],
+    "PlatformIds": [1, 2]
+  }
+]

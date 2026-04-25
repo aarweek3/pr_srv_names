@@ -99,11 +99,26 @@ namespace DAL.Migrations
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("HierarchyPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("IconPath")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("ParentId")
                         .HasColumnType("integer");
@@ -123,6 +138,8 @@ namespace DAL.Migrations
 
                     b.HasIndex("CreatedAt");
 
+                    b.HasIndex("HierarchyPath");
+
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("ParentId");
@@ -135,7 +152,7 @@ namespace DAL.Migrations
                     b.ToTable("categories_of_aggregator");
                 });
 
-            modelBuilder.Entity("DAL.Models.Aggregator.DeveloperOfAggregator", b =>
+            modelBuilder.Entity("DAL.Models.Aggregator.CategoryTagOfAggregator", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,10 +160,60 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CanonicalName")
-                        .IsRequired()
+                    b.Property<string>("Color")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IconPath")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("category_tags_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.DeveloperOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -159,13 +226,24 @@ namespace DAL.Migrations
                     b.Property<string>("IconPath")
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Slug")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SystemCode")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -179,12 +257,12 @@ namespace DAL.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("Slug")
+                    b.HasIndex("SystemCode")
                         .IsUnique();
 
                     b.HasIndex("UpdatedAt");
 
-                    b.ToTable("developer_of_aggregators");
+                    b.ToTable("developers_of_aggregator");
                 });
 
             modelBuilder.Entity("DAL.Models.Aggregator.DownloadLinkOfAggregator", b =>
@@ -337,11 +415,17 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code")
+                        .IsUnique();
+
                     b.HasIndex("CreatedAt");
 
                     b.HasIndex("IsDefault")
                         .IsUnique()
                         .HasFilter("\"IsDefault\" = true");
+
+                    b.HasIndex("ShortCode")
+                        .IsUnique();
 
                     b.HasIndex("UpdatedAt");
 
@@ -408,7 +492,7 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryOfAggregatorId")
+                    b.Property<int>("CategoryOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -423,10 +507,12 @@ namespace DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("MetaDescription")
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("MetaTitle")
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -450,6 +536,51 @@ namespace DAL.Migrations
                     b.ToTable("category_of_aggregator_localizations");
                 });
 
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.CategoryTagOfAggregatorLocalization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryTagOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("LanguageOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("CategoryTagOfAggregatorId", "LanguageOfAggregatorId")
+                        .IsUnique();
+
+                    b.ToTable("category_tag_of_aggregator_localizations");
+                });
+
             modelBuilder.Entity("DAL.Models.Aggregator.Localizations.DeveloperOfAggregatorLocalization", b =>
                 {
                     b.Property<int>("Id")
@@ -466,7 +597,7 @@ namespace DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int?>("DeveloperOfAggregatorId")
+                    b.Property<int>("DeveloperOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<int>("LanguageOfAggregatorId")
@@ -480,8 +611,8 @@ namespace DAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -513,7 +644,7 @@ namespace DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<int?>("DownloadLinkOfAggregatorId")
+                    b.Property<int>("DownloadLinkOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<int>("LanguageOfAggregatorId")
@@ -557,25 +688,37 @@ namespace DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<string>("HtmlContent")
+                        .HasColumnType("text");
+
                     b.Property<int>("LanguageOfAggregatorId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("LicenseTypeOfAggregatorId")
+                    b.Property<int>("LicenseTypeOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int?>("SeoDataId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UrlPicture")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
 
                     b.HasIndex("LanguageOfAggregatorId");
+
+                    b.HasIndex("SeoDataId");
 
                     b.HasIndex("UpdatedAt");
 
@@ -612,7 +755,7 @@ namespace DAL.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<int?>("PlatformOfAggregatorId")
+                    b.Property<int>("PlatformOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("SeoDataId")
@@ -676,7 +819,7 @@ namespace DAL.Migrations
                     b.Property<string>("MetaTitle")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ProgramOfAggregatorId")
+                    b.Property<int>("ProgramOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Pros")
@@ -724,7 +867,7 @@ namespace DAL.Migrations
                     b.Property<int>("LanguageOfAggregatorId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ScreenshotOfAggregatorId")
+                    b.Property<int>("ScreenshotOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -758,18 +901,30 @@ namespace DAL.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("H1Title")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("LanguageOfAggregatorId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("MetaDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("MetaTitle")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int?>("TagOfAggregatorId")
+                    b.Property<int>("TagOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -811,7 +966,7 @@ namespace DAL.Migrations
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("VersionOfAggregatorId")
+                    b.Property<int>("VersionOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("WhatsNew")
@@ -858,7 +1013,7 @@ namespace DAL.Migrations
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("VideoOfAggregatorId")
+                    b.Property<int>("VideoOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -956,6 +1111,10 @@ namespace DAL.Migrations
                     b.Property<long?>("DownloadCountExact")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("ExternalIdentifier")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -1040,6 +1199,12 @@ namespace DAL.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("NeedsReview")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("RatingCount")
                         .HasColumnType("integer");
 
@@ -1047,6 +1212,12 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("SubCategoryOfAggregatorId")
                         .HasColumnType("integer");
@@ -1094,10 +1265,10 @@ namespace DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int?>("PlatformOfAggregatorId")
+                    b.Property<int>("PlatformOfAggregatorId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ProgramOfAggregatorId")
+                    b.Property<int>("ProgramOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -1117,6 +1288,97 @@ namespace DAL.Migrations
                     b.ToTable("program_platforms_of_aggregator");
                 });
 
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramSlugRedirectOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("NewSlug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("OldSlug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("OldSlug")
+                        .IsUnique();
+
+                    b.HasIndex("ProgramOfAggregatorId");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.ToTable("program_slug_redirects_of_aggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramSnapshotOfAggregator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AggregatorSourceId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<long?>("DownloadCount")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Price")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("ProgramOfAggregatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<double?>("RatingValue")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("SnapshotDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AggregatorSourceId");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("ProgramOfAggregatorId", "SnapshotDate");
+
+                    b.ToTable("program_snapshots_of_aggregator");
+                });
+
             modelBuilder.Entity("DAL.Models.Aggregator.ProgramTagOfAggregator", b =>
                 {
                     b.Property<int>("Id")
@@ -1133,13 +1395,13 @@ namespace DAL.Migrations
                     b.Property<bool>("IsMain")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("ProgramOfAggregatorId")
+                    b.Property<int>("ProgramOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TagOfAggregatorId")
+                    b.Property<int>("TagOfAggregatorId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -1213,6 +1475,14 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryTagId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -1221,10 +1491,17 @@ namespace DAL.Migrations
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("IconPath")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsFeature")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Slug")
@@ -1233,6 +1510,9 @@ namespace DAL.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -1248,6 +1528,8 @@ namespace DAL.Migrations
                         .IsUnique();
 
                     b.HasIndex("UpdatedAt");
+
+                    b.HasIndex("CategoryTagId", "IsActive", "IsDeleted");
 
                     b.ToTable("tags_of_aggregator");
                 });
@@ -5614,7 +5896,9 @@ namespace DAL.Migrations
                 {
                     b.HasOne("DAL.Models.Aggregator.CategoryOfAggregator", "CategoryOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("CategoryOfAggregatorId");
+                        .HasForeignKey("CategoryOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
                         .WithMany()
@@ -5627,11 +5911,32 @@ namespace DAL.Migrations
                     b.Navigation("LanguageOfAggregator");
                 });
 
+            modelBuilder.Entity("DAL.Models.Aggregator.Localizations.CategoryTagOfAggregatorLocalization", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.CategoryTagOfAggregator", "CategoryTag")
+                        .WithMany("Localizations")
+                        .HasForeignKey("CategoryTagOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
+                        .WithMany()
+                        .HasForeignKey("LanguageOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoryTag");
+
+                    b.Navigation("LanguageOfAggregator");
+                });
+
             modelBuilder.Entity("DAL.Models.Aggregator.Localizations.DeveloperOfAggregatorLocalization", b =>
                 {
                     b.HasOne("DAL.Models.Aggregator.DeveloperOfAggregator", "DeveloperOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("DeveloperOfAggregatorId");
+                        .HasForeignKey("DeveloperOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
                         .WithMany()
@@ -5648,7 +5953,9 @@ namespace DAL.Migrations
                 {
                     b.HasOne("DAL.Models.Aggregator.DownloadLinkOfAggregator", "DownloadLinkOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("DownloadLinkOfAggregatorId");
+                        .HasForeignKey("DownloadLinkOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DAL.Models.Aggregator.LanguageOfAggregator", "LanguageOfAggregator")
                         .WithMany()
@@ -5671,11 +5978,19 @@ namespace DAL.Migrations
 
                     b.HasOne("DAL.Models.Aggregator.LicenseTypeOfAggregator", "LicenseTypeOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("LicenseTypeOfAggregatorId");
+                        .HasForeignKey("LicenseTypeOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.GeneralModels.SeoData", "SeoData")
+                        .WithMany()
+                        .HasForeignKey("SeoDataId");
 
                     b.Navigation("LanguageOfAggregator");
 
                     b.Navigation("LicenseTypeOfAggregator");
+
+                    b.Navigation("SeoData");
                 });
 
             modelBuilder.Entity("DAL.Models.Aggregator.Localizations.PlatformOfAggregatorLocalization", b =>
@@ -5688,7 +6003,9 @@ namespace DAL.Migrations
 
                     b.HasOne("DAL.Models.Aggregator.PlatformOfAggregator", "PlatformOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("PlatformOfAggregatorId");
+                        .HasForeignKey("PlatformOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DAL.Models.GeneralModels.SeoData", "SeoData")
                         .WithMany()
@@ -5715,7 +6032,9 @@ namespace DAL.Migrations
 
                     b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("ProgramOfAggregatorId");
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("LanguageOfAggregator");
 
@@ -5734,7 +6053,9 @@ namespace DAL.Migrations
 
                     b.HasOne("DAL.Models.Aggregator.ScreenshotOfAggregator", "ScreenshotOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("ScreenshotOfAggregatorId");
+                        .HasForeignKey("ScreenshotOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("LanguageOfAggregator");
 
@@ -5751,7 +6072,9 @@ namespace DAL.Migrations
 
                     b.HasOne("DAL.Models.Aggregator.TagOfAggregator", "TagOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("TagOfAggregatorId");
+                        .HasForeignKey("TagOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("LanguageOfAggregator");
 
@@ -5768,7 +6091,9 @@ namespace DAL.Migrations
 
                     b.HasOne("DAL.Models.Aggregator.VersionOfAggregator", "VersionOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("VersionOfAggregatorId");
+                        .HasForeignKey("VersionOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("LanguageOfAggregator");
 
@@ -5785,7 +6110,9 @@ namespace DAL.Migrations
 
                     b.HasOne("DAL.Models.Aggregator.VideoOfAggregator", "VideoOfAggregator")
                         .WithMany("Localizations")
-                        .HasForeignKey("VideoOfAggregatorId");
+                        .HasForeignKey("VideoOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("LanguageOfAggregator");
 
@@ -5847,14 +6174,46 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Models.Aggregator.PlatformOfAggregator", "PlatformOfAggregator")
                         .WithMany("ProgramPlatforms")
                         .HasForeignKey("PlatformOfAggregatorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
                         .WithMany("ProgramPlatforms")
                         .HasForeignKey("ProgramOfAggregatorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("PlatformOfAggregator");
+
+                    b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramSlugRedirectOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("SlugRedirects")
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.ProgramSnapshotOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.AggregatorSource", "AggregatorSource")
+                        .WithMany()
+                        .HasForeignKey("AggregatorSourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
+                        .WithMany("Snapshots")
+                        .HasForeignKey("ProgramOfAggregatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AggregatorSource");
 
                     b.Navigation("ProgramOfAggregator");
                 });
@@ -5864,12 +6223,14 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Models.Aggregator.ProgramOfAggregator", "ProgramOfAggregator")
                         .WithMany("ProgramTags")
                         .HasForeignKey("ProgramOfAggregatorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DAL.Models.Aggregator.TagOfAggregator", "TagOfAggregator")
                         .WithMany("ProgramTags")
                         .HasForeignKey("TagOfAggregatorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ProgramOfAggregator");
 
@@ -5885,6 +6246,17 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("ProgramOfAggregator");
+                });
+
+            modelBuilder.Entity("DAL.Models.Aggregator.TagOfAggregator", b =>
+                {
+                    b.HasOne("DAL.Models.Aggregator.CategoryTagOfAggregator", "Category")
+                        .WithMany("Tags")
+                        .HasForeignKey("CategoryTagId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("DAL.Models.Aggregator.VersionOfAggregator", b =>
@@ -6930,6 +7302,13 @@ namespace DAL.Migrations
                     b.Navigation("Localizations");
                 });
 
+            modelBuilder.Entity("DAL.Models.Aggregator.CategoryTagOfAggregator", b =>
+                {
+                    b.Navigation("Localizations");
+
+                    b.Navigation("Tags");
+                });
+
             modelBuilder.Entity("DAL.Models.Aggregator.DeveloperOfAggregator", b =>
                 {
                     b.Navigation("Localizations");
@@ -6965,6 +7344,10 @@ namespace DAL.Migrations
                     b.Navigation("ProgramTags");
 
                     b.Navigation("Screenshots");
+
+                    b.Navigation("SlugRedirects");
+
+                    b.Navigation("Snapshots");
 
                     b.Navigation("Versions");
 

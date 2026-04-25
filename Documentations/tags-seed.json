@@ -1,0 +1,256 @@
+{
+    "Categories": [
+        {
+            "Slug": "operating-systems",
+            "IconName": "nz-icon:desktop",
+            "Color": "var(--av-tag-blue)",
+            "SortOrder": 1,
+            "IsActive": true,
+            "Translations": {
+                "ru-RU": {
+                    "Name": "Операционные системы",
+                    "Description": "Поддерживаемые платформы."
+                },
+                "en-US": {
+                    "Name": "Operating Systems",
+                    "Description": "Supported platforms."
+                }
+            },
+            "Tags": [
+                {
+                    "Slug": "windows",
+                    "Type": "OS",
+                    "Color": "#0078d7",
+                    "IconName": "nz-icon:windows",
+                    "SortOrder": 1,
+                    "IsFeature": true,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "Windows",
+                            "MetaTitle": "Программы для Windows — Скачать бесплатно",
+                            "H1Title": "ПО для Windows"
+                        },
+                        "en-US": {
+                            "Name": "Windows",
+                            "MetaTitle": "Windows Software — Free Download",
+                            "H1Title": "Software for Windows"
+                        }
+                    }
+                },
+                {
+                    "Slug": "macos",
+                    "Type": "OS",
+                    "Color": "#000000",
+                    "IconName": "nz-icon:apple",
+                    "SortOrder": 2,
+                    "IsFeature": true,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "macOS",
+                            "MetaTitle": "Софт для Mac (macOS) — Полный каталог",
+                            "H1Title": "Приложения для macOS"
+                        },
+                        "en-US": {
+                            "Name": "macOS",
+                            "MetaTitle": "Mac Applications — Official Catalog",
+                            "H1Title": "macOS Applications"
+                        }
+                    }
+                },
+                {
+                    "Slug": "linux",
+                    "Type": "OS",
+                    "Color": "#fcc624",
+                    "IconName": "nz-icon:linux",
+                    "SortOrder": 3,
+                    "IsFeature": false,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "Linux",
+                            "H1Title": "Программное обеспечение для Linux"
+                        },
+                        "en-US": {
+                            "Name": "Linux",
+                            "H1Title": "Open Source Software for Linux"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "Slug": "security-safety",
+            "IconName": "nz-icon:shield",
+            "Color": "var(--av-tag-cyan)",
+            "SortOrder": 2,
+            "IsActive": true,
+            "Translations": {
+                "ru-RU": {
+                    "Name": "Безопасность",
+                    "Description": "Проверки и гарантии надежности."
+                },
+                "en-US": {
+                    "Name": "Security & Trust",
+                    "Description": "Safety and verification labels."
+                }
+            },
+            "Tags": [
+                {
+                    "Slug": "verified",
+                    "Type": "Special",
+                    "Color": "#52c41a",
+                    "IconName": "nz-icon:check-circle",
+                    "SortOrder": 1,
+                    "IsFeature": true,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "Проверено",
+                            "H1Title": "Безопасный софт (Проверено модераторами)",
+                            "MetaDescription": "Только проверенные файлы без вирусов."
+                        },
+                        "en-US": {
+                            "Name": "Verified",
+                            "H1Title": "Verified & Secure Software",
+                            "MetaDescription": "Manually verified by our editors."
+                        }
+                    }
+                },
+                {
+                    "Slug": "ad-free",
+                    "Type": "Special",
+                    "Color": null,
+                    "IconName": "nz-icon:stop",
+                    "SortOrder": 2,
+                    "IsFeature": false,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "Без рекламы",
+                            "H1Title": "Программы без встроенной рекламы"
+                        },
+                        "en-US": {
+                            "Name": "Ad-Free",
+                            "H1Title": "Ad-Free Software Experience"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "Slug": "license-types",
+            "IconName": "nz-icon:safety-certificate",
+            "Color": "var(--av-tag-green)",
+            "SortOrder": 3,
+            "IsActive": true,
+            "Translations": {
+                "ru-RU": {
+                    "Name": "Тип лицензии",
+                    "Description": "Условия использования."
+                },
+                "en-US": {
+                    "Name": "License Type",
+                    "Description": "Usage terms."
+                }
+            },
+            "Tags": [
+                {
+                    "Slug": "freeware",
+                    "Type": "License",
+                    "Color": null,
+                    "IconName": "nz-icon:gift",
+                    "SortOrder": 1,
+                    "IsFeature": true,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "Бесплатно"
+                        },
+                        "en-US": {
+                            "Name": "Freeware"
+                        }
+                    }
+                },
+                {
+                    "Slug": "open-source",
+                    "Type": "License",
+                    "Color": null,
+                    "IconName": "nz-icon:github",
+                    "SortOrder": 2,
+                    "IsFeature": false,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "Open Source"
+                        },
+                        "en-US": {
+                            "Name": "Open Source"
+                        }
+                    }
+                },
+                {
+                    "Slug": "subscription",
+                    "Type": "License",
+                    "Color": "#13c2c2",
+                    "IconName": "nz-icon:interaction",
+                    "SortOrder": 3,
+                    "IsFeature": false,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "Подписка"
+                        },
+                        "en-US": {
+                            "Name": "Subscription"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "Slug": "system-architecture",
+            "IconName": "nz-icon:cluster",
+            "Color": "var(--av-tag-orange)",
+            "SortOrder": 4,
+            "IsActive": true,
+            "Translations": {
+                "ru-RU": {
+                    "Name": "Архитектура",
+                    "Description": "Технические требования к процессору."
+                },
+                "en-US": {
+                    "Name": "Architecture",
+                    "Description": "Processor architecture compatibility."
+                }
+            },
+            "Tags": [
+                {
+                    "Slug": "x64",
+                    "Type": "Technical",
+                    "Color": null,
+                    "IconName": "nz-icon:database",
+                    "SortOrder": 1,
+                    "IsFeature": false,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "64-bit"
+                        },
+                        "en-US": {
+                            "Name": "64-bit"
+                        }
+                    }
+                },
+                {
+                    "Slug": "arm64",
+                    "Type": "Technical",
+                    "Color": null,
+                    "IconName": "nz-icon:apartment",
+                    "SortOrder": 2,
+                    "IsFeature": false,
+                    "Translations": {
+                        "ru-RU": {
+                            "Name": "ARM64"
+                        },
+                        "en-US": {
+                            "Name": "ARM64"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

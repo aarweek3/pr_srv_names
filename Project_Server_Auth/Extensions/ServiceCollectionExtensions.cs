@@ -29,8 +29,29 @@ using DAL.Repositories.Interfaces;
 using DAL.Repositories;
 using pr_srv_names.Pages.Aggregator.LanguageOfAggregator.Interfaces;
 using pr_srv_names.Pages.Aggregator.LanguageOfAggregator.Services;
-using pr_srv_names.Pages.AGGREGATOR.PlatformOfAggregator.Interfaces;
 using pr_srv_names.Pages.AGGREGATOR.PlatformOfAggregator.Services;
+using pr_srv_names.Pages.AGGREGATOR.LicenseTypeOfAggregator.Interfaces;
+using pr_srv_names.Pages.AGGREGATOR.LicenseTypeOfAggregator.Services;
+using pr_srv_names.Pages.AGGREGATOR.PlatformOfAggregator.Interfaces;
+using pr_srv_names.Pages.AGGREGATOR.DeveloperOfAggregator.Interfaces;
+using pr_srv_names.Pages.AGGREGATOR.DeveloperOfAggregator.Services;
+using pr_srv_names.Pages.AGGREGATOR.CategoryTagOfAggregator.Interfaces;
+using pr_srv_names.Pages.AGGREGATOR.CategoryTagOfAggregator.Services;
+using pr_srv_names.Pages.AGGREGATOR.TagOfAggregator.Interfaces;
+using pr_srv_names.Pages.AGGREGATOR.TagOfAggregator.Services;
+using FluentValidation;
+using pr_srv_names.Pages.AGGREGATOR.TagOfAggregator.Validators;
+using pr_srv_names.Pages.AGGREGATOR.TagOfAggregator.Dtos;
+using pr_srv_names.Pages.AGGREGATOR.CategoryTagOfAggregator.Dtos;
+using pr_srv_names.Pages.AGGREGATOR.CategoryOfAggregator.Interfaces;
+using pr_srv_names.Pages.AGGREGATOR.CategoryOfAggregator.Services;
+using pr_srv_names.Pages.AGGREGATOR.CategoryOfAggregator.Dtos;
+using pr_srv_names.Pages.AGGREGATOR.CategoryOfAggregator.Validators;
+using pr_srv_names.Pages.AGGREGATOR.ProgramOfAggregator.Interfaces;
+using pr_srv_names.Pages.AGGREGATOR.ProgramOfAggregator.Services;
+using pr_srv_names.Pages.AGGREGATOR.ProgramOfAggregator.Validators;
+using pr_srv_names.Pages.AGGREGATOR.ProgramOfAggregator.Dtos;
+
 
 namespace pr_srv_names.Extensions
 {
@@ -73,6 +94,51 @@ namespace pr_srv_names.Extensions
             // Aggregator Platforms
             services.AddScoped<IPlatformOfAggregatorService, PlatformOfAggregatorService>();
             services.AddScoped<IPlatformOfAggregatorRepository, PlatformOfAggregatorRepository>();
+
+            // Aggregator License Types
+            services.AddScoped<ILicenseTypeOfAggregatorService, LicenseTypeOfAggregatorService>();
+            services.AddScoped<ILicenseTypeOfAggregatorRepository, LicenseTypeOfAggregatorRepository>();
+
+            // Aggregator Developers
+            services.AddScoped<IDeveloperOfAggregatorService, DeveloperOfAggregatorService>();
+            services.AddScoped<IDeveloperOfAggregatorRepository, DeveloperOfAggregatorRepository>();
+
+            // Aggregator Tags
+            services.AddScoped<ICategoryTagOfAggregatorService, CategoryTagOfAggregatorService>();
+            services.AddScoped<ICategoryTagOfAggregatorRepository, CategoryTagOfAggregatorRepository>();
+            services.AddScoped<ITagOfAggregatorService, TagOfAggregatorService>();
+            services.AddScoped<ITagOfAggregatorRepository, TagOfAggregatorRepository>();
+
+            // Aggregator Categories
+            services.AddScoped<ICategoryOfAggregatorService, CategoryOfAggregatorService>();
+            services.AddScoped<ICategoryOfAggregatorRepository, CategoryOfAggregatorRepository>();
+            services.AddScoped<IProgramOfAggregatorRepository, ProgramOfAggregatorRepository>();
+            services.AddScoped<IVersionOfAggregatorRepository, VersionOfAggregatorRepository>();
+            services.AddScoped<IDownloadLinkOfAggregatorRepository, DownloadLinkOfAggregatorRepository>();
+            services.AddScoped<IAggregatorSourceRepository, AggregatorSourceRepository>();
+            services.AddScoped<IScreenshotOfAggregatorRepository, ScreenshotOfAggregatorRepository>();
+            services.AddScoped<IVideoOfAggregatorRepository, VideoOfAggregatorRepository>();
+            services.AddScoped<IDownloadLogOfAggregatorRepository, DownloadLogOfAggregatorRepository>();
+
+            services.AddScoped<IProgramOfAggregatorService, ProgramOfAggregatorService>();
+
+
+            // Validators
+            services.AddScoped<IValidator<CategoryTagOfAggregatorCreateDto>, CategoryTagOfAggregatorCreateValidator>();
+            services.AddScoped<IValidator<CategoryTagOfAggregatorUpdateDto>, CategoryTagOfAggregatorUpdateValidator>();
+            services.AddScoped<IValidator<TagOfAggregatorCreateDto>, TagOfAggregatorCreateValidator>();
+            services.AddScoped<IValidator<TagOfAggregatorUpdateDto>, TagOfAggregatorUpdateValidator>();
+
+            services.AddScoped<IValidator<CategoryOfAggregatorCreateDto>, CategoryOfAggregatorCreateValidator>();
+            services.AddScoped<IValidator<CategoryOfAggregatorUpdateDto>, CategoryOfAggregatorUpdateValidator>();
+            services.AddScoped<IValidator<CategoryOfAggregatorPageRequestDto>, CategoryOfAggregatorPageRequestValidator>();
+
+            services.AddScoped<IValidator<ProgramOfAggregatorCreateDto>, ProgramOfAggregatorCreateValidator>();
+            services.AddScoped<IValidator<ProgramOfAggregatorUpdateDto>, ProgramOfAggregatorUpdateValidator>();
+            services.AddScoped<IValidator<ProgramOfAggregatorPageRequestDto>, ProgramOfAggregatorPageRequestValidator>();
+            services.AddScoped<IValidator<VersionOfAggregatorCreateDto>, VersionOfAggregatorCreateValidator>();
+            services.AddScoped<IValidator<VersionOfAggregatorUpdateDto>, VersionOfAggregatorUpdateValidator>();
+
 
             // Anecdote Services
             services.AddScoped<IAnecdoteService, AnecdoteService>();

@@ -1,0 +1,354 @@
+[
+  {
+    "CanonicalName": "Open Source",
+    "Slug": "open-source",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Open Source",
+        "Description": "Software with source code that anyone can inspect, modify, and enhance.",
+        "HtmlContent": "<p>Open Source software is released under licenses like MIT, GPL, or Apache. It promotes collaboration and transparency.</p>",
+        "SeoData": {
+          "MetaTitle": "Open Source Software Catalog",
+          "MetaDescription": "Browse free and community-driven open source applications.",
+          "UrlSlug": "open-source-license",
+          "OgTitle": "Open Source Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Открытое ПО",
+        "Description": "Программное обеспечение с открытым исходным кодом.",
+        "HtmlContent": "<p>ПО с открытым исходным кодом (MIT, GPL, Apache). Позволяет любому пользователю изучать, изменять и распространять код.</p>",
+        "SeoData": {
+          "MetaTitle": "Каталог ПО с открытым исходным кодом",
+          "MetaDescription": "Просмотрите бесплатные приложения с открытым кодом и активным сообществом.",
+          "UrlSlug": "otkrytoe-po",
+          "OgTitle": "Open Source программы"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Freeware",
+    "Slug": "freeware",
+    "SortOrder": 2,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Freeware",
+        "Description": "Proprietary software available at no cost for unlimited time.",
+        "HtmlContent": "<p>Freeware is free to use but the source code is usually closed. It differs from Open Source as you cannot modify it.</p>",
+        "SeoData": {
+          "MetaTitle": "Best Freeware Applications",
+          "MetaDescription": "Download high-quality free software without any expiration date.",
+          "UrlSlug": "freeware-license",
+          "OgTitle": "Freeware Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Бесплатное ПО",
+        "Description": "Проприетарное ПО, доступное бесплатно без ограничения по времени.",
+        "HtmlContent": "<p>Бесплатное ПО (Freeware) не требует оплаты, но его исходный код закрыт. Отличается от Open Source запретом на модификацию.</p>",
+        "SeoData": {
+          "MetaTitle": "Лучшие бесплатные программы (Freeware)",
+          "MetaDescription": "Скачивайте качественное бесплатное ПО без ограничений по времени.",
+          "UrlSlug": "besplatnoe-po",
+          "OgTitle": "Freeware программы"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Shareware",
+    "Slug": "shareware",
+    "SortOrder": 3,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Shareware",
+        "Description": "Software distributed for free on a trial basis, intended for eventual purchase.",
+        "HtmlContent": "<p>Shareware allows users to try the software before buying. After the trial, users are expected to pay for continued use.</p>",
+        "SeoData": {
+          "MetaTitle": "Shareware and Trial Software",
+          "MetaDescription": "Try professional software for free before making a purchase decision.",
+          "UrlSlug": "shareware-license",
+          "OgTitle": "Shareware Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Условно-бесплатное",
+        "Description": "Программы, распространяемые бесплатно для ознакомления перед покупкой.",
+        "HtmlContent": "<p>Shareware позволяет протестировать программу. По истечении срока предполагается покупка лицензии для дальнейшего использования.</p>",
+        "SeoData": {
+          "MetaTitle": "Условно-бесплатные программы (Shareware)",
+          "MetaDescription": "Попробуйте профессиональное ПО бесплатно перед принятием решения о покупке.",
+          "UrlSlug": "uslovno-besplatnoe-po",
+          "OgTitle": "Shareware программы"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Trial",
+    "Slug": "trial",
+    "SortOrder": 4,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Trial",
+        "Description": "Fully functional software limited by time (usually 14-30 days).",
+        "HtmlContent": "<p>Trial versions allow you to test all features. Once the period ends, the software may stop working or limit functions.</p>",
+        "SeoData": {
+          "MetaTitle": "Free Trial Software Versions",
+          "MetaDescription": "Download full software versions for a limited evaluation period.",
+          "UrlSlug": "trial-license",
+          "OgTitle": "Trial Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Пробная версия",
+        "Description": "Полнофункциональное ПО, ограниченное по времени (обычно 14-30 дней).",
+        "HtmlContent": "<p>Пробные версии (Trial) дают полный доступ к функциям на время теста. После завершения работа программы блокируется.</p>",
+        "SeoData": {
+          "MetaTitle": "Пробные версии программ (Trial)",
+          "MetaDescription": "Скачивайте полные версии программ для ознакомительного периода.",
+          "UrlSlug": "probnye-versii",
+          "OgTitle": "Trial ПО"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Demo",
+    "Slug": "demo",
+    "SortOrder": 5,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Demo",
+        "Description": "Limited version of a program intended to showcase its capabilities.",
+        "HtmlContent": "<p>Demo versions usually have key features disabled (e.g., saving or exporting) to prevent full use without purchase.</p>",
+        "SeoData": {
+          "MetaTitle": "Software Demo Catalog",
+          "MetaDescription": "Explore software capabilities with limited demo versions.",
+          "UrlSlug": "demo-license",
+          "OgTitle": "Demo Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Демо-версия",
+        "Description": "Ограниченная версия программы, предназначенная для демонстрации возможностей.",
+        "HtmlContent": "<p>Демо-версии обычно имеют отключенные ключевые функции (например, сохранение), чтобы показать интерфейс без полноценного использования.</p>",
+        "SeoData": {
+          "MetaTitle": "Каталог демо-версий программ",
+          "MetaDescription": "Изучайте возможности программ с помощью ограниченных демо-версий.",
+          "UrlSlug": "demo-versii",
+          "OgTitle": "Демонстрационное ПО"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Freemium",
+    "Slug": "freemium",
+    "SortOrder": 6,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Freemium",
+        "Description": "Basic features are free, but advanced features require payment.",
+        "HtmlContent": "<p>Freemium models are popular in services and apps where you get core value for free and pay for 'Pro' features.</p>",
+        "SeoData": {
+          "MetaTitle": "Best Freemium Apps and Services",
+          "MetaDescription": "Free to use software with optional premium upgrades.",
+          "UrlSlug": "freemium-license",
+          "OgTitle": "Freemium Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Фримиум",
+        "Description": "Базовые функции бесплатны, расширенные — за плату.",
+        "HtmlContent": "<p>Модель Freemium позволяет использовать основной функционал бесплатно, предлагая платные 'Pro' опции для опытных пользователей.</p>",
+        "SeoData": {
+          "MetaTitle": "Лучшие приложения по модели Freemium",
+          "MetaDescription": "Бесплатное ПО с возможностью перехода на премиум-функции.",
+          "UrlSlug": "freemium-licenzii",
+          "OgTitle": "Фримиум программы"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Subscription",
+    "Slug": "subscription",
+    "SortOrder": 7,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Subscription",
+        "Description": "SaaS model requiring periodic payments for access and updates.",
+        "HtmlContent": "<p>Subscription models ensure you always have the latest version as long as the recurring fee is paid.</p>",
+        "SeoData": {
+          "MetaTitle": "Leading Subscription Software",
+          "MetaDescription": "Manage software costs with monthly or yearly subscription models.",
+          "UrlSlug": "subscription-license",
+          "OgTitle": "Subscription Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Подписка",
+        "Description": "Модель SaaS, требующая регулярных платежей за доступ и обновления.",
+        "HtmlContent": "<p>Подписка гарантирует наличие актуальной версии ПО при условии своевременной ежемесячной или ежегодной оплаты.</p>",
+        "SeoData": {
+          "MetaTitle": "ПО по подписке и SaaS",
+          "MetaDescription": "Управляйте расходами с помощью гибких моделей подписки.",
+          "UrlSlug": "podpiska",
+          "OgTitle": "Программы по подписке"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Commercial",
+    "Slug": "commercial",
+    "SortOrder": 8,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Commercial",
+        "Description": "Proprietary software that must be purchased for use.",
+        "HtmlContent": "<p>Commercial or Retail software requires a one-time license purchase for a specific version or device.</p>",
+        "SeoData": {
+          "MetaTitle": "Commercial Software Catalog",
+          "MetaDescription": "Professional paid software for business and personal use.",
+          "UrlSlug": "commercial-license",
+          "OgTitle": "Paid Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Коммерческое",
+        "Description": "Проприетарное ПО, которое необходимо купить для использования.",
+        "HtmlContent": "<p>Коммерческое (Retail) ПО требует разовой покупки лицензии для конкретной версии или устройства.</p>",
+        "SeoData": {
+          "MetaTitle": "Каталог коммерческого ПО",
+          "MetaDescription": "Профессиональное платное ПО для бизнеса и личного использования.",
+          "UrlSlug": "kommercheskoe-po",
+          "OgTitle": "Платные программы"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Adware",
+    "Slug": "adware",
+    "SortOrder": 9,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Adware",
+        "Description": "Free software supported by advertising.",
+        "HtmlContent": "<p>Adware is provided for free but displays advertisements to the user during operation to fund development.</p>",
+        "SeoData": {
+          "MetaTitle": "Ad-supported Free Software",
+          "MetaDescription": "Free apps funded by advertising during use.",
+          "UrlSlug": "adware-license",
+          "OgTitle": "Adware Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Рекламное ПО",
+        "Description": "Бесплатное ПО, содержащее рекламу.",
+        "HtmlContent": "<p>Adware предоставляется бесплатно, но показывает рекламу пользователю во время работы для финансирования разработки.</p>",
+        "SeoData": {
+          "MetaTitle": "Бесплатное ПО с рекламой (Adware)",
+          "MetaDescription": "Бесплатные приложения, поддерживаемые за счет рекламы.",
+          "UrlSlug": "adware-po",
+          "OgTitle": "Adware программы"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Donationware",
+    "Slug": "donationware",
+    "SortOrder": 10,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Donationware",
+        "Description": "Free software where users are encouraged to donate to the developer.",
+        "HtmlContent": "<p>Donationware is fully functional for free, but the author requests voluntary contributions to continue development.</p>",
+        "SeoData": {
+          "MetaTitle": "Donation-based Free Software",
+          "MetaDescription": "Support developers by donating to high-quality free projects.",
+          "UrlSlug": "donationware-license",
+          "OgTitle": "Donationware"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Донат",
+        "Description": "Бесплатное ПО, где пользователям предлагается поддержать автора пожертвованием.",
+        "HtmlContent": "<p>Программы Donationware полностью функциональны и бесплатны, но автор просит добровольные взносы на поддержку проекта.</p>",
+        "SeoData": {
+          "MetaTitle": "Программы за пожертвования (Donationware)",
+          "MetaDescription": "Поддержите разработчиков качественного бесплатного ПО.",
+          "UrlSlug": "donationware-po",
+          "OgTitle": "Donationware программы"
+        }
+      }
+    ]
+  },
+  {
+    "CanonicalName": "Nagware",
+    "Slug": "nagware",
+    "SortOrder": 11,
+    "IsActive": true,
+    "Localizations": [
+      {
+        "LanguageOfAggregatorId": 1,
+        "Name": "Nagware",
+        "Description": "Software that frequently reminds the user to purchase or register.",
+        "HtmlContent": "<p>Nagware (or Begware) displays pop-up messages or splash screens to encourage legal purchase while remaining functional.</p>",
+        "SeoData": {
+          "MetaTitle": "Nagware and Reminder-based Apps",
+          "MetaDescription": "Functional software with reminders to purchase a full license.",
+          "UrlSlug": "nagware-license",
+          "OgTitle": "Nagware Software"
+        }
+      },
+      {
+        "LanguageOfAggregatorId": 2,
+        "Name": "Nagware",
+        "Description": "ПО, которое часто напоминает пользователю о необходимости покупки или регистрации.",
+        "HtmlContent": "<p>Nagware (или Begware) показывает всплывающие окна или заставки, призывая купить лицензию, оставаясь при этом рабочим.</p>",
+        "SeoData": {
+          "MetaTitle": "Nagware программы с напоминанием о покупке",
+          "MetaDescription": "Рабочее ПО с периодическими напоминаниями о регистрации лицензии.",
+          "UrlSlug": "nagware-po",
+          "OgTitle": "Nagware ПО"
+        }
+      }
+    ]
+  }
+]

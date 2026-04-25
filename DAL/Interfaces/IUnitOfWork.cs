@@ -18,7 +18,19 @@ namespace DAL.Interfaces
         ILanguageAppRepository LanguagesApp { get; }
         ILanguageOfAggregatorRepository LanguagesOfAggregator { get; }
         IPlatformOfAggregatorRepository PlatformsOfAggregator { get; }
+        ILicenseTypeOfAggregatorRepository LicenseTypesOfAggregator { get; }
+        IDeveloperOfAggregatorRepository DevelopersOfAggregator { get; }
         IPlatformRepository Platforms { get; }
+        ICategoryTagOfAggregatorRepository CategoryTags { get; }
+        ITagOfAggregatorRepository Tags { get; }
+        ICategoryOfAggregatorRepository CategoriesOfAggregator { get; }
+        IProgramOfAggregatorRepository ProgramsOfAggregator { get; }
+        IVersionOfAggregatorRepository VersionsOfAggregator { get; }
+        IDownloadLinkOfAggregatorRepository DownloadLinksOfAggregator { get; }
+        IAggregatorSourceRepository AggregatorSources { get; }
+        IScreenshotOfAggregatorRepository ScreenshotsOfAggregator { get; }
+        IVideoOfAggregatorRepository VideosOfAggregator { get; }
+        IDownloadLogOfAggregatorRepository DownloadLogsOfAggregator { get; }
 
         /// <summary>
         ///     Samples

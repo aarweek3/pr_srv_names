@@ -21,6 +21,7 @@ namespace pr_srv_names.Pages.Icons.Services
         private readonly IConfiguration _config;
         
         private string FrontendProjectPath => _config["FrontendProjectPath"] ?? @"d:\_PROGECT\pr_aurora_admin";
+        private string BackendProjectPath => _config["BackendProjectPath"] ?? @"d:\_PROGECT\pr_srv_names";
 
         public IconLaboratoryService(
             IUnitOfWork uow,
@@ -530,6 +531,10 @@ namespace pr_srv_names.Pages.Icons.Services
             if (path.StartsWith("src") || path.StartsWith("/src"))
             {
                 fullPath = Path.Combine(FrontendProjectPath, path.TrimStart('/'));
+            }
+            else if (!Path.IsPathRooted(path))
+            {
+                fullPath = Path.Combine(BackendProjectPath, path);
             }
 
             // Security check: allow d:\_PROGECT\

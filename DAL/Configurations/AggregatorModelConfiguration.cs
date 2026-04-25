@@ -17,11 +17,12 @@ namespace DAL.Configurations
             // =============================================
             modelBuilder.Entity<ProgramOfAggregator>().HasIndex(e => e.Slug).IsUnique();
             modelBuilder.Entity<CategoryOfAggregator>().HasIndex(e => e.Slug).IsUnique();
-            modelBuilder.Entity<DeveloperOfAggregator>().HasIndex(e => e.Slug).IsUnique();
+            modelBuilder.Entity<DeveloperOfAggregator>().HasIndex(e => e.SystemCode).IsUnique();
             modelBuilder.Entity<PlatformOfAggregator>().HasIndex(e => e.SystemCode).IsUnique();
             modelBuilder.Entity<AggregatorSource>().HasIndex(e => e.Slug).IsUnique();
             modelBuilder.Entity<LicenseTypeOfAggregator>().HasIndex(e => e.Slug).IsUnique();
             modelBuilder.Entity<TagOfAggregator>().HasIndex(e => e.Slug).IsUnique();
+            modelBuilder.Entity<CategoryTagOfAggregator>().HasIndex(e => e.Slug).IsUnique();
 
             modelBuilder.Entity<VersionOfAggregator>()
                 .HasIndex(v => new { v.ProgramOfAggregatorId, v.VersionNumber })
@@ -68,6 +69,9 @@ namespace DAL.Configurations
 
             modelBuilder.Entity<TagOfAggregatorLocalization>()
                 .HasIndex(e => new { e.TagOfAggregatorId, e.LanguageOfAggregatorId }).IsUnique();
+
+            modelBuilder.Entity<CategoryTagOfAggregatorLocalization>()
+                .HasIndex(e => new { e.CategoryTagOfAggregatorId, e.LanguageOfAggregatorId }).IsUnique();
 
             // =============================================
             // 3. MarketData уникальность
@@ -179,6 +183,18 @@ namespace DAL.Configurations
                 .WithMany(t => t.ProgramTags)
                 .HasForeignKey(pt => pt.TagOfAggregatorId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // =============================================
+            // 12. Категории тегов (CategoryTag)
+            // =============================================
+            modelBuilder.Entity<TagOfAggregator>()
+                .HasOne(t => t.Category)
+                .WithMany(c => c.Tags)
+                .HasForeignKey(t => t.CategoryTagId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TagOfAggregator>()
+                .HasIndex(t => new { t.CategoryTagId, t.IsActive, t.IsDeleted });
         }
 
         private static void SetSoftDeleteFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : class, ISoftDeletableOfAggregator

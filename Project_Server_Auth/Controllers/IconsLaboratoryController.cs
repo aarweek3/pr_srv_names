@@ -301,7 +301,7 @@ namespace pr_srv_names.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return StatusCode(403, new { success = false, message = ex.Message });
             }
             catch (FileNotFoundException ex)
             {

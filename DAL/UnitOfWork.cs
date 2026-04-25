@@ -47,8 +47,44 @@ namespace DAL
         private IPlatformOfAggregatorRepository? _platformOfAggregatorRepository;
         public IPlatformOfAggregatorRepository PlatformsOfAggregator => _platformOfAggregatorRepository ??= new PlatformOfAggregatorRepository(_context);
 
+        private ILicenseTypeOfAggregatorRepository? _licenseTypeOfAggregatorRepository;
+        public ILicenseTypeOfAggregatorRepository LicenseTypesOfAggregator => _licenseTypeOfAggregatorRepository ??= new LicenseTypeOfAggregatorRepository(_context);
+
+        private IDeveloperOfAggregatorRepository? _developerOfAggregatorRepository;
+        public IDeveloperOfAggregatorRepository DevelopersOfAggregator => _developerOfAggregatorRepository ??= new DeveloperOfAggregatorRepository(_context);
+
         private IPlatformRepository? _platformRepository;
         public IPlatformRepository Platforms => _platformRepository ??= new PlatformRepository(_context);
+
+        private ICategoryTagOfAggregatorRepository? _categoryTagOfAggregatorRepository;
+        public ICategoryTagOfAggregatorRepository CategoryTags => _categoryTagOfAggregatorRepository ??= new CategoryTagOfAggregatorRepository(_context);
+
+        private ITagOfAggregatorRepository? _tagOfAggregatorRepository;
+        public ITagOfAggregatorRepository Tags => _tagOfAggregatorRepository ??= new TagOfAggregatorRepository(_context);
+
+        private ICategoryOfAggregatorRepository? _categoryOfAggregatorRepository;
+        public ICategoryOfAggregatorRepository CategoriesOfAggregator => _categoryOfAggregatorRepository ??= new CategoryOfAggregatorRepository(_context);
+
+        private IProgramOfAggregatorRepository? _programOfAggregatorRepository;
+        public IProgramOfAggregatorRepository ProgramsOfAggregator => _programOfAggregatorRepository ??= new ProgramOfAggregatorRepository(_context);
+
+        private IVersionOfAggregatorRepository? _versionOfAggregatorRepository;
+        public IVersionOfAggregatorRepository VersionsOfAggregator => _versionOfAggregatorRepository ??= new VersionOfAggregatorRepository(_context);
+
+        private IDownloadLinkOfAggregatorRepository? _downloadLinkOfAggregatorRepository;
+        public IDownloadLinkOfAggregatorRepository DownloadLinksOfAggregator => _downloadLinkOfAggregatorRepository ??= new DownloadLinkOfAggregatorRepository(_context);
+
+        private IAggregatorSourceRepository? _aggregatorSourceRepository;
+        public IAggregatorSourceRepository AggregatorSources => _aggregatorSourceRepository ??= new AggregatorSourceRepository(_context);
+
+        private IScreenshotOfAggregatorRepository? _screenshotOfAggregatorRepository;
+        public IScreenshotOfAggregatorRepository ScreenshotsOfAggregator => _screenshotOfAggregatorRepository ??= new ScreenshotOfAggregatorRepository(_context);
+
+        private IVideoOfAggregatorRepository? _videoOfAggregatorRepository;
+        public IVideoOfAggregatorRepository VideosOfAggregator => _videoOfAggregatorRepository ??= new VideoOfAggregatorRepository(_context);
+
+        private IDownloadLogOfAggregatorRepository? _downloadLogOfAggregatorRepository;
+        public IDownloadLogOfAggregatorRepository DownloadLogsOfAggregator => _downloadLogOfAggregatorRepository ??= new DownloadLogOfAggregatorRepository(_context);
 
         private INameRepository? _nameRepository;
         public INameRepository Names => _nameRepository ??= new NameRepository(_context);

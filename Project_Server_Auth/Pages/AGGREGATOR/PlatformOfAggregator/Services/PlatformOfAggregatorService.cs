@@ -378,13 +378,14 @@ namespace pr_srv_names.Pages.AGGREGATOR.PlatformOfAggregator.Services
             
             return request.SortBy switch
             {
+                PlatformOfAggregatorSortField.Id => isAsc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id),
                 PlatformOfAggregatorSortField.Name => isAsc ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
                 PlatformOfAggregatorSortField.SystemCode => isAsc ? query.OrderBy(x => x.SystemCode) : query.OrderByDescending(x => x.SystemCode),
                 PlatformOfAggregatorSortField.SortOrder => isAsc ? query.OrderBy(x => x.SortOrder) : query.OrderByDescending(x => x.SortOrder),
                 PlatformOfAggregatorSortField.CreatedAt => isAsc ? query.OrderBy(x => x.CreatedAt) : query.OrderByDescending(x => x.CreatedAt),
                 PlatformOfAggregatorSortField.UpdatedAt => isAsc ? query.OrderBy(x => x.UpdatedAt) : query.OrderByDescending(x => x.UpdatedAt),
                 PlatformOfAggregatorSortField.ProgramsCount => isAsc ? query.OrderBy(x => x.ProgramPlatforms.Count) : query.OrderByDescending(x => x.ProgramPlatforms.Count),
-                _ => query.OrderBy(x => x.SortOrder)
+                _ => query.OrderBy(x => x.Name)
             };
         }
     }

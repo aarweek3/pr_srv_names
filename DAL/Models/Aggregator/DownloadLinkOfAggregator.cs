@@ -12,7 +12,7 @@ namespace DAL.Models.Aggregator
     {
         public int VersionOfAggregatorId { get; set; }
         [ForeignKey(nameof(VersionOfAggregatorId))]
-        public virtual VersionOfAggregator? VersionOfAggregator { get; set; }
+        public virtual VersionOfAggregator VersionOfAggregator { get; set; } = null!;
 
         [Required, MaxLength(2048)]
         public string Url { get; set; } = string.Empty;

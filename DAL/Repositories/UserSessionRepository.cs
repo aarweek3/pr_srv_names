@@ -1,4 +1,4 @@
-﻿
+
 // DAL/Repositories/UserSessionRepository.cs
 using DAL.Models.AuthorizationModels;
 using DAL.Repositories.Interfaces;
@@ -11,7 +11,7 @@ namespace DAL.Repositories
     /// </summary>
     public class UserSessionRepository : Repository<UserSession>, IUserSessionRepository
     {
-        public UserSessionRepository(DbContext context) : base(context)
+        public UserSessionRepository(AppDbContext context) : base(context)
         {
         }
 

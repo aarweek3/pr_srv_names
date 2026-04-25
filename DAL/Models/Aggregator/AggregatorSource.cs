@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using DAL.Models.Aggregator.Base;
 
 namespace DAL.Models.Aggregator
 {
     [Table("aggregator_sources")]
+    [Index(nameof(Slug), IsUnique = true)]
     public class AggregatorSource : FullAuditableEntityOfAggregator
     {
         [Required, MaxLength(100)]

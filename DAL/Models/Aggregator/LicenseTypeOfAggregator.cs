@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using DAL.Models.Aggregator.Base;
 using DAL.Models.Aggregator.Localizations;
 
 namespace DAL.Models.Aggregator
 {
     [Table("license_types_of_aggregator")]
+    [Index(nameof(Slug), IsUnique = true)]
     public class LicenseTypeOfAggregator : FullAuditableEntityOfAggregator
     {
         [Required, MaxLength(100)]

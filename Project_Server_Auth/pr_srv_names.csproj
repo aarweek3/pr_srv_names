@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\icons\**" />
+    <Content Remove="wwwroot\icons\**" />
+    <EmbeddedResource Remove="wwwroot\icons\**" />
+    <None Remove="wwwroot\icons\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
@@ -73,8 +80,9 @@
     <Folder Include="Pages\UserSetting\Models\" />
     <Folder Include="Pages\UserSetting\Services\" />
     <Folder Include="Pages\UserSetting\Validators\" />
-    <Folder Include="wwwroot\icons\" />
+    <Folder Include="wwwroot\imageDevelopments\" />
     <Folder Include="wwwroot\uploads\" />
+    <Folder Include="wwwroot\uploads\general\" />
   </ItemGroup>
 
 </Project>

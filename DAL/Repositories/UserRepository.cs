@@ -1,4 +1,4 @@
-﻿// DAL/Repositories/UserRepository.cs
+// DAL/Repositories/UserRepository.cs
 using DAL.Models.AuthorizationModels;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +10,10 @@ namespace DAL.Repositories
     /// </summary>
     public class UserRepository : IUserRepository
     {
-        private readonly DbContext _context;
+        private readonly AppDbContext _context;
         private readonly DbSet<ApplicationUser> _users;
 
-        public UserRepository(DbContext context)
+        public UserRepository(AppDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _users = _context.Set<ApplicationUser>();

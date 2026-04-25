@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using DAL.Models.Aggregator.Base;
 using DAL.Models.GeneralModels;
 
@@ -7,11 +8,12 @@ namespace DAL.Models.Aggregator.Localizations
 {
     // Локализация (перевод) для платформы агрегатора
     [Table("platform_of_aggregator_localizations")]
+    [Index(nameof(PlatformOfAggregatorId), nameof(LanguageOfAggregatorId), IsUnique = true)]
     public class PlatformOfAggregatorLocalization : AuditableEntityOfAggregator
     {
-        public int? PlatformOfAggregatorId { get; set; }
+        public int PlatformOfAggregatorId { get; set; }
         [ForeignKey(nameof(PlatformOfAggregatorId))]
-        public virtual PlatformOfAggregator? PlatformOfAggregator { get; set; }
+        public virtual PlatformOfAggregator PlatformOfAggregator { get; set; } = null!;
 
         public int LanguageOfAggregatorId { get; set; }
         [ForeignKey(nameof(LanguageOfAggregatorId))]

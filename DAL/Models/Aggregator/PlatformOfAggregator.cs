@@ -2,6 +2,7 @@ using DAL.Constants;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using DAL.Models.Aggregator.Base;
 using DAL.Models.Aggregator.Localizations;
 
@@ -9,6 +10,7 @@ namespace DAL.Models.Aggregator
 {
     // Платформа (ОС) для Агрегатора
     [Table("platforms_of_aggregator")]
+    [Index(nameof(SystemCode), IsUnique = true)]
     public class PlatformOfAggregator : FullAuditableEntityOfAggregator
     {
         // Публичное/системное название
